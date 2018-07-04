@@ -45,7 +45,6 @@ class ShellStream
         $name = $url["host"];
         $this->code = base64_decode($name);
         $this->position = 0;
-        $opened_path = __DIR__.DIRECTORY_SEPARATOR.md5($this->code).'.shell';
         return true;
     }
 
