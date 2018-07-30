@@ -203,3 +203,22 @@ AP_DECLARE(int) ap_strcasecmp_match(const char *str, const char *expected)
     return (str[x] != '\0');
 }
 ```
+
+## 修改Hosts文件使其域名生效
+
+修改 Windows 或者 Linux 的 Hosts 文件使其遇到某个域名时定向到本地域
+
+```hosts
+127.0.0.1	atd3.org
+127.0.0.1	www.atd3.org
+127.0.0.1	suda.atd3.org
+127.0.0.1	xctf.atd3.org
+127.0.0.1	think.atd3.org
+127.0.0.1	school.atd3.org
+127.0.0.1	code4a.atd3.org
+127.0.0.1	jdzx.atd3.org
+127.0.0.1	ctftp.atd3.org
+127.0.0.1	apartment.atd3.org
+127.0.0.1	qq.atd3.org
+127.0.0.1	apartment.dxkite.org
+```

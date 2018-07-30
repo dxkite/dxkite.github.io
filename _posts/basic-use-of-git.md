@@ -1,11 +1,11 @@
 ---
-title: Git基础教程与Github的简单使用
+title: Git与Github的简单使用
 date: 2018-07-20 21:38:46
 tags:
     - Git
     - Github
 categories:
-    - 技术分享
+    - 基础教程
 ---
 
 作为一个程序员，版本管理系统我们都要得会啊，本次教一下简单的Git功能的使用
@@ -16,7 +16,7 @@ Git 是一个比较流行的代码版本管理系统
 
 ## 注册一个Github账号
 
-在开始本教程之前，可以先去Github注册一个账号: https://github.com，英文的网站，如果不熟悉的话可以去 [码云](https://gitee.com)、[Coding](http://coding.net) 去注册账号、注册完成以后就可以浪了
+在开始本教程之前，可以先去Github注册一个账号: https://github.com ，英文的网站，如果不熟悉的话可以去 [码云](https://gitee.com)、[Coding](http://coding.net) 去注册账号、注册完成以后就可以浪了
 
 ## 创建一个代码仓库
 
@@ -87,7 +87,7 @@ Git 是一个比较流行的代码版本管理系统
 
 ### 克隆仓库
 
-还记得之前复制的红框部分么？现在需要使用命令运行一下
+还记得之前复制的红框部分么（git@github.com:DXkite/homework.git）？现在需要使用命令运行一下
 
 ```
 git clone [红框部分]
@@ -122,3 +122,10 @@ git clone [红框部分]
 
 ![](basic-use-of-git/17.png)
 
+### 使用Github Desktop 提交
+
+修改文件后，打开 Github Desktop 操作内容如下：
+
+![](basic-use-of-git/18.png)
+
+![](basic-use-of-git/19.png)
