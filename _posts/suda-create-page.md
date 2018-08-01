@@ -1,5 +1,5 @@
 ---
-title: 02 Suda - 创建一个页面
+title: Suda - 02 创建一个页面
 date: 2018-07-30 19:30:53
 tags:
     - Suda
@@ -27,7 +27,7 @@ categories:
 ### 调整目录结构
 
 1. 在目录下创建一个 `suda` 文件夹，将所有东西拷贝到目录下，现在的目录应该只有一个 `suda` 目录。
-2. 打开 suda 目录，找到 suda->system->resource->project 目录，将 project 目录下的东西放到当前目录下。
+2. 打开 suda 目录，找到 `suda->system->resource->project` 目录，将 project 目录下的东西放到当前目录下。
 
     现在的目录下应该有三个项目
     - suda 文件夹

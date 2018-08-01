@@ -1,5 +1,5 @@
 ---
-title: 01 Suda - 基础开发环境项目配置
+title: Suda - 01 基础开发环境项目配置
 date: 2018-07-30 13:20:52
 tags:
     - Suda
