@@ -1,0 +1,7 @@
+[submodule "hexo-source"]
+	path = source
+	url = git@github.com:DXkite/dxkite.github.io.git
+	branch = raw
+[submodule "nayo"]
+	path = themes/nayo
+	url = https://github.com/Lemonreds/hexo-theme-nayo.git
