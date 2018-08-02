@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  03 贪吃蛇 - 事件获取与处理：处理事件 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		03 贪吃蛇 - 事件获取与处理：处理事件
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 07, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			2740
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>一个游戏不仅仅要能够显示出画面啊，还得接受事件并处理不是么，本次显示一波事件</p>
+<a id="more"></a>
+<h2 id="处理退出事件"><a href="#处理退出事件" class="headerlink" title="处理退出事件"></a>处理退出事件</h2><p>现在开始，游戏的界面都是死循环了，得退出一波，先创建一个标志位，表示游戏正在运行，事件处理流程：</p>
+<ol>
+<li>游戏死循环</li>
+<li>获取事件流</li>
+<li>处理事件流</li>
+</ol>
+<p>实现代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame </span><br><span class="line"><span class="comment"># 1. 先初始化游戏框架</span></span><br><span class="line">pygame.init()</span><br><span class="line"><span class="comment"># 2. 创建一个窗口</span></span><br><span class="line">screen = pygame.display.set_mode((<span class="number">200</span>,<span class="number">150</span>),<span class="number">0</span>,<span class="number">32</span>)</span><br><span class="line"><span class="comment"># 加载字体 (使用系统字体)</span></span><br><span class="line">font = pygame.font.SysFont(<span class="string">'arial'</span>, <span class="number">16</span>)</span><br><span class="line"><span class="comment"># 运行标志</span></span><br><span class="line">running = <span class="keyword">True</span></span><br><span class="line"><span class="comment"># 1. 游戏死循环</span></span><br><span class="line"><span class="keyword">while</span> running:</span><br><span class="line">    <span class="comment"># 2. 获取事件流</span></span><br><span class="line">    <span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</span><br><span class="line">        <span class="comment"># 3. 处理事件流</span></span><br><span class="line">        <span class="keyword">if</span> event.type == pygame.QUIT:</span><br><span class="line">            print(<span class="string">'quit game'</span>)</span><br><span class="line">            <span class="comment"># 结束运行</span></span><br><span class="line">            running = <span class="keyword">False</span></span><br><span class="line">    <span class="comment"># 2.1 屏幕填充白色</span></span><br><span class="line">    screen.fill((<span class="number">0xff</span>,<span class="number">0xff</span>,<span class="number">0xff</span>))</span><br><span class="line">    <span class="comment"># 2.3 渲染文字</span></span><br><span class="line">    text = font.render(<span class="string">"Hello World"</span> ,<span class="keyword">True</span>,(<span class="number">0xff</span>,<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">    <span class="comment"># 2.4 贴图文字</span></span><br><span class="line">    screen.blit(text,(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">    <span class="comment"># 3. 刷新显示窗口</span></span><br><span class="line">    pygame.display.flip()  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 退出框架</span></span><br><span class="line">pygame.quit()</span><br></pre></td></tr></table></figure>
+<h2 id="处理键盘事件"><a href="#处理键盘事件" class="headerlink" title="处理键盘事件"></a>处理键盘事件</h2><p>键盘事件的类型为 <code>KEYDOWN</code> 或者 <code>KEYUP</code>， 我们使用的时候一般使用 <code>KEYDOWN</code> 作为触发点：<br>本程序实例将监控上下左右键，并显示在屏幕上</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame </span><br><span class="line"><span class="keyword">from</span> pygame <span class="keyword">import</span> K_UP,K_DOWN,K_LEFT,K_RIGHT,QUIT,KEYDOWN</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 先初始化游戏框架</span></span><br><span class="line">pygame.init()</span><br><span class="line"><span class="comment"># 2. 创建一个窗口</span></span><br><span class="line">screen = pygame.display.set_mode((<span class="number">200</span>,<span class="number">150</span>),<span class="number">0</span>,<span class="number">32</span>)</span><br><span class="line"><span class="comment"># 加载字体 (使用系统字体)</span></span><br><span class="line">font = pygame.font.SysFont(<span class="string">'arial'</span>, <span class="number">16</span>)</span><br><span class="line"><span class="comment"># 运行标志</span></span><br><span class="line">running = <span class="keyword">True</span></span><br><span class="line"><span class="comment"># 案件方向</span></span><br><span class="line">text  = <span class="string">'No Key Event'</span></span><br><span class="line"><span class="comment"># 1. 游戏死循环</span></span><br><span class="line"><span class="keyword">while</span> running:</span><br><span class="line">    <span class="comment"># 2. 获取事件流</span></span><br><span class="line">    <span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</span><br><span class="line">        text = <span class="string">'No Key Event'</span></span><br><span class="line">        <span class="comment"># 3. 处理事件流</span></span><br><span class="line">        <span class="keyword">if</span> event.type == QUIT:</span><br><span class="line">            <span class="comment"># 结束运行</span></span><br><span class="line">            running = <span class="keyword">False</span></span><br><span class="line">        <span class="keyword">elif</span> event.type == KEYDOWN:</span><br><span class="line">            <span class="comment"># 键盘按下事件</span></span><br><span class="line">            <span class="keyword">if</span> event.key == K_UP:</span><br><span class="line">                text = <span class="string">'K_UP'</span></span><br><span class="line">            <span class="keyword">elif</span> event.key == K_DOWN:</span><br><span class="line">                text = <span class="string">'K_DOWN'</span></span><br><span class="line">            <span class="keyword">elif</span> event.key == K_LEFT:</span><br><span class="line">                text = <span class="string">'K_LEFT'</span></span><br><span class="line">            <span class="keyword">elif</span> event.key == K_RIGHT:</span><br><span class="line">                text = <span class="string">'K_RIGHT'</span></span><br><span class="line">    <span class="comment"># 2.1 屏幕填充白色</span></span><br><span class="line">    screen.fill((<span class="number">0xff</span>,<span class="number">0xff</span>,<span class="number">0xff</span>))</span><br><span class="line">    <span class="comment"># 2.3 渲染文字</span></span><br><span class="line">    text_surface = font.render(text,<span class="keyword">True</span>,(<span class="number">0xff</span>,<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">    <span class="comment"># 2.4 贴图文字</span></span><br><span class="line">    screen.blit(text_surface,(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">    <span class="comment"># 3. 刷新显示窗口</span></span><br><span class="line">    pygame.display.flip()  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 退出框架</span></span><br><span class="line">pygame.quit()</span><br></pre></td></tr></table></figure>
+<p>测试：</p>
+<p><img src="3-1.png" alt=""></p>
+<h3 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h3><p>监控事件，当事件为键盘按下时，判断键盘按下的值是什么，并显示在屏幕表面上</p>
+<h2 id="处理鼠标事件"><a href="#处理鼠标事件" class="headerlink" title="处理鼠标事件"></a>处理鼠标事件</h2><p>鼠标事件包括了鼠标移动，左键右键中键的监听，事件类型为 <code>MOUSEMOTION</code>,<code>MOUSEBUTTONUP</code>,<code>MOUSEBUTTONDOWN</code> 三种</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td><code>MOUSEMOTION</code>,<code>MOUSEBUTTONUP</code>,<code>MOUSEBUTTONDOWN</code></td>
+</tr>
+<tr>
+<td>pos</td>
+<td>鼠标位置</td>
+</tr>
+<tr>
+<td>rel</td>
+<td>相对位置</td>
+</tr>
+</tbody>
+</table>
+<p><em>示例代码</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame </span><br><span class="line"><span class="keyword">from</span> pygame <span class="keyword">import</span> K_UP,K_DOWN,K_LEFT,K_RIGHT,QUIT,MOUSEMOTION,MOUSEBUTTONUP,MOUSEBUTTONDOWN</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 先初始化游戏框架</span></span><br><span class="line">pygame.init()</span><br><span class="line"><span class="comment"># 2. 创建一个窗口</span></span><br><span class="line">screen = pygame.display.set_mode((<span class="number">300</span>,<span class="number">150</span>),<span class="number">0</span>,<span class="number">32</span>)</span><br><span class="line"><span class="comment"># 加载字体 (使用系统字体)</span></span><br><span class="line">font = pygame.font.SysFont(<span class="string">'arial'</span>, <span class="number">16</span>)</span><br><span class="line"><span class="comment"># 运行标志</span></span><br><span class="line">running = <span class="keyword">True</span></span><br><span class="line"><span class="comment"># 案件方向</span></span><br><span class="line">mouse  = (<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line">mouse_move = (<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line">mouse_key = <span class="keyword">None</span></span><br><span class="line">text = <span class="string">'No Event'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 游戏死循环</span></span><br><span class="line"><span class="keyword">while</span> running:</span><br><span class="line">    <span class="comment"># 2. 获取事件流</span></span><br><span class="line">    <span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</span><br><span class="line">        <span class="comment"># 3. 处理事件流</span></span><br><span class="line">        <span class="keyword">if</span> event.type == QUIT:</span><br><span class="line">            <span class="comment"># 结束运行</span></span><br><span class="line">            running = <span class="keyword">False</span></span><br><span class="line">        <span class="keyword">elif</span> event.type == MOUSEMOTION:</span><br><span class="line">            mouse = event.pos</span><br><span class="line">            mouse_move = event.rel</span><br><span class="line">            text = <span class="string">'mouse pos %s rel %s '</span> % (str(mouse),str(mouse_move))</span><br><span class="line">        <span class="keyword">elif</span> event.type == MOUSEBUTTONUP:</span><br><span class="line">            mouse = event.pos</span><br><span class="line">            mouse_key = event.button </span><br><span class="line">            text = <span class="string">'mouse pos %s button %s'</span> % (str(mouse),str(mouse_key))</span><br><span class="line">        <span class="keyword">elif</span> event.type == MOUSEBUTTONDOWN:</span><br><span class="line">            mouse = event.pos</span><br><span class="line">            mouse_key = event.button </span><br><span class="line">            text = <span class="string">'mouse pos %s button %s'</span> % (str(mouse),str(mouse_key))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2.1 屏幕填充白色</span></span><br><span class="line">    screen.fill((<span class="number">0xff</span>,<span class="number">0xff</span>,<span class="number">0xff</span>))</span><br><span class="line">    <span class="comment"># 2.3 渲染文字</span></span><br><span class="line">    text_surface = font.render(text,<span class="keyword">True</span>,(<span class="number">0xff</span>,<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">    <span class="comment"># 2.4 贴图文字</span></span><br><span class="line">    screen.blit(text_surface,(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">    <span class="comment"># 3. 刷新显示窗口</span></span><br><span class="line">    pygame.display.flip()  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 退出框架</span></span><br><span class="line">pygame.quit()</span><br></pre></td></tr></table></figure>
+<p><em>运行截图</em></p>
+<p><img src="3-2.png" alt=""></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Python贪吃蛇教程/">Python贪吃蛇教程</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Python/">Python</a> <a class="tag-link" href="/tags/pygame/">pygame</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/08/snake-show-and-control-fps/" data-hover="04 贪吃蛇 - 帧率限制：限制显示速率">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/06/snake-display-image/" data-hover="02 贪吃蛇 - 加载图片与显示：显示图片"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

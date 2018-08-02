@@ -1,0 +1,384 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda - 01 基础开发环境项目配置 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda - 01 基础开发环境项目配置
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 30, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			1356
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>本次基础教程讲解一个我自己开发的Web框架项目的使用，学习前，请保证自己看得懂PHP</p>
+<a id="more"></a>
+<h2 id="开发环境要求"><a href="#开发环境要求" class="headerlink" title="开发环境要求"></a>开发环境要求</h2><ul>
+<li>运行环境<ul>
+<li>Windows x86 | Windows x64</li>
+<li>PHP 7.2.x</li>
+<li>MySQL | MariaDB 数据库</li>
+<li>Apache 2.x</li>
+</ul>
+</li>
+<li>框架要求<ul>
+<li>版本 1.2.15 以及以上</li>
+</ul>
+</li>
+</ul>
+<p><strong>说明</strong>：框架内使用了很多PHP新特性，所以会一直保持PHP的更新迭代，请保证框架使用最新PHP运行，也是提高网站项目运行性能的一个好方法。</p>
+<h2 id="开发环境安装"><a href="#开发环境安装" class="headerlink" title="开发环境安装"></a>开发环境安装</h2><ul>
+<li><p>PHP服务器集成环境推荐：</p>
+<ul>
+<li><p>PHP Study <a href="http://phpstudy.php.cn/phpstudy/PhpStudy20180211.zip" target="_blank" rel="noopener">http://phpstudy.php.cn/phpstudy/PhpStudy20180211.zip</a></p>
+<p>  PHPStudy的可用PHP 7.2版本，内置 yaml 扩展</p>
+<ul>
+<li>PHP 7.2.1 <a href="http://atd-data.cdn.h-k.pw/20180730/4/4_jTvR4r32_php-7.2.1-nts.zip" target="_blank" rel="noopener">http://atd-data.cdn.h-k.pw/20180730/4/4_jTvR4r32_php-7.2.1-nts.zip</a></li>
+</ul>
+</li>
+<li><p>LAMPP/XAMPP </p>
+<ul>
+<li>Windows <a href="https://www.apachefriends.org/xampp-files/7.2.7/xampp-win32-7.2.7-0-VC15-installer.exe" target="_blank" rel="noopener">https://www.apachefriends.org/xampp-files/7.2.7/xampp-win32-7.2.7-0-VC15-installer.exe</a></li>
+<li>Linux <a href="https://www.apachefriends.org/xampp-files/7.2.7/xampp-linux-x64-7.2.7-0-installer.run" target="_blank" rel="noopener">https://www.apachefriends.org/xampp-files/7.2.7/xampp-linux-x64-7.2.7-0-installer.run</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>PHP 扩展 <ul>
+<li>php_pdo_mysql（内置）</li>
+<li>php_yaml （可选 1.2.16支持采用 yaml作为配置文件格式）</li>
+</ul>
+</li>
+<li><p>Suda 框架</p>
+<p>  直接克隆项目即可：<a href="https://github.com/DXkite/suda.git" target="_blank" rel="noopener">https://github.com/DXkite/suda.git</a></p>
+</li>
+</ul>
+<h2 id="框架配置相关"><a href="#框架配置相关" class="headerlink" title="框架配置相关"></a>框架配置相关</h2><p>克隆项目后，将网站根目录调整到 <code>public</code> 目录下，访问URL domain.com/dev.php<br>出现如下界面类似则算框架安装成功：</p>
+<p><img src="1.png" alt=""></p>
+<p>如果不是这个界面则根据报错修改相关错误</p>
+<h3 id="错误1：数据库账号密码错误"><a href="#错误1：数据库账号密码错误" class="headerlink" title="错误1：数据库账号密码错误"></a>错误1：数据库账号密码错误</h3><p><img src="2.png" alt=""></p>
+<p>如果出现上述报错，说明你的MySQL的数据库账号密码错误，解决方案：</p>
+<ul>
+<li>方案1：修改数据库的账号密码为 root</li>
+<li>方案2：修改配置文件 <code>app/resource/config/config.json</code></li>
+</ul>
+<p>配置文件默认内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"debug"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"timelimit"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"timezone"</span>: <span class="string">"PRC"</span>,</span><br><span class="line">    <span class="attr">"markVersion"</span>:<span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"database"</span>: &#123;</span><br><span class="line">        <span class="attr">"prefix"</span>: <span class="string">"dx_"</span>, </span><br><span class="line">        <span class="attr">"host"</span>: <span class="string">"127.0.0.1"</span>, </span><br><span class="line">        <span class="attr">"port"</span>: <span class="number">3306</span>,</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"suda_system"</span>, </span><br><span class="line">        <span class="attr">"user"</span>: <span class="string">"root"</span>,</span><br><span class="line">        <span class="attr">"passwd"</span>: <span class="string">"root"</span>, </span><br><span class="line">        <span class="attr">"charset"</span>: <span class="string">"utf8"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"non-static"</span>: <span class="string">"php"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中属性 <code>database</code> 为数据库配置</p>
+<h3 id="错误2：数据库驱动丢失"><a href="#错误2：数据库驱动丢失" class="headerlink" title="错误2：数据库驱动丢失"></a>错误2：数据库驱动丢失</h3><p><img src="3.png" alt=""></p>
+<p>如果出现上述错误，找到你的PHP的配置文件 <code>php.ini</code> 全局搜索 <code>extension=php_pdo_mysql</code></p>
+<p><img src="4.png" alt=""></p>
+<p>将前面的 <code>;</code> 去掉即可</p>
+<h3 id="错误3：PHP版本错误"><a href="#错误3：PHP版本错误" class="headerlink" title="错误3：PHP版本错误"></a>错误3：PHP版本错误</h3><p><img src="5.png" alt=""></p>
+<p>如果出现上述错误，在<a href="http://php.net" target="_blank" rel="noopener">PHP官网</a>下载版本为 <code>PHP7.2</code><br>如下版本为 PHP 7.2.1 ，加入了 yml 配置文件支持。<a href="http://atd-data.cdn.h-k.pw/20180730/4/4_jTvR4r32_php-7.2.1-nts.zip" target="_blank" rel="noopener">下载 PHP 7.2.1</a> </p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate1.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate2.png">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/30/suda-create-page/" data-hover="Suda - 02 创建一个页面">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/27/apache-vhost-alias-conf/" data-hover="Apache 实现一域一文件夹的虚拟主机配置"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

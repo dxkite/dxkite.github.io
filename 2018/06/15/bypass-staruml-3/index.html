@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  绕过StarUML3 正版验证，去除水印 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		绕过StarUML3 正版验证，去除水印
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		6月 15, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			2459
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>StarUML 是一个方便的UML绘图工具，一直在使用这个，现在StarUML更新到了3.0，对弹窗做了很多的优化，现在支持了原始弹窗，和右键菜单，比以前的右键菜单好多了，但是未注册的导出的图片很尬尬，有水印，学生党什么的，肯定不能购买咯， :joy: ，话不多说，开始分析。</p>
+<a id="more"></a>
+<p><strong>仅供学习，就是为了去除水印，不要拿来干啥子</strong></p>
+<h2 id="StarUML-2-绕过"><a href="#StarUML-2-绕过" class="headerlink" title="StarUML 2 绕过"></a>StarUML 2 绕过</h2><p>StarUML 使用的技术是 <code>Electorn</code> ，在 2.x 时代，程序都没打包，安装在程序目录下，具体是 <code>C:\Program Files (x86)\StarUML</code> ,这个是默认安装目录，破解方式很简单，找到授权验证的部分，修改下代码就好了，具体文件： <code>C:\Program Files (x86)\StarUML\www\license\node\LicenseManagerDomain.js</code> 目录相对于安装目录，文件修改地方就在20多行的验证函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">validate</span>(<span class="params">PK, name, product, licenseKey</span>)</span></span><br></pre></td></tr></table></figure>
+<p>将原始函数修改为如下即可，内容随意，只要返回一个授权包即可：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">validate</span>(<span class="params">PK, name, product, licenseKey</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> &#123; </span><br><span class="line">            name: <span class="string">"DXkite"</span>, </span><br><span class="line">            product: <span class="string">"StarUML"</span>, </span><br><span class="line">            licenseType: <span class="string">"Personal"</span>,</span><br><span class="line">            quantity: <span class="string">"DXkite"</span>,</span><br><span class="line">            licenseKey: <span class="string">"DXkite Key"</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="StarUML3-绕过"><a href="#StarUML3-绕过" class="headerlink" title="StarUML3 绕过"></a>StarUML3 绕过</h2><p>现在升级到了 3.0 系统，整个系统的安装目录从C盘转到了用户数据文件夹，Windows 10的具体路径 <code>C:\Users\[用户名]\AppData\Local\Programs\StarUML</code></p>
+<h3 id="解包-app-asar"><a href="#解包-app-asar" class="headerlink" title="解包 app.asar"></a>解包 app.asar</h3><p>我的路径为 <code>C:\Users\DXkite\AppData\Local\Programs\StarUML</code>，其中管理许可证书的文件在 <code>C:\Users\DXkite\AppData\Local\Programs\StarUML\resources\app.asar</code> 文件中，在这里使用 <code>asar</code> 命令解压 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install asar -g</span><br><span class="line">asar e app.asar app</span><br></pre></td></tr></table></figure>
+<p>解压后可以发现目录下多了个<code>app</code>的文件夹。<strong>备份 <code>app.asar</code> 文件</strong> ，修改 <code>app</code> 文件夹中的文件 <code>C:\Users\DXkite\AppData\Local\Programs\StarUML\resources\app\src\engine\license-manager.js</code>找到验证函数 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">validate () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// Local check</span></span><br><span class="line">        <span class="keyword">var</span> file = <span class="keyword">this</span>.findLicense()</span><br><span class="line">        <span class="keyword">if</span> (!file) &#123;</span><br><span class="line">          reject(<span class="string">'License key not found'</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">var</span> data = fs.readFileSync(file, <span class="string">'utf8'</span>)</span><br><span class="line">          licenseInfo = <span class="built_in">JSON</span>.parse(data)</span><br><span class="line">          <span class="keyword">var</span> base = SK + licenseInfo.name +</span><br><span class="line">            SK + licenseInfo.product + <span class="string">'-'</span> + licenseInfo.licenseType +</span><br><span class="line">            SK + licenseInfo.quantity +</span><br><span class="line">            SK + licenseInfo.timestamp + SK</span><br><span class="line">          <span class="keyword">var</span> _key = crypto.createHash(<span class="string">'sha1'</span>).update(base).digest(<span class="string">'hex'</span>).toUpperCase()</span><br><span class="line">          <span class="keyword">if</span> (_key !== licenseInfo.licenseKey) &#123;</span><br><span class="line">            reject(<span class="string">'Invalid license key'</span>)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Server check</span></span><br><span class="line">            $.post(app.config.validation_url, &#123;<span class="attr">licenseKey</span>: licenseInfo.licenseKey&#125;)</span><br><span class="line">              .done(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">                resolve(data)</span><br><span class="line">              &#125;)</span><br><span class="line">              .fail(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (err &amp;&amp; err.status === <span class="number">499</span>) &#123; <span class="comment">/*License key not exists*/</span></span><br><span class="line">                  reject(err)</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  <span class="comment">// If server is not available, assume that license key is valid</span></span><br><span class="line">                  resolve(licenseInfo)</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">        reject(err)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>修改验证逻辑, 调用 <code>resolve</code> 方法，给定一个可用的许可，内容随意</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">validate () &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">resolve(&#123;</span><br><span class="line">	name : <span class="string">"DXkite"</span>,</span><br><span class="line">	product : <span class="string">"DXkite product"</span>,</span><br><span class="line">	licenseType : <span class="string">"DXkite Personal"</span>,</span><br><span class="line">	quantity : <span class="string">"DXkite Quantity"</span>,</span><br><span class="line">	timestamp :<span class="string">"1529049036"</span>,</span><br><span class="line">&#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="打包-app-文件夹"><a href="#打包-app-文件夹" class="headerlink" title="打包 app 文件夹"></a>打包 app 文件夹</h3><p>现在证书验证逻辑已经被修改了，我们所需要做的就是继续打包回去。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">asar p app app.asar</span><br></pre></td></tr></table></figure>
+<p>打包回去以后你会发现你的StarUML3就被破解了。</p>
+<blockquote>
+<p>文章纯属记录，部分细节问题就没说，主要是破解程序还是不要太皮。有钱的可以买一个，我们程序员不容易</p>
+</blockquote>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+     
+      	
+
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/01/eval-php-without-function-eval/" data-hover="特殊方式运行PHP代码">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/06/07/ciscn-center-zone-q12/" data-hover="CISCN 2018 华中赛区 Q12"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

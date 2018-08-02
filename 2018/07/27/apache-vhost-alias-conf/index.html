@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Apache 实现一域一文件夹的虚拟主机配置 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Apache 实现一域一文件夹的虚拟主机配置
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 27, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			4239
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>在开发网站的过程中，使用Apache做为主要服务器的时候一般都是 <code>localhost</code> 访问网站，访问的时候只能一次访问一个网站域，在本文中将讲解如何配合 <code>hosts</code> 文件来控制访问的网站程序</p>
+<a id="more"></a>
+<h2 id="Apache-实现虚拟主机根目录"><a href="#Apache-实现虚拟主机根目录" class="headerlink" title="Apache 实现虚拟主机根目录"></a>Apache 实现虚拟主机根目录</h2><p><strong>前置条件</strong>：虚拟主机目录必须在主机目录下<br><strong>依赖模块</strong>：<code>mod_vhost_alias</code></p>
+<p>格式说明 （<code>VirtualDocumentRoot</code>） 语法格式：<code>%-N+.-M+</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%%</td>
+<td>百分号转义</td>
+</tr>
+<tr>
+<td>%N</td>
+<td>N为任意数字，负号表示从后面开始</td>
+</tr>
+<tr>
+<td>%N.M</td>
+<td>M表示截取N的子字符</td>
+</tr>
+<tr>
+<td>+</td>
+<td>表示包含当前位置以及以后的位置</td>
+</tr>
+</tbody>
+</table>
+<p>具体实现要求： </p>
+<ol>
+<li>访问 <code>www.dxkite.org</code> 时加载 <code>${DocumentRoot}/dxkite.org/www/public</code> 下的网站程序</li>
+<li>访问 <code>dxkite.org</code> 时加载 <code>${DocumentRoot}/dxkite.org/www/public</code> 下的网站程序</li>
+<li>访问 <code>$1.org</code> 时加载 <code>${DocumentRoot}/$1/www/public</code> 下的网站程序</li>
+<li>访问 <code>$1.$2.org</code> 时加载 <code>${DocumentRoot}/$2/$1/public</code> 下的网站程序</li>
+<li>访问 <code>localhost</code> 或者 ip 定位到 <code>${DocumentRoot}/localhost/public</code> 下的网络程序</li>
+</ol>
+<p>不难看出，要求 1 是要求 3的特殊情况</p>
+<blockquote>
+<p>dxkite.org –&gt; 导向本地开发网站</p>
+</blockquote>
+<h2 id="域名分割例子"><a href="#域名分割例子" class="headerlink" title="域名分割例子"></a>域名分割例子</h2><table>
+<thead>
+<tr>
+<th>域名</th>
+<th>参数</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>test.dxkite.cn</td>
+<td>%0</td>
+<td>test.dxkite.cn</td>
+</tr>
+<tr>
+<td>test.dxkite.cn</td>
+<td>%1</td>
+<td>test</td>
+</tr>
+<tr>
+<td>test.dxkite.cn</td>
+<td>%2</td>
+<td>dxkite</td>
+</tr>
+<tr>
+<td>test.dxkite.cn</td>
+<td>%2+</td>
+<td>dxkite.cn</td>
+</tr>
+<tr>
+<td>test.dxkite.cn</td>
+<td>%1.2</td>
+<td>e</td>
+</tr>
+</tbody>
+</table>
+<h2 id="具体规则"><a href="#具体规则" class="headerlink" title="具体规则"></a>具体规则</h2><h3 id="规则-5"><a href="#规则-5" class="headerlink" title="规则 5"></a>规则 5</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">VirtualHost</span> <span class="attr">_default_:80</span>&gt;</span></span><br><span class="line">    DocumentRoot "D:\Server\localhost\public"</span><br><span class="line">    ErrorLog "D:\Server\logs\localhost.err"</span><br><span class="line">    CustomLog "D:\Server\logs\localhost.log" common</span><br><span class="line">    <span class="tag">&lt;<span class="name">Directory</span> "<span class="attr">D:</span>\<span class="attr">Server</span>\<span class="attr">localhost</span>\<span class="attr">public</span>"&gt;</span></span><br><span class="line">        Options -Indexes +FollowSymLinks +ExecCGI</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow from all</span><br><span class="line">        Require all granted</span><br><span class="line">    <span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">VirtualHost</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="规则2"><a href="#规则2" class="headerlink" title="规则2"></a>规则2</h3><p>规则3无法目前通过其他方式实现（我暂未发现），暂实现特例规则2<br>参考实现方案：</p>
+<ul>
+<li>使用代理</li>
+<li>使用URL重写</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">VirtualHost</span> *<span class="attr">:80</span>&gt;</span></span><br><span class="line">    ServerName dxkite.org</span><br><span class="line">    VirtualDocumentRoot "D:\Server\vhost\dxkite.org\www\public" </span><br><span class="line">    ErrorLog "D:\Server\logs\vhost_access.err"</span><br><span class="line">    CustomLog "D:\Server\logs\vhost_access.log" vhost_common</span><br><span class="line">    <span class="tag">&lt;<span class="name">Directory</span> "<span class="attr">D:</span>\<span class="attr">Server</span>\<span class="attr">vhost</span>\%<span class="attr">2</span>+\%<span class="attr">1</span>\<span class="attr">public</span>"&gt;</span></span><br><span class="line">        Options +Indexes +FollowSymLinks</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow from all</span><br><span class="line">        Require all granted</span><br><span class="line">    <span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">VirtualHost</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="规则-3"><a href="#规则-3" class="headerlink" title="规则 3"></a>规则 3</h3><p>如果要添加其他域名的话，就在后面加就可以了</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">VirtualHost</span> *<span class="attr">:80</span>&gt;</span></span><br><span class="line">    ServerAlias dxkite.org atd3.org</span><br><span class="line">    VirtualDocumentRoot "D:\Server\vhost\%0\www\public" </span><br><span class="line">    ErrorLog "D:\Server\logs\vhost_access.err"</span><br><span class="line">    CustomLog "D:\Server\logs\vhost_access.log" vhost_common</span><br><span class="line">    <span class="tag">&lt;<span class="name">Directory</span> "<span class="attr">D:</span>\<span class="attr">Server</span>\<span class="attr">vhost</span>\%<span class="attr">0</span>\<span class="attr">www</span>\<span class="attr">public</span>"&gt;</span></span><br><span class="line">        Options +Indexes +FollowSymLinks</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow from all</span><br><span class="line">        Require all granted</span><br><span class="line">    <span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">VirtualHost</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="规则-1，4"><a href="#规则-1，4" class="headerlink" title="规则 1，4"></a>规则 1，4</h3><p><strong>注意</strong>: * 表示匹配所有、 ? 匹配单个字符 (官网没找到解释，看源码)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">VirtualHost</span> *<span class="attr">:80</span>&gt;</span></span><br><span class="line">    ServerAlias *</span><br><span class="line">    VirtualDocumentRoot "D:\Server\vhost\%2+\%1\public" </span><br><span class="line">    ErrorLog "D:\Server\logs\vhost_access.err"</span><br><span class="line">    CustomLog "D:\Server\logs\vhost_access.log" vhost_common</span><br><span class="line">    <span class="tag">&lt;<span class="name">Directory</span> "<span class="attr">D:</span>\<span class="attr">Server</span>\<span class="attr">vhost</span>\%<span class="attr">2</span>+\%<span class="attr">1</span>\<span class="attr">public</span>"&gt;</span></span><br><span class="line">        Options +Indexes +FollowSymLinks</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Order allow,deny</span><br><span class="line">        Allow from all</span><br><span class="line">        Require all granted</span><br><span class="line">    <span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">VirtualHost</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong> 虚拟主机配置规则有顺序要求</p>
+<blockquote>
+<p><strong>参考文献</strong><br><a href="http://httpd.apache.org/docs/2.0/en/vhosts/" target="_blank" rel="noopener">http://httpd.apache.org/docs/2.0/en/vhosts/</a><br><a href="http://httpd.apache.org/docs/2.2/mod/mod_rewrite.html" target="_blank" rel="noopener">http://httpd.apache.org/docs/2.2/mod/mod_rewrite.html</a><br><a href="http://httpd.apache.org/docs/current/mod/mod_proxy.html" target="_blank" rel="noopener">http://httpd.apache.org/docs/current/mod/mod_proxy.html</a></p>
+</blockquote>
+</blockquote>
+<p><strong>虚拟主机参考源码</strong></p>
+<blockquote>
+<p>httpd-2.4.34/server/vhost.c:894~925<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* return 1 if host matches ServerName or ServerAliases */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">matches_aliases</span><span class="params">(server_rec *s, <span class="keyword">const</span> <span class="keyword">char</span> *host)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">apr_array_header_t</span> *names;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* match ServerName */</span></span><br><span class="line">    <span class="keyword">if</span> (!strcasecmp(host, s-&gt;server_hostname)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* search all the aliases from ServerAlias directive */</span></span><br><span class="line">    names = s-&gt;names;</span><br><span class="line">    <span class="keyword">if</span> (names) &#123;</span><br><span class="line">        <span class="keyword">char</span> **name = (<span class="keyword">char</span> **) names-&gt;elts;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; names-&gt;nelts; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!name[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (!strcasecmp(host, name[i]))</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    names = s-&gt;wild_names;</span><br><span class="line">    <span class="keyword">if</span> (names) &#123;</span><br><span class="line">        <span class="keyword">char</span> **name = (<span class="keyword">char</span> **) names-&gt;elts;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; names-&gt;nelts; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!name[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (!ap_strcasecmp_match(host, name[i]))</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>httpd-2.4.34/server/util.c:211~234<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">AP_DECLARE(<span class="keyword">int</span>) ap_strcasecmp_match(<span class="keyword">const</span> <span class="keyword">char</span> *str, <span class="keyword">const</span> <span class="keyword">char</span> *expected)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> x, y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (x = <span class="number">0</span>, y = <span class="number">0</span>; expected[y]; ++y, ++x) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!str[x] &amp;&amp; expected[y] != <span class="string">'*'</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">if</span> (expected[y] == <span class="string">'*'</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span> (expected[++y] == <span class="string">'*'</span>);</span><br><span class="line">            <span class="keyword">if</span> (!expected[y])</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (str[x]) &#123;</span><br><span class="line">                <span class="keyword">int</span> ret;</span><br><span class="line">                <span class="keyword">if</span> ((ret = ap_strcasecmp_match(&amp;str[x++], &amp;expected[y])) != <span class="number">1</span>)</span><br><span class="line">                    <span class="keyword">return</span> ret;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (expected[y] != <span class="string">'?'</span></span><br><span class="line">                 &amp;&amp; apr_tolower(str[x]) != apr_tolower(expected[y]))</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (str[x] != <span class="string">'\0'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="修改Hosts文件使其域名生效"><a href="#修改Hosts文件使其域名生效" class="headerlink" title="修改Hosts文件使其域名生效"></a>修改Hosts文件使其域名生效</h2><p>修改 Windows 或者 Linux 的 Hosts 文件使其遇到某个域名时定向到本地域</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1	atd3.org</span><br><span class="line">127.0.0.1	www.atd3.org</span><br><span class="line">127.0.0.1	suda.atd3.org</span><br><span class="line">127.0.0.1	xctf.atd3.org</span><br><span class="line">127.0.0.1	think.atd3.org</span><br><span class="line">127.0.0.1	school.atd3.org</span><br><span class="line">127.0.0.1	code4a.atd3.org</span><br><span class="line">127.0.0.1	jdzx.atd3.org</span><br><span class="line">127.0.0.1	ctftp.atd3.org</span><br><span class="line">127.0.0.1	apartment.atd3.org</span><br><span class="line">127.0.0.1	qq.atd3.org</span><br><span class="line">127.0.0.1	apartment.dxkite.org</span><br></pre></td></tr></table></figure>  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Apache/">Apache</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/30/suda-env-build/" data-hover="Suda - 01 基础开发环境项目配置">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/26/springboot2-with-quartz/" data-hover="SpringBoot 2 中使用 Quartz"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

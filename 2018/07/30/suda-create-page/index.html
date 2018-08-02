@@ -1,0 +1,475 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda - 02 创建一个页面 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda - 02 创建一个页面
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 30, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			2843
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>本文将介绍如何使用Suda框架创建一个简单的页面。</p>
+<a id="more"></a>
+<h2 id="目录文件功能介绍"><a href="#目录文件功能介绍" class="headerlink" title="目录文件功能介绍"></a>目录文件功能介绍</h2><p>在创建页面之前，我先介绍一下框架目录下各个文件夹的功能以及作用。 经过上一节内容我们的目录结构应该是如下的结构：</p>
+<p><img src="1.png" alt=""></p>
+<p>如果不是，或者目录结构是如下样式，则进行一波操作：</p>
+<p><img src="2.png" alt=""></p>
+<h3 id="调整目录结构"><a href="#调整目录结构" class="headerlink" title="调整目录结构"></a>调整目录结构</h3><ol>
+<li>在目录下创建一个 <code>suda</code> 文件夹，将所有东西拷贝到目录下，现在的目录应该只有一个 <code>suda</code> 目录。</li>
+<li><p>打开 suda 目录，找到 <code>suda-&gt;system-&gt;resource-&gt;project</code> 目录，将 project 目录下的东西放到当前目录下。</p>
+<p> 现在的目录下应该有三个项目</p>
+<ul>
+<li>suda 文件夹</li>
+<li>public 文件夹</li>
+<li>.gitignore 文件</li>
+</ul>
+</li>
+<li>访问网站 host/dev.php ，将会出现上一节的页面。此时目录调整完毕。</li>
+</ol>
+<p><img src="3.png" alt=""></p>
+<h3 id="目录说明"><a href="#目录说明" class="headerlink" title="目录说明"></a>目录说明</h3><table>
+<thead>
+<tr>
+<th>文件或者目录</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>suda 目录</td>
+<td>该目录放置了框架的所有文件</td>
+</tr>
+<tr>
+<td>app 目录</td>
+<td>该目录放置了网站应用程序的所有代码</td>
+</tr>
+<tr>
+<td>public 目录</td>
+<td>该目录放置了一些用户可以访问到的文件以及静态文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="app-目录"><a href="#app-目录" class="headerlink" title="app 目录"></a>app 目录</h3><p>在开发的过程中，我们最经常用到的目录就是 <code>app</code> 目录，在这个目录下，放置了我们网站程序的所有源码。</p>
+<table>
+<thead>
+<tr>
+<th>文件或者目录</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data 目录</td>
+<td>该目录放置了网站程序运行时所产生的文件</td>
+</tr>
+<tr>
+<td>modules 目录</td>
+<td>该目录放置了网站应用程序的功能模块，每个模块包含了一个或者多个功能</td>
+</tr>
+<tr>
+<td>resource 目录</td>
+<td>该目录放置了网站程序公用的资源文件</td>
+</tr>
+<tr>
+<td>share 目录</td>
+<td>该目录放置了网站程序公用的代码文件</td>
+</tr>
+<tr>
+<td>manifast.json 文件</td>
+<td>该文件描述了网站应用的一些属性</td>
+</tr>
+</tbody>
+</table>
+<h3 id="manifast-json-文件"><a href="#manifast-json-文件" class="headerlink" title="manifast.json 文件"></a>manifast.json 文件</h3><p>该文件的默认内容如下，重要属性主要有两个 <code>modules</code>, <code>reachable</code></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"suda-test-app"</span>,</span><br><span class="line">    <span class="attr">"namespace"</span>: <span class="string">"cn\\atd3"</span>,</span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"1.0-dev"</span>,</span><br><span class="line">    <span class="attr">"application"</span>: <span class="string">"suda\\core\\Application"</span>,</span><br><span class="line">    <span class="attr">"modules"</span>: [<span class="string">"suda"</span>, <span class="string">"app"</span>],</span><br><span class="line">    <span class="attr">"reachable"</span>: [<span class="string">"app"</span>],</span><br><span class="line">    <span class="attr">"language"</span>: <span class="string">"zh-CN"</span>,</span><br><span class="line">    <span class="attr">"url"</span>: &#123;</span><br><span class="line">        <span class="attr">"mode"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"beautify"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"rewrite"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="属性说明"><a href="#属性说明" class="headerlink" title="属性说明"></a>属性说明</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>应用的名字</td>
+</tr>
+<tr>
+<td>language</td>
+<td>应用的语言</td>
+</tr>
+<tr>
+<td>modules</td>
+<td>应用加载的功能模块</td>
+</tr>
+<tr>
+<td>reachable</td>
+<td>应用可以使用的模块</td>
+</tr>
+</tbody>
+</table>
+<p>其中，应用的模块放置在 <code>app/module</code> 目录下，现在只有一个模块 <code>app</code>，其中 <code>suda</code> 模块为内置模块</p>
+<h3 id="应用配置文件-app-resource-config-config-json"><a href="#应用配置文件-app-resource-config-config-json" class="headerlink" title="应用配置文件 app/resource/config/config.json"></a>应用配置文件 app/resource/config/config.json</h3><p>该文件包含了应用的默认配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"debug"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"timelimit"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"timezone"</span>: <span class="string">"PRC"</span>,</span><br><span class="line">    <span class="attr">"markVersion"</span>:<span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"database"</span>: &#123;</span><br><span class="line">        <span class="attr">"prefix"</span>: <span class="string">"dx_"</span>, </span><br><span class="line">        <span class="attr">"host"</span>: <span class="string">"127.0.0.1"</span>, </span><br><span class="line">        <span class="attr">"port"</span>: <span class="number">3306</span>,</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"suda_system"</span>, </span><br><span class="line">        <span class="attr">"user"</span>: <span class="string">"root"</span>,</span><br><span class="line">        <span class="attr">"passwd"</span>: <span class="string">"root"</span>, </span><br><span class="line">        <span class="attr">"charset"</span>: <span class="string">"utf8"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"non-static"</span>: <span class="string">"php"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="属性说明-1"><a href="#属性说明-1" class="headerlink" title="属性说明"></a>属性说明</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>debug</td>
+<td>开启Debug模式，默认开启，会被覆盖</td>
+</tr>
+<tr>
+<td>timelimit</td>
+<td>PHP允许的最长运行时间，0表示无限</td>
+</tr>
+<tr>
+<td>timezone</td>
+<td>设置时区，PRC 中国</td>
+</tr>
+<tr>
+<td>markVersion</td>
+<td>显示版本头，在HTTP头部可以看到版本信息</td>
+</tr>
+<tr>
+<td>database</td>
+<td>数据库配置信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="如何创建一个页面"><a href="#如何创建一个页面" class="headerlink" title="如何创建一个页面"></a>如何创建一个页面</h2><p>在框架中，所有的页面都依赖于模块而生存，我们来看看 <code>app/modules/app</code> 文件夹，也就是app模块，<br>其中，控制页面URL的文件在模块目录下的 <code>resource/config/router.json</code> 文件中。我们看看该文件的内容</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"index"</span>: &#123;</span><br><span class="line">        <span class="attr">"class"</span>: <span class="string">"cn\\atd3\\response\\IndexResponse"</span>,</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该文件内包含了一个页面的路由，既访问 <code>/</code> 时调用 <code>cn\\atd3\\response\\IndexResponse</code> 类，本次我们就暂时不讲解调用类，现在就新建一个静态页面即可。</p>
+<h3 id="步骤1：添加一个页面模板"><a href="#步骤1：添加一个页面模板" class="headerlink" title="步骤1：添加一个页面模板"></a>步骤1：添加一个页面模板</h3><p>添加页面模板的位置在模块目录下：<code>resource/template/模板名/</code>，其中模板名用default作为默认的模板名，现在往里面加入一个HTML页面,文件名为 <code>hello.tpl.html</code>, 注意，扩展名：<strong>tpl.html</strong></p>
+<blockquote>
+<p>resource/template/default/hello.tpl.html</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="步骤2：添加URL引用"><a href="#步骤2：添加URL引用" class="headerlink" title="步骤2：添加URL引用"></a>步骤2：添加URL引用</h3><p>我们创建好页面之后，需要用URL来引用整个页面。在 <code>resource/config/router.json</code> </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"index"</span>: &#123;</span><br><span class="line">        <span class="attr">"class"</span>: <span class="string">"cn\\atd3\\response\\IndexResponse"</span>,</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"hello"</span>: &#123;</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/hello"</span>,</span><br><span class="line">        <span class="attr">"template"</span>: <span class="string">"hello"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>hello</code> 为URL的名字，<code>template</code> 指定的为URL加载的模板，这里省略 <code>.tpl.html</code> ，<code>url</code>指定了访问时的URL</p>
+<p>现在的目录结构如下</p>
+<p><img src="4.png" alt=""></p>
+<p>此时我们访问页面 ：domain.com/hello 我们会发现是404页面，原因是页面加载了缓存，减低性能消耗</p>
+<p><img src="5.png" alt=""></p>
+<p>现在我们需要实时访问。则访问：domain.com/dev.php/hello ，其中 dev.php 是开发时入口。会清理缓存并重新写入</p>
+<p><img src="/images/placeholder.png" alt="" data-src="6.png" class="lazyload"></p>
+<p>由此，一个静态页面就加入成功了。</p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate1.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate2.png">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/08/01/suda-action-page/" data-hover="Suda - 03 动态页面及日志记录">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/30/suda-env-build/" data-hover="Suda - 01 基础开发环境项目配置"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

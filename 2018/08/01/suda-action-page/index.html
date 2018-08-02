@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda - 03 动态页面及日志记录 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda - 03 动态页面及日志记录
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		8月 01, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			10202
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>本例将学习创建个动态页面以及学习日志的查看和使用。</p>
+<a id="more"></a>
+<h2 id="MVC模式说明"><a href="#MVC模式说明" class="headerlink" title="MVC模式说明"></a>MVC模式说明</h2><p>在Web开发中，用的比较多的方式就是分层设计，最常用的分层模式便是 MVC模式（Model View Controller）</p>
+<ul>
+<li><code>Model</code> 层：业务模型层，处理业务规则</li>
+<li><code>View</code> 层：交互界面层，用户看到并与之交互的界面</li>
+<li><code>Controller</code> 层：接受用户的输入并调用模型和视图去完成用户的需求</li>
+</ul>
+<blockquote>
+<p>Any problem  in computer science can be solved by anther layer of indirection.<br>计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决<br>— 某大佬</p>
+</blockquote>
+<h2 id="框架的分层"><a href="#框架的分层" class="headerlink" title="框架的分层"></a>框架的分层</h2><p>在框架中，分层模式不明显也不强调，按照自己的思路来编写代码也可，不过推荐按照一定的规则来对操作进行分层，方便自己也方便他人，一般来说我写代码的时候会分层如下几层</p>
+<ul>
+<li><code>Response</code> 层：对应 MVC 分层中的控制器层，控制界面显示处理业务逻辑</li>
+<li><code>Table</code> 层：负责控制业务数据持久化数据的操作</li>
+<li><code>Model</code> 层：负责对业务逻辑的处理以及使用Table层对数据持久化</li>
+<li><code>Controller</code> 层：负责数据处理以及调用模型</li>
+<li><code>Provider</code> 层：提供对外API的映射以及构建以及权限验证</li>
+</ul>
+<p>当业务逻辑不复杂的时候我会把 <code>Model</code> 和 <code>Table</code> 层合并做 <code>Table</code> 层。既各层级的职能分配如下</p>
+<ul>
+<li><code>Response</code> 层：对应 MVC 分层中的控制器层，控制界面显示处理业务逻辑</li>
+<li><code>Table</code> 层：负责对业务逻辑的处理、数据的持久化数据的操作</li>
+<li><code>Controller</code> 层：负责数据处理以及调用模型</li>
+<li><code>Provider</code> 层：提供对外API的映射以及构建以及权限验证</li>
+</ul>
+<h2 id="创建一个动态页面"><a href="#创建一个动态页面" class="headerlink" title="创建一个动态页面"></a>创建一个动态页面</h2><p>在上一次课中我们创建了一个静态页面，我们现在创建一个动态页面，该页面实现功能如下：显示请求的IP地址和时间。记录一条info日志。并记录运行时长。</p>
+<h3 id="步骤一：先建一条路由"><a href="#步骤一：先建一条路由" class="headerlink" title="步骤一：先建一条路由"></a>步骤一：先建一条路由</h3><p>打开上节课的路由文件，添加一条路由。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"index"</span>: &#123;</span><br><span class="line">        <span class="attr">"class"</span>: <span class="string">"cn\\atd3\\response\\IndexResponse"</span>,</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"hello"</span>: &#123;</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/hello"</span>,</span><br><span class="line">        <span class="attr">"template"</span>: <span class="string">"hello"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"action_page"</span>: &#123;</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/action-page"</span>,</span><br><span class="line">        <span class="attr">"class"</span>: <span class="string">"cn\\atd3\\response\\ActionPageResponse"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>action_page</code> 为本次我们创建的页面路由，该路由会在用户访问 <code>/action-page</code> 是调用 <code>cn\atd3\response\ActionPageResponse</code> 类。</p>
+<h3 id="步骤2：创建路由类"><a href="#步骤2：创建路由类" class="headerlink" title="步骤2：创建路由类"></a>步骤2：创建路由类</h3><p>在Suda框架中，推荐使用类来代替传统的从头到尾的脚本，不清楚的可以参考 ：<a href="http://php.net/manual/zh/language.oop5.php" target="_blank" rel="noopener">PHP类参考</a> ，在框架中，处理请求的类为 <code>suda\core\Request</code>，处理响应的类为 <code>suda\core\Response</code> ，本课我们使用响应类来处理请求，这个类是一个抽象类，需要继承；</p>
+<p>打开 <code>src</code> 文件夹，在文件夹下创建一个文件 <code>ActionPageResponse.php</code> ，这个文件会在加载 <code>cn\atd3\response\ActionPageResponse</code> 类的时候自动被包含，其中 <code>src</code> 的根命名空间为 <code>cn\atd3\response</code> 也就是说，框架加载类中包含 <code>cn\atd3\response\类名</code> 都是在这个文件夹中搜索。</p>
+<p>现在的目录结构如下：</p>
+<p><img src="1.png" alt=""></p>
+<p>现在我们在里面编写代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">cn</span>\<span class="title">atd3</span>\<span class="title">response</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">suda</span>\<span class="title">core</span>\<span class="title">Request</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ActionPageResponse</span> <span class="keyword">extends</span> \<span class="title">suda</span>\<span class="title">core</span>\<span class="title">Response</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">onRequest</span><span class="params">(Request $request)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'Hello World'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问页面可以得到如下结果：</p>
+<p><img src="2.png" alt=""></p>
+<h3 id="步骤3：使用模板"><a href="#步骤3：使用模板" class="headerlink" title="步骤3：使用模板"></a>步骤3：使用模板</h3><p>创建一个新的模板文件，命名为 action-page (对应的路径为 resource/template/default/action-page.tpl.html)<br>并写入代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Action PAGE<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="步骤4：引入模板并显示"><a href="#步骤4：引入模板并显示" class="headerlink" title="步骤4：引入模板并显示"></a>步骤4：引入模板并显示</h3><p>修改  <code>ActionPageResponse.php</code> 加入如下代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$view = <span class="keyword">$this</span>-&gt;page(<span class="string">'action-page'</span>); <span class="comment">// 创建一个页面并使用 action-page.tpl.html 作为模板</span></span><br><span class="line">$view-&gt;render();  <span class="comment">// 渲染模板显示出来</span></span><br></pre></td></tr></table></figure>
+<p>现在的代码以及文件结构如下：</p>
+<p><img src="3.png" alt=""></p>
+<p>访问，得到如下结果</p>
+<p><img src="4.png" alt=""></p>
+<h3 id="步骤5：插入动态变量"><a href="#步骤5：插入动态变量" class="headerlink" title="步骤5：插入动态变量"></a>步骤5：插入动态变量</h3><p>修改页面代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$view = <span class="keyword">$this</span>-&gt;page(<span class="string">'action-page'</span>); <span class="comment">// 创建一个页面并使用 action-page.tpl.html 作为模板</span></span><br><span class="line">$view-&gt;set(<span class="string">'ip'</span>,$request-&gt;ip()); <span class="comment">// 获取IP并压入模板</span></span><br><span class="line">$view-&gt;set(<span class="string">'time'</span>,date(<span class="string">'Y-m-d H:i:s'</span>,time())); <span class="comment">// 压入时间</span></span><br><span class="line">$view-&gt;render();  <span class="comment">// 渲染模板显示出来</span></span><br></pre></td></tr></table></figure>
+<p>修改模板代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span> &#123;&#123; $:ip &#125;&#125; - &#123;&#123; $:time &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其中 <code>{{ }}</code> 表示是一个动态参数，<code>$:ip</code> 表示使用模板中的变量 <code>ip</code> , 使用 <code>$:</code> 来与 PHP变量符号 <code>$</code> 区分。</p>
+<p>现在的页面结构如下：</p>
+<p><img src="5.png" alt=""></p>
+<p>访问后</p>
+<p><img src="/images/placeholder.png" alt="" data-src="6.png" class="lazyload"></p>
+<h3 id="步骤6：插入日志并查看"><a href="#步骤6：插入日志并查看" class="headerlink" title="步骤6：插入日志并查看"></a>步骤6：插入日志并查看</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">debug()-&gt;info(<span class="string">'日志信息'</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/placeholder.png" alt="" data-src="7.png" class="lazyload"></p>
+<p>日志文件路径：<code>app/data/logs/latest.log</code>，日志不会自动删除，在日志文件大于 2M 时会被压缩打包，</p>
+<p>日志文件内容：</p>
+<p><img src="/images/placeholder.png" alt="" data-src="8.png" class="lazyload"></p>
+<p>日志摘录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">=====9744c0=====233.233.233.233=====debug=====</span><br><span class="line">233.233.233.233	2018-08-01 09:44:36	GET	/action-page</span><br><span class="line">	[0.0157389641 s : 438.27 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:58]		suda\core\System#init	system init</span><br><span class="line">	[0.0169818401 s : 546.16 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:111]		suda\core\System#readManifast	reading manifast file</span><br><span class="line">	[0.0177240372 s : 548.71 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:104]		suda\core\System#console	loading application suda\core\Application from D:\Server\vhost\dxkite.org\test\public/../app</span><br><span class="line">	[0.0193159580 s : 648.66 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Application.php:81]		suda\core\Application#__construct	application load D:\Server\vhost\dxkite.org\test\public/../app</span><br><span class="line">	[0.0219209194 s : 650.99 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Application.php:525]		suda\core\Application#registerModule	load module config D:\Server\vhost\dxkite.org\test\suda\system\resource\modules/dxkite-suda/module.json</span><br><span class="line">	[0.0254838467 s : 884.95 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Application.php:525]		suda\core\Application#registerModule	load module config D:\Server\vhost\dxkite.org\test\app\modules/app/module.json</span><br><span class="line">	[0.0263028145 s : 887.67 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Application.php:337]		live modules	[&quot;demo\/app:1.0.0-dev&quot;,&quot;dxkite\/suda:1.0.6&quot;]</span><br><span class="line">	[0.0268199444 s : 887.74 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Hook.php:31]		suda\core\Hook#loadConfig	D:\Server\vhost\dxkite.org\test\app\modules/app/resource/config/listener.json</span><br><span class="line">	[0.0278959274 s : 889.52 KB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\template\Manager.php:117]		suda\template\Manager#theme	change themes:default</span><br><span class="line">	[0.0285499096 s : 913.83 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\tool\Command.php:49]		suda\tool\Command#exec	exec command &#123;closure command&#125; with args []</span><br><span class="line">	[0.0288488865 s : 913.8 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\tool\Command.php:49]		suda\tool\Command#exec	exec command &#123;closure command&#125; with args []</span><br><span class="line">	[0.0291199684 s : 912.6 KB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\suda.php:7]		suda\core\System#run	process init application 0.013243s</span><br><span class="line">	[0.0294208527 s : 914.97 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Application.php:365]		reachable modules	[&quot;demo\/app:1.0.0-dev&quot;]</span><br><span class="line">	[0.0296499729 s : 915.11 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Router.php:71]		suda\core\Router#load	load module:demo/app:1.0.0-dev path:D:\Server\vhost\dxkite.org\test\app\modules/app</span><br><span class="line">	[0.0316369534 s : 998.84 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Router.php:76]		suda\core\Router#load	loading simple route from file D:\Server\vhost\dxkite.org\test\app\modules/app/resource/config/router.json</span><br><span class="line">	[0.0341479778 s : 999.81 KB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\suda.php:7]		suda\core\System#run	process init router 0.004893s</span><br><span class="line">	[0.0343270302 s : 1003.75 KB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\tool\Command.php:49]		suda\tool\Command#exec	exec command &#123;closure command&#125; with args [&#123;&#125;]</span><br><span class="line">	[0.0345048904 s : 1000.93 KB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:85]		suda\core\Router#dispatch	process dispatch 0.000221s</span><br><span class="line">	[0.0353410244 s : 1.02 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Application.php:383]		suda\core\Application#activeModule	active module demo/app:1.0.0-dev</span><br><span class="line">	[0.0356998444 s : 1.02 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Application.php:389]		suda\core\Application#activeModule	set locale zh-CN</span><br><span class="line">	[0.0377128124 s : 1.02 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\tool\Command.php:97]		parse command cn\atd3\response\ActionPageResponse-&gt;onRequest	[&quot;cn\\atd3\\response\\ActionPageResponse-&gt;onRequest&quot;,&quot;cn\\atd3\\response\\ActionPageResponse&quot;,&quot;-&gt;&quot;,&quot;onRequest&quot;]</span><br><span class="line">	[0.0388419628 s : 1.04 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\tool\Command.php:49]		suda\tool\Command#exec	exec command cn\atd3\response\ActionPageResponse-&gt;onRequest with args [&#123;&#125;]</span><br><span class="line">	[0.0427668095 s : 1.05 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\template\Manager.php:133]		suda\template\compiler\suda\Compiler#compile	process compile demo/app:1.0.0-dev:action-page 0.001639s</span><br><span class="line">	[0.0445339680 s : 1.09 MB]	[info]	[D:\Server\vhost\dxkite.org\test\app\modules\app\src\ActionPageResponse.php:13]		cn\atd3\response\ActionPageResponse#onRequest	日志信息</span><br><span class="line">	[0.0446398258 s : 1.09 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\template\compiler\suda\Template.php:99]		start render	demo/app:1.0.0-dev:action-page</span><br><span class="line">	[0.0447850227 s : 1.11 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\template\compiler\suda\Template.php:91]		suda\template\compiler\suda\Template#echo	process render demo/app:1.0.0-dev:action-page 0.000047s</span><br><span class="line">	[0.0448758602 s : 1.09 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\template\compiler\suda\Template.php:107]		free render [348]	demo/app:1.0.0-dev:action-page</span><br><span class="line">	[0.0449628830 s : 1.09 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\template\compiler\suda\Template.php:59]		suda\template\compiler\suda\Template#render	echo demo/app:1.0.0-dev:action-page</span><br><span class="line">	[0.0454258919 s : 1.07 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Router.php:336]		suda\core\Router#runRouter	process request 0.007781s</span><br><span class="line">	[0.0455188751 s : 1.07 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:85]		suda\core\Router#dispatch	process run router 0.010214s</span><br><span class="line">	[0.0456018448 s : 1.07 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\suda.php:7]		suda\core\System#run	process run request 0.011327s</span><br><span class="line">	[0.0458300114 s : 1.07 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:140]		suda\core\Debug#timeEnd	process before shutdown 0.000111s</span><br><span class="line">	[0.0466220379 s : 1.09 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:150]		suda\core\Cache#gc	process cache gc 0.000109s</span><br><span class="line">	[0.0467770100 s : 1.09 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\tool\Command.php:49]		suda\tool\Command#exec	exec command &#123;closure command&#125; with args []</span><br><span class="line">	[0.0469088554 s : 1.09 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:152]		suda\core\System#onShutdown	connection status normal</span><br><span class="line">	[0.0470139980 s : 1.09 MB]	[trace]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:155]		suda\core\System#onShutdown	system shutdown</span><br><span class="line">	[0.0471739769 s : 1.09 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\System.php:156]		suda\core\Debug#timeEnd	process shutdown 0.001214s</span><br><span class="line">	[0.0473518372 s : 1.09 MB]	[info]	[D:\Server\vhost\dxkite.org\test\suda\system\src\suda\core\Debug.php:406]		suda\core\Debug#afterSystemRun	process system 0.032624s</span><br><span class="line">=====9744c0=====0.0475850105=====1.0871 MB:1.5067 MB=====22:23.916 MB=====</span><br></pre></td></tr></table></figure>
+<p>格式说明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">=====请求指纹=====IP地址=====运行模式=====</span><br><span class="line">请求IP	请求时间	请求方法	请求路径</span><br><span class="line">    [运行时间: 内存消耗]	[日志等级]	[文件位置]		调用函数	信息内容</span><br><span class="line">=====请求指纹=====运行时间=====消耗内存:最高内存消耗=====秒并发:并发消耗=====</span><br></pre></td></tr></table></figure>
+<h2 id="作业："><a href="#作业：" class="headerlink" title="作业："></a>作业：</h2><p>编写一个自己的动态页面，内容与示例不同</p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate1.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate2.png">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/08/01/suda-form-action/" data-hover="Suda - 04 表单与模板分支循环">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/30/suda-create-page/" data-hover="Suda - 02 创建一个页面"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

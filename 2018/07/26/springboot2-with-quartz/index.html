@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  SpringBoot 2 中使用 Quartz |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		SpringBoot 2 中使用 Quartz
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 26, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			3135
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>这几天在写SpringBoot项目，突然把SpringBoot从1.x更新到了2.x出了一堆的问题，本文讲一下Quartz升级版本后的配置</p>
+<a id="more"></a>
+<h2 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h2><p>在 SpringBoot 1.x 的时候引入依赖是这样的： </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.quartz-scheduler<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>quartz<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;quartz.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.quartz-scheduler<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>quartz-jobs<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;quartz.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>SpringBoot 2.x 改成了这样</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-quartz<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>改成这样的后果就是，不用自己用代码配置了。省去了配置各种东西的时间（妈耶，前两天白弄了）</p>
+<h2 id="配置文件变化"><a href="#配置文件变化" class="headerlink" title="配置文件变化"></a>配置文件变化</h2><p>在 SpringBoot 1.x 的时候使用的是  <code>org.quartz.xx</code> , 还要自己放到文件<code>quartz.properties</code>里面去，再引用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">org.quartz.scheduler.instanceId = AUTO</span><br><span class="line">org.quartz.scheduler.instanceName = DefaultQuartzScheduler</span><br><span class="line">org.quartz.threadPool.class = org.quartz.simpl.SimpleThreadPool</span><br><span class="line">org.quartz.threadPool.threadCount = 50</span><br><span class="line">org.quartz.threadPool.threadPriority = 5</span><br><span class="line">org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread = true</span><br><span class="line">org.quartz.jobStore.isClustered = true</span><br><span class="line">org.quartz.jobStore.misfireThreshold = 60000</span><br><span class="line">org.quartz.jobStore.clusterCheckinInterval = 20000</span><br><span class="line">org.quartz.jobStore.class = org.quartz.impl.jdbcjobstore.JobStoreTX</span><br><span class="line">org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.StdJDBCDelegate</span><br><span class="line">org.quartz.jobStore.selectWithLockSQL = SELECT * FROM &#123;0&#125;LOCKS WHERE LOCK_NAME = ? FOR UPDATE</span><br><span class="line">org.quartz.jobStore.tablePrefix = QRTZ_</span><br></pre></td></tr></table></figure>
+<p>吐血三升。在SpringBoot2.x中配置文件和配置项都变了，改到 <code>application.properties</code> 里面，配置项的前缀和属性也变了很多：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">spring.quartz.properties.org.quartz.scheduler.instanceName=clusteredScheduler</span><br><span class="line">spring.quartz.properties.org.quartz.scheduler.instanceId=AUTO</span><br><span class="line">spring.quartz.properties.org.quartz.jobStore.class=org.quartz.impl.jdbcjobstore.JobStoreTX</span><br><span class="line">spring.quartz.properties.org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.StdJDBCDelegate</span><br><span class="line">spring.quartz.properties.org.quartz.jobStore.tablePrefix=QRTZ_</span><br><span class="line">spring.quartz.properties.org.quartz.jobStore.isClustered=true</span><br><span class="line">spring.quartz.properties.org.quartz.jobStore.clusterCheckinInterval=10000</span><br><span class="line">spring.quartz.properties.org.quartz.jobStore.useProperties=false</span><br><span class="line">spring.quartz.properties.org.quartz.threadPool.class=org.quartz.simpl.SimpleThreadPool</span><br><span class="line">spring.quartz.properties.org.quartz.threadPool.threadCount=10</span><br><span class="line">spring.quartz.properties.org.quartz.threadPool.threadPriority=5</span><br><span class="line">spring.quartz.properties.org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread=true</span><br><span class="line">spring.quartz.job-store-type=jdbc</span><br></pre></td></tr></table></figure>
+<p>这样的话就自动集成了 Quartz 功能。</p>
+<blockquote>
+<p>讲道理配置用 yaml 感觉更加好？</p>
+</blockquote>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">    quartz:</span></span><br><span class="line"><span class="attr">        job-store-type:</span> <span class="string">jdbc</span></span><br><span class="line"><span class="attr">        properties:</span></span><br><span class="line"><span class="attr">            org:</span></span><br><span class="line"><span class="attr">                quartz:</span></span><br><span class="line"><span class="attr">                    jobStore:</span></span><br><span class="line"><span class="attr">                        class:</span> <span class="string">org.quartz.impl.jdbcjobstore.JobStoreTX</span></span><br><span class="line"><span class="attr">                        clusterCheckinInterval:</span> <span class="number">10000</span></span><br><span class="line"><span class="attr">                        driverDelegateClass:</span> <span class="string">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</span></span><br><span class="line"><span class="attr">                        isClustered:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">                        tablePrefix:</span> <span class="string">QRTZ_</span></span><br><span class="line"><span class="attr">                        useProperties:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">                    scheduler:</span></span><br><span class="line"><span class="attr">                        instanceId:</span> <span class="string">AUTO</span></span><br><span class="line"><span class="attr">                        instanceName:</span> <span class="string">clusteredScheduler</span></span><br><span class="line"><span class="attr">                    threadPool:</span></span><br><span class="line"><span class="attr">                        class:</span> <span class="string">org.quartz.simpl.SimpleThreadPool</span></span><br><span class="line"><span class="attr">                        threadCount:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">                        threadPriority:</span> <span class="number">5</span></span><br><span class="line"><span class="attr">                        threadsInheritContextClassLoaderOfInitializingThread:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>配置文件装换工具：<a href="http://www.toyaml.com/" target="_blank" rel="noopener">http://www.toyaml.com/</a> （提供 properties 与 yaml 的互相装换）</p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术笔记/">技术笔记</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Java/">Java</a> <a class="tag-link" href="/tags/Quartz/">Quartz</a> <a class="tag-link" href="/tags/SpringBoot-2-0/">SpringBoot 2.0</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/27/apache-vhost-alias-conf/" data-hover="Apache 实现一域一文件夹的虚拟主机配置">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/20/basic-use-of-git/" data-hover="Git与Github的简单使用"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

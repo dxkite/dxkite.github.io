@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  07 贪吃蛇 - 界面切换与控制 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		07 贪吃蛇 - 界面切换与控制
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 11, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			2497
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>上一节我们创建了一个按钮，现在我们要把按钮利用起来，现在我们需要三个界面：</p>
+<ol>
+<li>游戏主界面：提供游戏的开始和退出</li>
+<li>游戏界面：显示贪吃蛇以及游戏</li>
+<li>游戏失败界面：贪吃蛇死亡后显示的界面<a id="more"></a>
+</li>
+</ol>
+<p>回想一下界面的整个流程，现在我们需要开始正式写了，我们需要一个主程序，来控制各种界面的切换，以及需要三个界面，控制界面的显示等事务：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">View</span>:</span></span><br><span class="line">    screen = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    界面初始化</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, screen)</span>:</span></span><br><span class="line">        self.screen = screen</span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    界面绘制处理</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    界面事件分发</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>一个界面至少要包含两个方法，用来处理绘制和事件，现在我们来写第一个界面，这个界面为主界面，用来显示开始游戏和退出按键，以及显示一个游戏大图, 实现代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainView</span><span class="params">(View)</span>:</span></span><br><span class="line"></span><br><span class="line">    logo = <span class="keyword">None</span></span><br><span class="line">    btn_start = <span class="keyword">None</span></span><br><span class="line">    btn_exit = <span class="keyword">None</span></span><br><span class="line">    context = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, context)</span>:</span></span><br><span class="line">        self.btn_start = Button(<span class="string">'Start Game'</span>, self._on_start)</span><br><span class="line">        self.btn_exit = Button(<span class="string">'Exit Game'</span>, self._on_exit)</span><br><span class="line">        self.context = context</span><br><span class="line">        self.logo = pygame.image.load(<span class="string">'img/logo.png'</span>)</span><br><span class="line">        w, h = self.logo.get_size()</span><br><span class="line">        <span class="comment"># 调整界面适应 Logo 大小以及显示按钮</span></span><br><span class="line">        self.context.screen = pygame.display.set_mode(</span><br><span class="line">            (int(w * <span class="number">1.5</span>), int(h * <span class="number">2</span>)), <span class="number">0</span>, <span class="number">32</span>)</span><br><span class="line">        <span class="comment"># 设置界面标题</span></span><br><span class="line">        pygame.display.set_caption(<span class="string">'Python Snake Game v1.0'</span>)</span><br><span class="line">        View.__init__(self, context.screen)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 绘制界面</span></span><br><span class="line">        self._on_draw()</span><br><span class="line">        <span class="comment"># 绘制按钮</span></span><br><span class="line">        self.btn_start.on_draw(self.context.screen)</span><br><span class="line">        self.btn_exit.on_draw(self.context.screen)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="comment"># 监控各种事件</span></span><br><span class="line">        self.btn_start.on_event(event)</span><br><span class="line">        self.btn_exit.on_event(event)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_exit</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 控制退出状态</span></span><br><span class="line">        print(<span class="string">'exit game'</span>)</span><br><span class="line">        self.context.running = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_start</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 切换界面到游戏界面</span></span><br><span class="line">        print(<span class="string">'start game'</span>)</span><br><span class="line">        self.context.view = GameView(self.context)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_on_draw</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        计算各个按钮的位置以及Logo的位置</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        s_w, s_h = self.context.screen.get_size()</span><br><span class="line">        l_w, l_h = self.logo.get_size()</span><br><span class="line">        x, y, bs_w, bs_h = self.btn_start.get_box()</span><br><span class="line">        x, y, be_w, be_h = self.btn_exit.get_box()</span><br><span class="line">        y_start = l_h + <span class="number">50</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        界面元素排版</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        self.btn_start.pos = (s_w/<span class="number">2</span> - bs_w / <span class="number">2</span>, y_start)</span><br><span class="line">        self.btn_exit.pos = (s_w/<span class="number">2</span> - be_w / <span class="number">2</span>, y_start + bs_h + <span class="number">4</span>)</span><br><span class="line">        self.context.screen.blit(self.logo, (s_w/<span class="number">2</span>-l_w/<span class="number">2</span>, s_h/<span class="number">2</span>-l_h/<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>为了使界面能够正常显示，我们添加一个 <code>Game</code> 类来控制游戏以及界面的显示，控制界面的显示与操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pygame</span><br><span class="line"><span class="keyword">from</span> pygame <span class="keyword">import</span> QUIT</span><br><span class="line"><span class="keyword">from</span> pygameui <span class="keyword">import</span> Button</span><br><span class="line"><span class="keyword">from</span> views <span class="keyword">import</span> MainView</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Game</span>:</span></span><br><span class="line">    <span class="comment"># 运行状态</span></span><br><span class="line">    running = <span class="keyword">True</span></span><br><span class="line">    GAME_START = <span class="number">0</span></span><br><span class="line">    GAME_OVER = <span class="number">1</span></span><br><span class="line">    <span class="comment"># 屏幕状态</span></span><br><span class="line">    screen = <span class="keyword">None</span></span><br><span class="line">    <span class="comment"># 显示界面</span></span><br><span class="line">    view = <span class="keyword">None</span></span><br><span class="line">    <span class="comment"># 运行时钟</span></span><br><span class="line">    clock = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        pygame.init()</span><br><span class="line">        <span class="comment"># 初始化基础界面</span></span><br><span class="line">        self.clock = pygame.time.Clock()</span><br><span class="line">        self.screen = pygame.display.set_mode((<span class="number">300</span>, <span class="number">150</span>), <span class="number">0</span>, <span class="number">32</span>)</span><br><span class="line">        self.view = MainView(self)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> self.running:</span><br><span class="line">            <span class="keyword">for</span> event <span class="keyword">in</span> pygame.event.get():</span><br><span class="line">                <span class="comment"># 分发界面事件</span></span><br><span class="line">                self.view.on_event(event)</span><br><span class="line">                <span class="keyword">if</span> event.type == QUIT:</span><br><span class="line">                    self.running = <span class="keyword">False</span></span><br><span class="line">            self.screen.fill((<span class="number">0xff</span>, <span class="number">0xff</span>, <span class="number">0xff</span>))</span><br><span class="line">            <span class="comment"># 调用界面显示</span></span><br><span class="line">            self.view.on_draw()</span><br><span class="line">            pygame.display.flip()</span><br><span class="line">            self.clock.tick(<span class="number">60</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    Game().run()</span><br></pre></td></tr></table></figure>
+<p>全部代码： <a href="https://github.com/DXkite/python-snake-game-demo/tree/master/07-snake-frame" target="_blank" rel="noopener">https://github.com/DXkite/python-snake-game-demo/tree/master/07-snake-frame</a></p>
+<p><em>运行界面</em></p>
+<p><img src="0.png" alt=""></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Python贪吃蛇教程/">Python贪吃蛇教程</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Python/">Python</a> <a class="tag-link" href="/tags/pygame/">pygame</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/12/snake-draw-and-move/" data-hover="08 贪吃蛇 - 绘制与移动蛇">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/10/snake-ui-button/" data-hover="06 贪吃蛇 - 按钮控件实现"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

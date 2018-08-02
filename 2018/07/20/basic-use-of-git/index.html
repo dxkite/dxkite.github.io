@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Git与Github的简单使用 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Git与Github的简单使用
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 20, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			1153
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>作为一个程序员，版本管理系统我们都要得会啊，本次教一下简单的Git功能的使用</p>
+<p>Git 是一个比较流行的代码版本管理系统</p>
+<a id="more"></a>
+<h2 id="注册一个Github账号"><a href="#注册一个Github账号" class="headerlink" title="注册一个Github账号"></a>注册一个Github账号</h2><p>在开始本教程之前，可以先去Github注册一个账号: <a href="https://github.com" target="_blank" rel="noopener">https://github.com</a> ，英文的网站，如果不熟悉的话可以去 <a href="https://gitee.com" target="_blank" rel="noopener">码云</a>、<a href="http://coding.net" target="_blank" rel="noopener">Coding</a> 去注册账号、注册完成以后就可以浪了</p>
+<h2 id="创建一个代码仓库"><a href="#创建一个代码仓库" class="headerlink" title="创建一个代码仓库"></a>创建一个代码仓库</h2><p>在首页找到 <code>+</code> 号，点击后有一个 <code>New repository</code> </p>
+<p><img src="0.png" alt=""></p>
+<p>点击后出现如下界面 也可以点击访问：<a href="https://github.com/new" target="_blank" rel="noopener">https://github.com/new</a> </p>
+<p><img src="1.png" alt=""></p>
+<p>填写后即可创建一个代码仓库，创建成功后出现如下界面，复制红框的部分 （<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:DXkite/homework.git）</p>
+<p><img src="2.png" alt=""></p>
+<h2 id="Git安装配置"><a href="#Git安装配置" class="headerlink" title="Git安装配置"></a>Git安装配置</h2><p>安装如下软件</p>
+<ul>
+<li><strong>Github Desktop</strong> <a href="https://desktop.github.com/" target="_blank" rel="noopener">https://desktop.github.com/</a> <a href="https://central.github.com/deployments/desktop/desktop/latest/win32" target="_blank" rel="noopener">Windows版本 点击下载</a></li>
+<li><strong>Git</strong> <a href="https://www.git-scm.com/download/" target="_blank" rel="noopener">https://www.git-scm.com/download/</a> <a href="https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/Git-2.18.0-64-bit.exe" target="_blank" rel="noopener">Windows版本 点击下载</a></li>
+</ul>
+<p>全部安装，安装配置选择默认配置即可，安装完成后登陆 </p>
+<p><img src="3.png" alt=""></p>
+<p>登陆成功后，会要你配置Git，填写你注册时的账号邮箱即可</p>
+<p><img src="4.png" alt=""></p>
+<p>点击 Continue 之后即可，点击 Finish 完成</p>
+<h2 id="配置SSH登陆"><a href="#配置SSH登陆" class="headerlink" title="配置SSH登陆"></a>配置SSH登陆</h2><p>选择一个文件夹（最好是放代码的地方），右键鼠标，选择 Git Bash Here</p>
+<p><img src="/images/placeholder.png" alt="" data-src="5.png" class="lazyload"></p>
+<p>输入运行命令 <code>ssh-keygen</code>，然后一直回车就行 </p>
+<p><img src="/images/placeholder.png" alt="" data-src="6.png" class="lazyload"></p>
+<p>然后找到上图的 id_rsa.pub 文件 <code>/c/Users/DXkite/.ssh/id_rsa.pub</code> 既在 <code>C:/Users/DXkite/.ssh/id_rsa.pub</code></p>
+<p>打开文件，复制文件内容</p>
+<p><img src="/images/placeholder.png" alt="" data-src="7.png" class="lazyload"></p>
+<p>打开Github，选择 Settinng</p>
+<p><img src="/images/placeholder.png" alt="" data-src="8.png" class="lazyload"></p>
+<p>选择 New SSH Key</p>
+<p><img src="/images/placeholder.png" alt="" data-src="9.png" class="lazyload"></p>
+<p>填上内容后点击  <code>Add SSH Key</code></p>
+<p><img src="/images/placeholder.png" alt="" data-src="10.png" class="lazyload"></p>
+<p>点击后会出现一个提示，输入密码，即可，在刚刚的窗口输入命令 <code>ssh git@github.com</code>，可能会要你输入<code>yes</code></p>
+<p><img src="/images/placeholder.png" alt="" data-src="11.png" class="lazyload"></p>
+<p>出现如上提示即可</p>
+<h2 id="克隆并上传第一个提交"><a href="#克隆并上传第一个提交" class="headerlink" title="克隆并上传第一个提交"></a>克隆并上传第一个提交</h2><h3 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h3><p>还记得之前复制的红框部分么（<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:DXkite/homework.git）？现在需要使用命令运行一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone [红框部分]</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<p><img src="/images/placeholder.png" alt="" data-src="12.png" class="lazyload"></p>
+<p>可以发现文件夹内会新建了一个文件夹，打开后，编辑 <code>README.md</code></p>
+<p><img src="/images/placeholder.png" alt="" data-src="13.png" class="lazyload"></p>
+<p>修改后，在这个文件夹打开 Git Bash </p>
+<p>运行命令 <code>git status</code> ，可以看到仓库的状态</p>
+<blockquote>
+<p><strong>git status</strong> 用来获取当前仓库的状态</p>
+</blockquote>
+<p><img src="/images/placeholder.png" alt="" data-src="14.png" class="lazyload"></p>
+<blockquote>
+<p><strong>git add .</strong> 把文件添加到仓库<br><strong>git commit -m “提交信息”</strong> 添加一个提交</p>
+</blockquote>
+<p><img src="/images/placeholder.png" alt="" data-src="15.png" class="lazyload"></p>
+<blockquote>
+<p><strong>git push origin master</strong> 把提交上传到Github</p>
+</blockquote>
+<p><img src="/images/placeholder.png" alt="" data-src="16.png" class="lazyload"></p>
+<p>提交完成后，可以查看你的仓库的文件变化 </p>
+<p><img src="/images/placeholder.png" alt="" data-src="17.png" class="lazyload"></p>
+<h3 id="使用Github-Desktop-提交"><a href="#使用Github-Desktop-提交" class="headerlink" title="使用Github Desktop 提交"></a>使用Github Desktop 提交</h3><p>修改文件后，打开 Github Desktop 操作内容如下：</p>
+<p><img src="/images/placeholder.png" alt="" data-src="18.png" class="lazyload"></p>
+<p><img src="/images/placeholder.png" alt="" data-src="19.png" class="lazyload"></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Git/">Git</a> <a class="tag-link" href="/tags/Github/">Github</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate1.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate2.png">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/26/springboot2-with-quartz/" data-hover="SpringBoot 2 中使用 Quartz">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/19/php-function-default-behavior/" data-hover="PHP函数的默认行为"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

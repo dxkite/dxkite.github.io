@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  08 贪吃蛇 - 绘制与移动蛇 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		08 贪吃蛇 - 绘制与移动蛇
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		7月 12, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			3527
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>主界面做好以后，我们开始做贪吃蛇界面，首先定义好一个贪吃蛇游戏界面的类，创建好地图大小，我们这里创建一个 12*12的地图块</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GameView</span><span class="params">(View)</span>:</span></span><br><span class="line">    block = <span class="keyword">None</span></span><br><span class="line">    food = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, context)</span>:</span></span><br><span class="line">        View.__init__(self, context.screen)</span><br><span class="line">        <span class="comment"># 加载基础资源</span></span><br><span class="line">        self.block = pygame.image.load(<span class="string">'img/block.jpg'</span>)</span><br><span class="line">        self.food = pygame.image.load(<span class="string">'img/food.png'</span>)</span><br><span class="line">        <span class="comment"># 获取地图块大小</span></span><br><span class="line">        self.BLOCK_SIZE = self.block.get_size()</span><br><span class="line">        <span class="comment"># 设置屏幕大小</span></span><br><span class="line">        context.screen = pygame.display.set_mode(</span><br><span class="line">            (<span class="number">12</span>*self.BLOCK_SIZE[<span class="number">0</span>], <span class="number">12</span> * self.BLOCK_SIZE[<span class="number">1</span>]), <span class="number">0</span>, <span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">    <span class="string">""""""</span><span class="string">""""""</span><span class="string">""""""</span><span class="string">"""</span></span><br><span class="line"><span class="string">    在某个位置绘制一个块</span></span><br><span class="line"><span class="string">    """</span><span class="string">""""""</span><span class="string">""""""</span><span class="string">""""""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">draw_surface</span><span class="params">(self, pos, surface)</span>:</span></span><br><span class="line">        self.screen.blit(</span><br><span class="line">            surface, (pos[<span class="number">0</span>]*self.BLOCK_SIZE[<span class="number">0</span>], pos[<span class="number">1</span>]*self.BLOCK_SIZE[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
+<p>创建完成后，我们来实现一个贪吃蛇类，控制贪吃蛇的移动与绘制，首先我们生成一个数组存储贪吃蛇并对其进行一系列的处理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Snake</span>:</span></span><br><span class="line">    <span class="comment"># 方向说明</span></span><br><span class="line">    HEAD_UP = <span class="number">0</span></span><br><span class="line">    HEAD_DOWN = <span class="number">1</span></span><br><span class="line">    HEAD_LEFT = <span class="number">2</span></span><br><span class="line">    HEAD_RIGHT = <span class="number">3</span></span><br><span class="line">    <span class="comment"># 移动方向</span></span><br><span class="line">    direction = HEAD_LEFT</span><br><span class="line">    <span class="comment"># 身体数据</span></span><br><span class="line">    body = []</span><br><span class="line">    <span class="comment"># 初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">        self.body = [[x, y], [x - <span class="number">1</span>, y], [x<span class="number">-2</span>, y]]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 监听按键</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 绘制贪吃蛇</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断是否吃到食物</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">has_eat</span><span class="params">(self, food)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断是否撞到物品</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">has_hit</span><span class="params">(self, blocks)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>初始化的时候，我们在地图上创建了个 12*12 的地图，蛇从地图的任意地方生成蛇头，我们将蛇身初始为3格,初始向右爬行，则初始化身体：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">    self.body = [[x, y], [x - <span class="number">1</span>, y], [x<span class="number">-2</span>, y]]</span><br></pre></td></tr></table></figure>
+<p>在初始化的时候我们需要将资源也加载上来</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">    self.body = [[x, y], [x - <span class="number">1</span>, y], [x<span class="number">-2</span>, y]]</span><br><span class="line">    self.direction = self.HEAD_RIGHT</span><br><span class="line">    self.img_head = [pygame.image.load(</span><br><span class="line">        <span class="string">'img/head_'</span> + str(i+<span class="number">1</span>) + <span class="string">'.png'</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">4</span>)]</span><br><span class="line">    self.img_body = pygame.image.load(<span class="string">'img/body.png'</span>)</span><br></pre></td></tr></table></figure>
+<p>现在我们监控按键，对于蛇，按下后会改变方向，且只能向正向改变方向（如：当蛇向上移动时不能一下向下移动）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> event.key == K_UP <span class="keyword">and</span> self.direction != self.HEAD_DOWN:</span><br><span class="line">        self.direction = self.HEAD_UP</span><br><span class="line">    <span class="keyword">elif</span> event.key == K_DOWN <span class="keyword">and</span> self.direction != self.HEAD_UP:</span><br><span class="line">        self.direction = self.HEAD_DOWN</span><br><span class="line">    <span class="keyword">elif</span> event.key == K_LEFT <span class="keyword">and</span> self.direction != self.HEAD_RIGHT:</span><br><span class="line">        self.direction = self.HEAD_LEFT</span><br><span class="line">    <span class="keyword">elif</span> event.key == K_RIGHT <span class="keyword">and</span> self.direction != self.HEAD_LEFT:</span><br><span class="line">        self.direction = self.HEAD_RIGHT</span><br></pre></td></tr></table></figure>
+<p>现在我们需要绘制蛇身，遍历身体的每一个位置，每次刷新绘图的时候都会调用 <code>on_draw</code> 我们通过监控 <code>on_draw</code> 调用的次数来计算速度，当蛇爬到边界时从对侧出现，实现代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 绘制贪吃蛇</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self, view)</span>:</span></span><br><span class="line">    <span class="comment"># 绘制已有的身体</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(self.body)):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">            view.draw_surface(self.body[i], self.img_head[self.direction])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            view.draw_surface(self.body[i], self.img_body)</span><br><span class="line">    <span class="comment"># 计算移动</span></span><br><span class="line">    <span class="keyword">if</span> self.frame_count &lt; self.speed:</span><br><span class="line">        self.frame_count = self.frame_count + <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        self.frame_count = <span class="number">0</span></span><br><span class="line">        <span class="comment"># 调整头部方向</span></span><br><span class="line">        move = copy.deepcopy(self.body[<span class="number">0</span>])</span><br><span class="line">        <span class="comment"># 计算移动</span></span><br><span class="line">        <span class="keyword">if</span> self.direction == self.HEAD_UP:</span><br><span class="line">            move[<span class="number">1</span>] = move[<span class="number">1</span>] - <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> move[<span class="number">1</span>] &lt; <span class="number">0</span>:</span><br><span class="line">                move[<span class="number">1</span>] = view.h - <span class="number">1</span></span><br><span class="line">            self.body.insert(<span class="number">0</span>, move)</span><br><span class="line">        <span class="keyword">elif</span> self.direction == self.HEAD_DOWN:</span><br><span class="line">            move[<span class="number">1</span>] = move[<span class="number">1</span>] + <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> move[<span class="number">1</span>] &gt;= view.h:</span><br><span class="line">                move[<span class="number">1</span>] = <span class="number">0</span></span><br><span class="line">            self.body.insert(<span class="number">0</span>, move)</span><br><span class="line">        <span class="keyword">elif</span> self.direction == self.HEAD_LEFT:</span><br><span class="line">            move[<span class="number">0</span>] = move[<span class="number">0</span>] - <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> move[<span class="number">0</span>] &lt; <span class="number">0</span>:</span><br><span class="line">                move[<span class="number">0</span>] = view.w - <span class="number">1</span></span><br><span class="line">            self.body.insert(<span class="number">0</span>, move)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            move[<span class="number">0</span>] = move[<span class="number">0</span>] + <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> move[<span class="number">0</span>] &gt;= view.w:</span><br><span class="line">                move[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">            self.body.insert(<span class="number">0</span>, move)</span><br><span class="line">        <span class="comment"># 剔除最末尾</span></span><br><span class="line">        self.body.pop(len(self.body) - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>现在我们将蛇加入地图 GameView：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GameView</span><span class="params">(View)</span>:</span></span><br><span class="line">    block = <span class="keyword">None</span></span><br><span class="line">    food = <span class="keyword">None</span></span><br><span class="line">    snake = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, context)</span>:</span></span><br><span class="line">        View.__init__(self, context.screen)</span><br><span class="line">        <span class="comment"># 加载基础资源</span></span><br><span class="line">        self.block = pygame.image.load(<span class="string">'img/block.jpg'</span>)</span><br><span class="line">        self.food = pygame.image.load(<span class="string">'img/food.png'</span>)</span><br><span class="line">        self.w = <span class="number">12</span></span><br><span class="line">        self.h = <span class="number">12</span></span><br><span class="line">        self.BLOCK_SIZE = self.block.get_size()</span><br><span class="line">        context.screen = pygame.display.set_mode(</span><br><span class="line">            (self.w*self.BLOCK_SIZE[<span class="number">0</span>], self.h * self.BLOCK_SIZE[<span class="number">1</span>]), <span class="number">0</span>, <span class="number">32</span>)</span><br><span class="line">        <span class="comment"># 初始化蛇</span></span><br><span class="line">        self.snake = Snake(<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="string">""""""</span><span class="string">""""""</span><span class="string">""""""</span><span class="string">"""</span></span><br><span class="line"><span class="string">    在某个位置绘制一个块</span></span><br><span class="line"><span class="string">    """</span><span class="string">""""""</span><span class="string">""""""</span><span class="string">""""""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">draw_surface</span><span class="params">(self, pos, surface)</span>:</span></span><br><span class="line">        self.screen.blit(</span><br><span class="line">            surface, (pos[<span class="number">0</span>]*self.BLOCK_SIZE[<span class="number">0</span>], pos[<span class="number">1</span>]*self.BLOCK_SIZE[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_draw</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.snake.on_draw(self)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_event</span><span class="params">(self, event)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> event.type == KEYDOWN:</span><br><span class="line">            self.snake.on_event(event)</span><br></pre></td></tr></table></figure>
+<p>运行后可以发现蛇在移动，通过上下左右控制蛇身以及方向</p>
+<p><img src="0.png" alt=""></p>
+<p>程序代码：<a href="https://github.com/DXkite/python-snake-game-demo/tree/master/08-snake-draw-and-move" target="_blank" rel="noopener">https://github.com/DXkite/python-snake-game-demo/tree/master/08-snake-draw-and-move</a></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Python贪吃蛇教程/">Python贪吃蛇教程</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/Python/">Python</a> <a class="tag-link" href="/tags/pygame/">pygame</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/images/donate2.png" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2018/07/13/snake-food-and-block/" data-hover="09 贪吃蛇 - 食物与障碍物生成">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2018/07/11/snake-frame/" data-hover="07 贪吃蛇 - 界面切换与控制"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>
