@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda - 06 引入并使用数据库 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda - 06 引入并使用数据库
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		8月 04, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			2889
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>一个网站，没有数据库和有数据库是两样，今天我们来学习把数据持久化到数据库中。<br>准备工作：</p>
+<ul>
+<li>创建一个路由 database 匹配地址 /database、 相应类：<code>cn\atd3\response\DBResponse</code></li>
+<li>创建一个页面模板  database , 并使相应类显示这个模板<a id="more"></a>
+</li>
+</ul>
+<h2 id="添加数据表"><a href="#添加数据表" class="headerlink" title="添加数据表"></a>添加数据表</h2><p>在 Suda 框架中，数据表不需要手动创建，我们在使用的时候继承 <code>suda\archive\Table</code> 类即可。<br>这里我们创建一个数据表：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">cn</span>\<span class="title">atd3</span>\<span class="title">table</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserTable</span> <span class="keyword">extends</span> \<span class="title">suda</span>\<span class="title">archive</span>\<span class="title">Table</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span>  <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">// 数据表名</span></span><br><span class="line">        <span class="keyword">parent</span>::__construct(<span class="string">'user'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">onBuildCreator</span><span class="params">($table)</span></span>&#123;</span><br><span class="line">        $table-&gt;fields(</span><br><span class="line">            <span class="comment">// 键名id，类型，长度省略 添加主键(primary)，自动增长(auto) </span></span><br><span class="line">            $table-&gt;field(<span class="string">'id'</span>,<span class="string">'bigint'</span>)-&gt;primary()-&gt;auto(),</span><br><span class="line">            $table-&gt;field(<span class="string">'name'</span>,<span class="string">'varchar'</span>,<span class="number">30</span>),</span><br><span class="line">            $table-&gt;field(<span class="string">'password'</span>,<span class="string">'varchar'</span>, <span class="number">255</span>)</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">return</span> $table;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一般来说，创建一个数据表就是以上代码即可，其中，<code>onBuildCreator</code> 放置数据表构建描述代码。<br>在 <code>__construct</code> 中调用父类的构造函数指定创建的数据表名。具体的函数参考可以找到Suda文件夹下的：  <code>docs/classes/suda/archive/Table.md</code> 文件查看文档 </p>
+<h2 id="创建数据处理类"><a href="#创建数据处理类" class="headerlink" title="创建数据处理类"></a>创建数据处理类</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">cn</span>\<span class="title">atd3</span>\<span class="title">response</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 引用 UserTable </span></span><br><span class="line"><span class="keyword">use</span> <span class="title">cn</span>\<span class="title">atd3</span>\<span class="title">table</span>\<span class="title">UserTable</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">suda</span>\<span class="title">core</span>\<span class="title">Request</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DBResponse</span> <span class="keyword">extends</span> \<span class="title">suda</span>\<span class="title">core</span>\<span class="title">Response</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">onRequest</span><span class="params">(Request $request)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $view = <span class="keyword">$this</span>-&gt;page(<span class="string">'database'</span>); </span><br><span class="line">        <span class="comment">// 新建数据表对象</span></span><br><span class="line">        $table = <span class="keyword">new</span> UserTable;</span><br><span class="line">        <span class="keyword">if</span> ($request-&gt;hasPost()) &#123;</span><br><span class="line">            <span class="comment">// 插入一条数据</span></span><br><span class="line">            $table-&gt;insert([</span><br><span class="line">                <span class="string">'name'</span> =&gt; $request-&gt;post(<span class="string">'name'</span>),</span><br><span class="line">                <span class="string">'password'</span> =&gt; $request-&gt;post(<span class="string">'password'</span>),</span><br><span class="line">            ]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 获取数据（ list 方法 可以获取全部数据）</span></span><br><span class="line">        $view-&gt;set(<span class="string">'user'</span>,$table-&gt;list());</span><br><span class="line">        $view-&gt;render();  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>细心的同学可能发现了，在代码里我好像都没有使用 <code>require</code>，<code>include</code> 啥的，这是框架帮我们自动加载了，<br>比如这个 <code>cn\atd3\table\UserTable</code> 数据表类，框架会自动搜索模板目录，查看模板配置：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">"import": &#123;</span><br><span class="line">    "share": &#123;</span><br><span class="line">        "cn\\atd3": "share"</span><br><span class="line">    &#125;,</span><br><span class="line">    "src": &#123;</span><br><span class="line">        "cn\\atd3\\response": "src"</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>在我们模块里面有这样一串代码，这里指定了 <code>cn\atd3</code> 命名空间找文件的路径是模块下的 <code>share</code> 路径，<code>cn\atd3\response</code> 要去 <code>src</code> 路径找。<br>所以，我们 <code>DBResponse.php</code> 文件应该放在 <code>src/DBResponse.php</code>，<code>UserTable.php</code> 应该放在 <code>share/table/UserTable.php</code> 文件下面：</p>
+<p><img src="1.png" alt=""></p>
+<p>在这个处理类中，表我们使用了两个方法：</p>
+<p><code>insert</code> 方法和 <code>list</code> 方法 ,对应的参考文件  <code>docs/classes/suda/archive/Table/insert.md</code>、<code>docs/classes/suda/archive/Table/list.md</code></p>
+<p>一个是插入数据，一个是列出数据，具体都可以看参考文件</p>
+<h2 id="构建界面"><a href="#构建界面" class="headerlink" title="构建界面"></a>构建界面</h2><p>界面我们现在需要有两个功能，才能配上处理文件：</p>
+<ol>
+<li>能够提交POST表单，数据为 <code>name</code> 和 <code>password</code></li>
+<li>能够显示数组列表</li>
+</ol>
+<p>现在的HTML界面如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>添加用户<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"@u"</span> <span class="attr">method</span>=<span class="string">"POST"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"name"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"password"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">button</span>&gt;</span>添加用户<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>用户列表<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 与PHP If 一致 --&gt;</span></span><br><span class="line">        @if (is_array($:user))</span><br><span class="line">            @foreach ( $:user as $user)</span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; $user['id'] &#125;&#125; - &#123;&#123;$user['name']&#125;&#125; - &#123;&#123;$user['password']&#125;&#125; <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            @endforeach</span><br><span class="line">        @else</span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span>空用户<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        @endif</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>运行界面：</p>
+<p><img src="2.png" alt=""></p>
+<p>我们测试插入一条数据</p>
+<p><img src="3.png" alt=""></p>
+<p>可以看到数据插入成功了</p>
+<h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><ul>
+<li>实现以上的功能</li>
+<li>尝试 update 方法和 delete 方法</li>
+</ul>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/images/donate1.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/images/donate2.png">	
+	</div>
+
+	<span class="donate-word">世界美好 你也是</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+           
+        
+      
+        
+        <a href="/2018/08/03/suda-file-upload/" data-hover="Suda - 05 文件上传与模板依赖"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+
+
+    
+    <div id="disqus_thread"></div>
+
+    <script>
+    (function() { 
+    var d = document, s = d.createElement('script');
+    s.src = 'https://'+'lemonreds'+'.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());    
+    (d.head || d.body).appendChild(s);
+    })();
+    </script>
+
+    <noscript>Please enable JavaScript to view the  <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+
+
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>
