@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   
   
-  <title>  Suda-Results-Statistical-Router |   Hello! I am DXkite </title>
+  <title>  Suda - 08 成绩统计系统 - 路由 |   Hello! I am DXkite </title>
 
  
   
@@ -71,7 +71,7 @@
 	<div class="post-header">
 
 	<p class="post-title">	
-		suda-results-statistical-router
+		Suda - 08 成绩统计系统 - 路由
 	</p>
 			
 
@@ -81,6 +81,11 @@
 	</span>
 
 	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			1794
+		</span>
 	
 </div>
 
@@ -92,15 +97,67 @@
 		
 
 			
-					  	
+					<p>上一篇我们讲了一下数据表，本次将一下部分路由以及处理。</p>
+<a id="more"></a>
+<h2 id="带参数的路由"><a href="#带参数的路由" class="headerlink" title="带参数的路由"></a>带参数的路由</h2><p>上一篇我留了几个路由作业，我挖了个坑</p>
+<ul>
+<li>index 页面，显示可以输入的表格数量，提供一个下载链接</li>
+<li>table 页面，显示输入的表格</li>
+<li>download 页面，提供下载表格的功能</li>
+</ul>
+<p>table/result/download 页面最好都要有一个参数，比如 访问的时候 <code>/table_id/table</code> 是不是更加给力一些？</p>
+<p>在路由中添加参数可以用语法 <code>{name:type=default}</code> 来定义参数，支持类型 string,int,url ,说明如下</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>一个字符串，匹配除/之外的所有字符</td>
+</tr>
+<tr>
+<td>url</td>
+<td>匹配后面的所有参数</td>
+</tr>
+<tr>
+<td>int</td>
+<td>匹配数字串</td>
+</tr>
+</tbody>
+</table>
+<h3 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h3><p>按照如上规则，我们的路由配置如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"index"</span>: &#123;</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/"</span>,</span><br><span class="line">        <span class="attr">"class"</span>: <span class="string">"dxkite\\statistical\\response\\IndexResponse"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"table"</span>: &#123;</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/&#123;table_id:string&#125;"</span>,</span><br><span class="line">        <span class="attr">"class"</span>: <span class="string">"dxkite\\statistical\\response\\TableResponse"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"download"</span>: &#123;</span><br><span class="line">        <span class="attr">"url"</span>: <span class="string">"\/&#123;table_id:string&#125;\/download"</span>,</span><br><span class="line">        <span class="attr">"class"</span>: <span class="string">"dxkite\\statistical\\response\\DownloadResponse"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，在 table  和 download 页面中我都插入了参数，这个参数可以通过 get 方式获得。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">dxkite</span>\<span class="title">statistical</span>\<span class="title">response</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">suda</span>\<span class="title">core</span>\<span class="title">Request</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TableResponse</span> <span class="keyword">extends</span> \<span class="title">suda</span>\<span class="title">core</span>\<span class="title">Response</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">onRequest</span><span class="params">(Request $request)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> $request-&gt;get(<span class="string">'table_id'</span>);  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="1.png" alt=""></p>
+<h2 id="index-页面"><a href="#index-页面" class="headerlink" title="index 页面"></a>index 页面</h2><p>显示当前可以填写的表格，并显示下载链接，目标页面：</p>
+<p><img src="2.png" alt=""></p>
+<p><strong>提示</strong> 带有参数的URL生成方式</p>
+<p>URL(url_id):<code>/{table}/xx/</code>  则 <code>u(&#39;url_id&#39;,somevalue)</code> ，按照顺序填写即可生成URL <code>/somevalue/xx/</code></p>
+<p>如 table 链接： </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"@u('table', 表单ID )"</span>&gt;</span>填写<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>HTML界面自己写，模板语法参考：<a href="https://github.com/DXkite/suda/blob/master/docs/Template.md" target="_blank" rel="noopener">https://github.com/DXkite/suda/blob/master/docs/Template.md</a></strong></p>
+<h2 id="index-处理"><a href="#index-处理" class="headerlink" title="index 处理"></a>index 处理</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">dxkite</span>\<span class="title">statistical</span>\<span class="title">response</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">suda</span>\<span class="title">core</span>\<span class="title">Request</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IndexResponse</span> <span class="keyword">extends</span> \<span class="title">suda</span>\<span class="title">core</span>\<span class="title">Response</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">onRequest</span><span class="params">(Request $request)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $view = <span class="keyword">$this</span>-&gt;page(<span class="string">'index'</span>);</span><br><span class="line">        <span class="comment">// 加载 resource/config/statistic.json 文件</span></span><br><span class="line"></span><br><span class="line">        $tables = app()-&gt;getModuleConfig(app()-&gt;getFileModule(<span class="keyword">__FILE__</span>),<span class="string">'statistic'</span>);</span><br><span class="line">        $list = [];</span><br><span class="line">        <span class="comment">// 解析拼凑成可以显示的结构</span></span><br><span class="line">        <span class="keyword">foreach</span> ($tables <span class="keyword">as</span> $id =&gt; $attr) &#123;</span><br><span class="line">            $list[$id][<span class="string">'id'</span>] = $id;</span><br><span class="line">            $list[$id][<span class="string">'name'</span>]= $attr[<span class="string">'name'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 压入到HTML view中显示</span></span><br><span class="line">        $view-&gt;set(<span class="string">'list'</span>,$list);</span><br><span class="line">        $view-&gt;render();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="填写表格显示"><a href="#填写表格显示" class="headerlink" title="填写表格显示"></a>填写表格显示</h2>  	
 					
 	  </div>     
 	  
 
 	
 <div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
       	
 
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a>    
       	
 </div>
 
@@ -227,7 +284,7 @@
      <div class="mobile-menu">      
 
       
-      <img class="mobile-menu-icon" src="/favicon.png">   
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
       
 
          
