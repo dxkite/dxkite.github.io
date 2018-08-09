@@ -26,6 +26,31 @@
     </entry>
     
     <entry>
+      <title>Suda - 10 模块化编程与模块创建和使用</title>
+      <link href="/2018/08/08/suda-use-module/"/>
+      <url>/2018/08/08/suda-use-module/</url>
+      <content type="html"><![CDATA[<p>在Suda框架中，支持模块化编程，也就是功能可以作为一个个模块来加入或者使用，这里我们先学会做一个模块包吧！</p><a id="more"></a><h2 id="创建模块包"><a href="#创建模块包" class="headerlink" title="创建模块包"></a>创建模块包</h2><p>在<a href="https://github.com/DXkite/suda/commit/9cd673b1ed76337fe9ef9b0685f77d2ba88471ed" target="_blank" rel="noopener">Suda最新的版本更新</a>中，支持模块以压缩包的形式发布</p><p>发布要求：</p><ol><li>完整的功能模块包</li><li>没有父级文件夹</li></ol><h3 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h3><p>打开我们写好的成绩统计模块，对他使用ZIP进行压缩，压缩后，压缩包的结构如下：</p><p><img src="1.png" alt=""></p><h3 id="重命名"><a href="#重命名" class="headerlink" title="重命名"></a>重命名</h3><p>将压缩包重命名为 <code>statistical.mod</code> 放置到模块目录下，现在的模块结构是这样的：</p><p><img src="2.png" alt=""></p><p>然后现在把 <code>statistical</code> 文件夹处理掉（删除或者保存到其他地方）,访问网站目录，可以看到网站依旧运行了</p><p><img src="3.png" alt=""></p><p>整个模块的代码会被解压到 <code>data/runtime/modules/模块文件名文件夹/</code> 下，没必要管他了：</p><p><img src="4.png" alt=""></p><p>如果运行失败，检擦一下框架的版本号和压缩包的内容是否正确。</p><h2 id="引入其他模块"><a href="#引入其他模块" class="headerlink" title="引入其他模块"></a>引入其他模块</h2><p>我们在开发的过程中，我们有些功能不想开发，然后刚刚好网上又有这个，就拿来用就好（PS：Suda模块中心应该提上日程了）</p><p>这里我们玩一下两个模块：</p><ul><li><p>支持模块 </p><p>  提供文件，数据库，网站设置等基础功能的支持 <a href="suda-dxkite-support.18.08.09.mod">下载</a></p></li><li><p>用户模块</p><p>  提供用户的注册登陆等功能 <a href="suda-dxkite-user.18.08.09.mod">下载</a></p></li></ul><p>下载完成后，放到模块文件夹下面，现在的文件夹结构：</p><p><img src="5.png" alt=""></p><p>我们先访问一下网站，没出错的话模块算是安装成功了。</p><h2 id="启用模块"><a href="#启用模块" class="headerlink" title="启用模块"></a>启用模块</h2><p>模块安装后，不启用是没法使用的（安全性考虑），所以，现在我们需要手动启用：编辑 <code>manifast.json</code> 文件：</p><p><img src="/images/placeholder.png" alt="" data-src="6.png" class="lazyload"></p><ul><li>注册模块：注册模块后，模块的 share 文件夹的代码和 resource 的资源都可以被使用</li><li>启用模块：启用模块后，模块可以通过浏览器访问</li></ul><p>启用模块后，我们访问： host/dev.php/setting 应该可以看到如下页面，说明我们的模块安装成功</p><p><img src="/images/placeholder.png" alt="" data-src="7.png" class="lazyload"></p><h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><ul><li>打包自己的模块</li><li>安装两个模块测试</li></ul>]]></content>
+      
+      <categories>
+          
+          <category> 基础教程 </category>
+          
+          <category> Suda框架技能使用 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PHP </tag>
+            
+            <tag> Suda </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Suda - 09 成绩统计系统 - 数据处理</title>
       <link href="/2018/08/07/suda-results-statistical-data/"/>
       <url>/2018/08/07/suda-results-statistical-data/</url>
@@ -336,11 +361,11 @@
             
             <tag> CTF </tag>
             
-            <tag> 网络安全 </tag>
+            <tag> Code Audit </tag>
             
             <tag> PHP </tag>
             
-            <tag> Code Audit </tag>
+            <tag> 网络安全 </tag>
             
         </tags>
       
@@ -361,11 +386,11 @@
       
         <tags>
             
-            <tag> 网络安全 </tag>
+            <tag> Code Audit </tag>
             
             <tag> PHP </tag>
             
-            <tag> Code Audit </tag>
+            <tag> 网络安全 </tag>
             
             <tag> Web </tag>
             
@@ -659,9 +684,9 @@
       
         <tags>
             
-            <tag> 网络安全 </tag>
-            
             <tag> PHP </tag>
+            
+            <tag> 网络安全 </tag>
             
         </tags>
       
@@ -705,9 +730,9 @@
       
         <tags>
             
-            <tag> 网络安全 </tag>
-            
             <tag> PHP </tag>
+            
+            <tag> 网络安全 </tag>
             
         </tags>
       
@@ -789,9 +814,9 @@
       
         <tags>
             
-            <tag> 网络安全 </tag>
-            
             <tag> PHP </tag>
+            
+            <tag> 网络安全 </tag>
             
             <tag> XSS </tag>
             
