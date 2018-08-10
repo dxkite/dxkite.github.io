@@ -146,8 +146,9 @@ categories:
 
 | 表段 | 类型 | 备注 | 说明 |
 |-----|------|------|------|
-| student_id | varchar | PK | 学号，字符串类型，长度暂时不定 |
-| table_id | varchar | PK | 表id，字符串类型，长度暂时不定 |
+| id | bigint | PK AUTO | ID 自动增长,**开发的时候注意给每个表添加ID可以优化效率** |
+| student_id | varchar |  | 学号，字符串类型，长度暂时不定 |
+| table_id | varchar |  | 表id，字符串类型，长度暂时不定 |
 | name | varchar | | 学生姓名|
 | data | text | | 数据域，为了存储不定长的数据，这里我们要处理 |
 
@@ -165,8 +166,9 @@ class StatisticTable extends \suda\archive\Table {
 
     protected function onBuildCreator($table){
         $table->fields(
-            $table->field('student_id','varchar',80)->primary(),
-            $table->field('table_id','varchar',80)->primary(),
+            $table->field('id','bigint',20)->primary()->auto()->comment('自动增长ID'),
+            $table->field('student_id','varchar',80)->key()->comment('学号'),
+            $table->field('table_id','varchar',80)->key()->comment('姓名'),
             $table->field('name','varchar',80),
             $table->field('data','text')
         );
@@ -191,8 +193,9 @@ class StatisticTable extends \suda\archive\Table {
 
     protected function onBuildCreator($table){
         $table->fields(
-            $table->field('student_id','varchar',80)->primary(),
-            $table->field('table_id','varchar',80)->primary(),
+            $table->field('id','bigint',20)->primary()->auto()->comment('自动增长ID'),
+            $table->field('student_id','varchar',80)->key()->comment('学号'),
+            $table->field('table_id','varchar',80)->key()->comment('姓名'),
             $table->field('name','varchar',80),
             $table->field('data','text')
         );

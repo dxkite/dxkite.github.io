@@ -66,8 +66,9 @@ class TableResponse extends \suda\core\Response
                 'student_id' => $request->post('number')
             ];
             // 如果存在学号相同，则更新记录
-            if ($table->getByPrimaryKey($primaryKey)) {
-                if ($table->updateByPrimaryKey($primaryKey, [
+            // 根据ID更新会更快
+            if ($data = $table->select(['id'],$where)->fetch()) {
+                if ($table->updateByPrimaryKey($data['id'], [
                     'name' => $request->post('name'),
                     'data' => $request->post('data')
                 ])) {
@@ -79,12 +80,13 @@ class TableResponse extends \suda\core\Response
                 }
             } else {
                 // 插入新记录
-                if ($table->insert([
+                $id = $table->insert([
                     'table_id' => $tableId,
                     'student_id' => $request->post('number'),
                     'name' => $request->post('name'),
                     'data' => $request->post('data'),
-                ])) {
+                ]);
+                if ($id > 0) {
                     return 1;
                 }
             }
@@ -94,7 +96,7 @@ class TableResponse extends \suda\core\Response
 }
 ```
 
-在这里，我们限制了 table_id 和 student_id ，如果这两个构成的主键存在则更新，否则插入。
+在这里，我们查询 table_id 和 student_id ，是否存在，存在则更新，否则插入。
 
 
 ## 数据下载
@@ -243,8 +245,20 @@ class DownloadResponse extends \suda\core\Response
 }
 ```
 
-我把生成下载文件的代码变成了一个函数（因为会写两次），然后验证了一下配置文件是否配置了密码，配置了则要输入面膜才可以下载。
+我把生成下载文件的代码变成了一个函数（因为会写两次），然后验证了一下配置文件是否配置了密码，配置了则要输入密码才可以下载。
+
+配置密码：
+
+![](suda-results-statistical-data/1.png)
+
+下载URL：
+
+`http://score.dxkite.org/dev.php/table_id_1/download?password=密码`
 
 ## 作业
 
 - 整合好代码使其能够完整运行起来
+
+----
+
+[完整模块代码下载](suda-results-statistical-data/statistical_18.08.10.mod)

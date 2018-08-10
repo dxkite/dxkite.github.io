@@ -52,10 +52,10 @@ categories:
 
 - 支持模块 
     
-    提供文件，数据库，网站设置等基础功能的支持 [下载](suda-use-module/suda-dxkite-support.18.08.09.mod)
+    提供文件，数据库，网站设置等基础功能的支持 [下载](suda-use-module/dxkite-support.18.08.10.mod)
 - 用户模块
 
-    提供用户的注册登陆等功能 [下载](suda-use-module/suda-dxkite-user.18.08.09.mod)
+    提供用户的注册登陆等功能 [下载](suda-use-module/dxkite-user.18.08.10.mod)
 
 下载完成后，放到模块文件夹下面，现在的文件夹结构：
 
