@@ -21,7 +21,7 @@ categories:
 - table 页面，显示输入的表格
 - download 页面，提供下载表格的功能
 
-table/result/download 页面最好都要有一个参数，比如 访问的时候 `/table_id/table` 是不是更加给力一些？
+table/download 页面最好都要有一个参数，比如 访问的时候 `/table_id/table` 是不是更加给力一些？
 
 在路由中添加参数可以用语法 `{name:type=default}` 来定义参数，支持类型 string,int,url ,说明如下
 

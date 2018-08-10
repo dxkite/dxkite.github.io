@@ -60,8 +60,8 @@ class TableResponse extends \suda\core\Response
     {
         $table = new \dxkite\statistical\table\StatisticTable;
         if ($request->post('name', null) && $request->post('number', null) && $request->post('data', null)) {
-            // 主键
-            $primaryKey = [
+            // 查询条件
+            $where = [
                 'table_id' => $tableId,
                 'student_id' => $request->post('number')
             ];

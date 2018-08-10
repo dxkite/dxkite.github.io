@@ -156,7 +156,7 @@ categories:
 
 ```php
 <?php
-namespace cn\atd3\table;
+namespace dxkite\statistical\table;
 class StatisticTable extends \suda\archive\Table {
 
     public function  __construct(){
@@ -183,7 +183,7 @@ Suda 框架提供对数据的预处理，在数据输入前和获取前都可以
 
 ```php
 <?php
-namespace cn\atd3\table;
+namespace dxkite\statistical\table;
 class StatisticTable extends \suda\archive\Table {
 
     public function  __construct(){
