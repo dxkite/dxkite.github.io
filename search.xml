@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>VSCode插件恢复配置记录</title>
+      <link href="/2018/08/18/my-vsc-plugin/"/>
+      <url>/2018/08/18/my-vsc-plugin/</url>
+      <content type="html"><![CDATA[<p>在北京，，忽然就蓝屏，暴躁老哥我直接格式化系统盘。。VSCode重装以后回复一波插件，记录一下</p><a id="more"></a><h2 id="PHP-Debug"><a href="#PHP-Debug" class="headerlink" title="PHP Debug"></a>PHP Debug</h2><p>PHP调试用的东西，需要的时候还行，基本配置：<a href="https://xdebug.org/wizard.php" target="_blank" rel="noopener">https://xdebug.org/wizard.php</a></p><p><img src="0.png" alt=""></p><p>使用方式：把phpinfo的内容复制到框框中：</p><p><img src="1.png" alt=""></p><p>点击分析之后：</p><p><img src="2.png" alt=""></p><p>按照配置安装即可，<code>php.ini</code> 我的配置，其中带路径的配置，自己调整好。。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[XDebug]</span><br><span class="line">xdebug.profiler_output_dir=&quot;D:\software\phpStudy\PHPTutorial\tmp\xdebug&quot;</span><br><span class="line">xdebug.trace_output_dir=&quot;D:\software\phpStudy\PHPTutorial\tmp\xdebug&quot;</span><br><span class="line">zend_extension = D:\software\phpStudy\PHPTutorial\php\php-7.2.1-nts\ext\php_xdebug-2.6.0-7.2-vc15-nts.dll</span><br><span class="line">xdebug.remote_enable = on</span><br><span class="line">xdebug.remote_handler = dbgp</span><br><span class="line">xdebug.show_local_vars=0</span><br><span class="line">xdebug.remote_autostart= 1</span><br></pre></td></tr></table></figure><h2 id="PHP-Symbols"><a href="#PHP-Symbols" class="headerlink" title="PHP Symbols"></a>PHP Symbols</h2><p>用于定位函数和符号</p><p><img src="3.png" alt=""></p><h2 id="PHP-DocBlocker"><a href="#PHP-DocBlocker" class="headerlink" title="PHP DocBlocker"></a>PHP DocBlocker</h2><p>自动注释</p><p><img src="4.png" alt=""></p><h2 id="php-cs-fixer"><a href="#php-cs-fixer" class="headerlink" title="php cs fixer"></a>php cs fixer</h2><p>用于格式化代码。需要下载 <code>php-cs-fixer</code> 格式化代码美滋滋</p><h2 id="Git-History-Diff"><a href="#Git-History-Diff" class="headerlink" title="Git History Diff"></a>Git History Diff</h2><p>用于查看变化文件</p>]]></content>
+      
+      <categories>
+          
+          <category> 杂记分享 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PHP </tag>
+            
+            <tag> VSCode </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Suda - 11 表白墙的设计</title>
       <link href="/2018/08/13/suda-confession-wall-design/"/>
       <url>/2018/08/13/suda-confession-wall-design/</url>
