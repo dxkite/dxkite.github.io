@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda - 12 表白墙数据存储 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda - 12 表白墙数据存储
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		8月 21, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			4204
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>表白墙首要的功能就是表白功能，首先我们来看看表白功能需要存储那些字段？</p>
+<a id="more"></a>
+<h2 id="数据字段处理"><a href="#数据字段处理" class="headerlink" title="数据字段处理"></a>数据字段处理</h2><p>在表白墙中，我们的核心数据字段主要有如下字段：</p>
+<ul>
+<li>发送用户</li>
+<li>是否匿名</li>
+<li>标题</li>
+<li>内容</li>
+<li>时间</li>
+<li>IP</li>
+<li>状态</li>
+</ul>
+<p>根据网络安全法的最新规定，我习惯性开发的时候记录操作的IP和时间，所有的数据基本上不会真的被删除，而是标记为一个删除状态。</p>
+<p>在这里，我们的内容模块引用了 <code>dxkite-content-parser</code> 模块，这个模块提供了一个比较常用的功能：将输入转码存储，用的时候解码成HTML显示，主要提供了如下函数：</p>
+<ul>
+<li><p>content_create(string $content, string $type=’text’):Content</p>
+<p>  将字符串创建为内容包</p>
+</li>
+<li><p>content_pack($content, string $type=’text’):string</p>
+<p>  将内容包转换为数据库可用的字符串</p>
+</li>
+<li><p>content_unpack(string $data):?Content</p>
+<p>  将数据库的字符串解包为内容</p>
+</li>
+<li><p>content_ispack(string $data)</p>
+<p>  判断字符串是不是内容包</p>
+</li>
+<li><p>content_unpack2html($data):?string</p>
+<p>  解包输出成HTML</p>
+</li>
+<li><p>content_unpack2raw($data):?string</p>
+<p>  解包输出原始内容</p>
+</li>
+<li><p>html_content(string $content, string $type = ‘text’):string</p>
+<p>  将内容直接输出HTML</p>
+</li>
+</ul>
+<p>我们使用以上函数即可将内容转换为我们想要的内容，并且包还提供了安全处理，现在我们来创建我们的数据表</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">table</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 表对象，处理表白</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfessionTable</span> <span class="keyword">extends</span> \<span class="title">suda</span>\<span class="title">archive</span>\<span class="title">Table</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> CONTENT_TYPE = <span class="string">'markdown'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> STATUS_DELETE = <span class="number">0</span>;  <span class="comment">// 删除状态</span></span><br><span class="line">    <span class="keyword">const</span> STATUS_NORMAL = <span class="number">1</span>;  <span class="comment">// 正常状态</span></span><br><span class="line">    <span class="keyword">const</span> STATUS_DRAFT = <span class="number">-1</span>;  <span class="comment">// 草稿状态</span></span><br><span class="line">    <span class="keyword">const</span> ANONYMOUS = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">parent</span>::__construct(<span class="string">'confession'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">onBuildCreator</span><span class="params">($table)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $table-&gt;fields(</span><br><span class="line">            $table-&gt;field(<span class="string">'id'</span>, <span class="string">'bigint'</span>, <span class="number">20</span>)-&gt;primary()-&gt;unsigned()-&gt;auto(),</span><br><span class="line">            $table-&gt;field(<span class="string">'user'</span>, <span class="string">'bigint'</span>, <span class="number">20</span>)-&gt;key()-&gt;comment(<span class="string">'发布者'</span>),</span><br><span class="line">            $table-&gt;field(<span class="string">'anonymous'</span>, <span class="string">'tinyint'</span>, <span class="number">1</span>)-&gt;default(<span class="keyword">self</span>::ANONYMOUS)-&gt;comment(<span class="string">'匿名发布'</span>),</span><br><span class="line">            $table-&gt;field(<span class="string">'title'</span>, <span class="string">'varchar'</span>, <span class="number">255</span>)-&gt;comment(<span class="string">'标题'</span>),</span><br><span class="line">            $table-&gt;field(<span class="string">'content'</span>, <span class="string">'text'</span>)-&gt;comment(<span class="string">"文字内容"</span>),</span><br><span class="line">            $table-&gt;field(<span class="string">'time'</span>, <span class="string">'int'</span>, <span class="number">11</span>)-&gt;key()-&gt;unsigned()-&gt;comment(<span class="string">'发表时间'</span>),</span><br><span class="line">            $table-&gt;field(<span class="string">'ip'</span>, <span class="string">'varchar'</span>, <span class="number">32</span>)-&gt;comment(<span class="string">'发布IP'</span>),</span><br><span class="line">            $table-&gt;field(<span class="string">'status'</span>, <span class="string">'int'</span>, <span class="number">11</span>)-&gt;key()-&gt;unsigned()-&gt;default(<span class="keyword">self</span>::STATUS_DRAFT)-&gt;comment(<span class="string">'状态'</span>)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用Markdown 对内容进行默认编码</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $content</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">_inputContentField</span><span class="params">(string $content)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> content_pack($content, <span class="keyword">self</span>::CONTENT_TYPE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将内容解码成HTML格式</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $content</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">_outputContentField</span><span class="params">(string $content)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 解码成对象</span></span><br><span class="line">        <span class="keyword">if</span> ($object = content_unpack($content)) &#123;</span><br><span class="line">            <span class="keyword">return</span> $object;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 未设置解码则按text编码</span></span><br><span class="line">        <span class="keyword">return</span> content_create($content, <span class="string">'text'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上便是我们的数据表结构，本次我们开发准寻一个套路：Table 负责存储、Controller负责数据处理、Provider负责API化显示，开发的时候我们采用 <code>Postman</code> 用来做API的调试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Table-&gt;Controller-&gt;Provider</span><br></pre></td></tr></table></figure>
+<h2 id="创建简单内容发布页面"><a href="#创建简单内容发布页面" class="headerlink" title="创建简单内容发布页面"></a>创建简单内容发布页面</h2><p>这个内容发布页面有几个元素，由于本次项目将直接上线，测试的模板采用 <code>Bootstrap</code> 来构建一个简单的页面。</p>
+<p>添加一个页面 <code>/</code>，继承来自<code>support</code>库的响应 <code>dxkite\support\visitor\response\Response</code>，该响应处理基本的请求：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">response</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">dxkite</span>\<span class="title">support</span>\<span class="title">visitor</span>\<span class="title">response</span>\<span class="title">Response</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">dxkite</span>\<span class="title">support</span>\<span class="title">visitor</span>\<span class="title">Context</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IndexResponse</span> <span class="keyword">extends</span> <span class="title">Response</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">onVisit</span><span class="params">(Context $context)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $view = <span class="keyword">$this</span>-&gt;view(<span class="string">'index'</span>);</span><br><span class="line">        $view-&gt;render();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="基础套版"><a href="#基础套版" class="headerlink" title="基础套版"></a>基础套版</h3><p>因为页面很多地方都似乎是共同的，我先弄一个页面套版：</p>
+<h4 id="header-tpl-html-导航栏部分"><a href="#header-tpl-html-导航栏部分" class="headerlink" title="header.tpl.html 导航栏部分"></a>header.tpl.html 导航栏部分</h4><p>这里直接是HTML代码，还有一些引入部分的变量，以及判断页面，<br><code>@b(表达式，成功，失败)</code> 语法类似三元操作符，然后 <code>$this-&gt;isMe</code> 用于判断当前的路由是否为指定的路由，这里判断是否为 <code>index</code> 路由。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">nav</span> <span class="attr">class</span>=<span class="string">"navbar navbar-dark sticky-top bg-dark navbar-expand-lg flex-md-nowrap p-0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"navbar-brand col-sm-3 col-md-2 mr-0"</span> <span class="attr">href</span>=<span class="string">"#"</span>&gt;</span>&#123;&#123; $:website_name('涉外学院 - 表白墙') &#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"navbar-nav mr-auto"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"navbar-nav px-3"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"nav-item text-nowrap"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"nav-link @b($this-&gt;isMe('index'),'active')"</span> <span class="attr">href</span>=<span class="string">"@u('index')"</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="layout-tpl-html-布局控制部分"><a href="#layout-tpl-html-布局控制部分" class="headerlink" title="layout.tpl.html 布局控制部分"></a>layout.tpl.html 布局控制部分</h4><p><code>@extend</code> 继承来自support模块的bootstrap模板。<br><code>@startInsert ... @endInsert</code> 用于往继承的模板中的 <code>@insert</code> 点插入代码。<br>这里预留了一个插入点 <code>confession-content</code> 用于插入内容。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@extend ('support:bootstrap') </span><br><span class="line">@startInsert('bs-head')</span><br><span class="line"><span class="comment">&lt;!-- css --&gt;</span></span><br><span class="line">@endInsert </span><br><span class="line">@startInsert('bs-content') </span><br><span class="line">@include ('header')</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    @if ($?:alert)</span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"alert alert-&#123;&#123; $:alert.type &#125;&#125; m-2"</span> <span class="attr">role</span>=<span class="string">"alert"</span>&gt;</span> &#123;&#123; $:alert.text &#125;&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">class</span>=<span class="string">"close"</span> <span class="attr">data-dismiss</span>=<span class="string">"alert"</span> <span class="attr">aria-label</span>=<span class="string">"Close"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">aria-hidden</span>=<span class="string">"true"</span>&gt;</span>&amp;times;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    @endif </span><br><span class="line">    @insert('confession-content')</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">@endInsert</span><br></pre></td></tr></table></figure>
+<h4 id="index-tpl-html"><a href="#index-tpl-html" class="headerlink" title="index.tpl.html"></a>index.tpl.html</h4><p>在主页面，继承<code>layout</code>，并在 <code>confession-content</code> 插入点插入内容。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@extend ('layout')</span><br><span class="line"><span class="comment">&lt;!-- 插入内容 --&gt;</span></span><br><span class="line">@startInsert('confession-content')</span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>这里是内容<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">@endInsert</span><br></pre></td></tr></table></figure></p>
+<p>所有布局文件完善后：</p>
+<p><img src="0.png" alt=""></p>
+<p>运行效果</p>
+<p><img src="1.png" alt=""></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a> <a class="tag-link" href="/tags/表白墙/">表白墙</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/donate_wechat.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/donate_alipay.jpg" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">Hello ! I'am DXkite</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+           
+        
+      
+        
+        <a href="/2018/08/18/my-vsc-plugin/" data-hover="VSCode插件恢复配置记录"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>
