@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda 自动加载类规则 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda 自动加载类规则
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		8月 22, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			1786
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>在PHP中，我们使用 <code>require</code>、<code>require_once</code>、<code>include</code>、<code>include_once</code> 来引用其他的PHP文件，但是在框架中，我们很少看到这样的代码，那么，框架是如何找到我们想要的类的？</p>
+<a id="more"></a>
+<h2 id="PSR4-加载规范"><a href="#PSR4-加载规范" class="headerlink" title="PSR4 加载规范"></a>PSR4 加载规范</h2><p>在PSR4中，有几个概念</p>
+<h3 id="命名空间-namespace"><a href="#命名空间-namespace" class="headerlink" title="命名空间(namespace)"></a>命名空间(namespace)</h3><p>起初实在C++中兴起的，在Java中体现为报名(package)，在C#中好像也是命名空间，PHP中也是，是为了解决命名冲突的问题而产生的比如A写了一个类叫 MyClass。B也写了一个MyClass类，我们在用的时候怎么区分？加个前缀啊，A写的类就叫 A\MyClass，B写的类就叫B\MyClass，完美的解决了。</p>
+<h3 id="根命名空间-root-namespace"><a href="#根命名空间-root-namespace" class="headerlink" title="根命名空间(root namespace)"></a>根命名空间(root namespace)</h3><p>继续上一个例子，如果A再写一个类，叫Student，一般按照习惯，我们自己写的东西都会放到自己的地方，那么，通常来说A的类Student就是A\Student，那么对于 MyClass 和 Student 来说，A就是相当于他们的父节点也就是树的父节点，即为根</p>
+<h3 id="查找目录"><a href="#查找目录" class="headerlink" title="查找目录"></a>查找目录</h3><p>一般来说，我们A写的代码肯定放到A的区域里，体现在源文件中的话，一般是用文件夹来表示，那么文件夹结构应该是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">源码文件夹X</span><br><span class="line">    |___A </span><br><span class="line">    |    |_ MyClass.php</span><br><span class="line">    |    |_ Student.php</span><br><span class="line">    |___B</span><br><span class="line">        |_ MyClass.php</span><br></pre></td></tr></table></figure>
+<p>在PSR4规则中，我们注册了一个文件夹，比如 <code>src</code> 文件夹，作为查找目录，那么，我们找类 <code>A\Student</code> 的时候会去各种源码文件夹找<br><code>A\Student.php</code> 文件，在源码文件夹X中找到了就自动include。也就避免我们自己来include文件了，毕竟很难找。</p>
+<h3 id="命名空间前缀-（namespace-prefix）"><a href="#命名空间前缀-（namespace-prefix）" class="headerlink" title="命名空间前缀 （namespace prefix）"></a>命名空间前缀 （namespace prefix）</h3><p>如果说我们的命名空间很长，比如：<code>very\long\name\space\A\MyClass</code> 我们一般会选择简化一下，因为我是A嘛，我写的东西肯定放在了A文件夹的下面，那么类名的话肯定是这样的 <code>very\long\name\space\A\Student</code> 但是我又不想创建一串文件夹 very啥的啥的，那么，我们假设，源码文件夹X本省表示一个命名空间：<code>very\long\name\space\</code> 那么，用这个做前缀。则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">源码文件夹X = very\long\name\space</span><br><span class="line">    |___A  = very\long\name\space\A</span><br><span class="line">    |    |_ MyClass.php = very\long\name\space\A\MyClass</span><br><span class="line">    |    |_ Student.php = very\long\name\space\A\Student</span><br><span class="line">    |___B</span><br><span class="line">        |_ MyClass.php = very\long\name\space\B\MyClass</span><br></pre></td></tr></table></figure>
+<p>以上就基本上是PSR4规则的一个简要介绍。</p>
+<h3 id="Suda-的源码自动加载"><a href="#Suda-的源码自动加载" class="headerlink" title="Suda 的源码自动加载"></a>Suda 的源码自动加载</h3><p>在Suda框架中，只支持PSR4规则，一般配置在文件 <code>manifast.json</code> 或者 <code>module.json</code> 文件中，如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"import"</span>: &#123;</span><br><span class="line">        <span class="attr">"share"</span>: &#123;</span><br><span class="line">            <span class="attr">"dxkite\\usercenter\\client"</span>: <span class="string">"share"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"src"</span>: &#123;</span><br><span class="line">            <span class="attr">"dxkite\\usercenter\\client\\response"</span>: <span class="string">"src"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里就懒得创建一堆文件夹了，就把源码下面的 src 作为 <code>dxkite\usercenter\client\response</code> 的一个根命名空间了，如果需要找类 <code>dxkite\usercenter\client\response\IndexResponse</code> 就去 src 目录下找 <code>IndexResponse.php</code> 文件，<strong>注意哦，命名空间提倡小写。</strong></p>
+<h3 id="share-与-src"><a href="#share-与-src" class="headerlink" title="share 与 src"></a>share 与 src</h3><p>在 <code>import</code> 规则中我们可以看到 <code>share</code> 规则和 <code>src</code> 规则，具体定义如下：</p>
+<p>当模块被使用的时候（就是运行了模块的某一个响应类，比如 <code>dxkite\usercenter\client\response\IndexResponse</code>）那么<code>src</code> 规则被激活，自动查找类的时候会包含 <code>src</code> 下面的文件，<strong>但是！</strong> 在非激活状态，比如运行其他模块的时候，只会把<code>share</code>规则注册进查找目录，用来查找类文件，也就是说，<code>share</code> 是其他模块可以访问的类，<code>src</code> 是只能自己用的类。</p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/PSR4/">PSR4</a> <a class="tag-link" href="/tags/Suda/">Suda</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/donate_wechat.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/donate_alipay.jpg" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">Hello ! I'am DXkite</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+           
+        
+      
+        
+        <a href="/2018/08/21/suda-confession-wall-table/" data-hover="Suda - 12 表白墙数据存储"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>
