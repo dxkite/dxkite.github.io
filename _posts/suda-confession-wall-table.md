@@ -67,7 +67,7 @@ class ConfessionTable extends \suda\archive\Table
 
     const STATUS_DELETE = 0;  // 删除状态
     const STATUS_NORMAL = 1;  // 正常状态
-    const STATUS_DRAFT = -1;  // 草稿状态
+    const STATUS_DRAFT = 2;  // 草稿状态
     const ANONYMOUS = 1;
 
     public function __construct()
