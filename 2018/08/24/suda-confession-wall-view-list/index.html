@@ -1,0 +1,349 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda - 14 表白墙基本业务操作 - 列出表白 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda - 14 表白墙基本业务操作 - 列出表白
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		8月 24, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			6311
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>今天的任务挺简单：获取表白内容列表</p>
+<a id="more"></a>
+<h2 id="套路1"><a href="#套路1" class="headerlink" title="套路1"></a>套路1</h2><p>按照昨天的套路，我们应该是先写HTML页面再说，但是在一个成熟的项目团队中，HTML页面将会由前端人员来写，也就是所谓的前后端分离。</p>
+<p>先创建一个方法 <code>list</code> ，这里我们引用一下 <code>Support</code> 模块的 <code>dxkite\support\view\TablePager</code> 类，这个类的功能是构建一个分页，也就是我们在网页中常见的下一页的功能的实现。基本参数如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 表页信息构建</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TablePager</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 列出指定条件的内容，并进行分页</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> Table $table 需要擦好像的表</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> [type] $where 查询条件</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $binder 查询条件值绑定</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer|null $page 分页</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $row 每页书目</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">listWhere</span><span class="params">(Table $table, $where, array $binder, ?int $page, int $row)</span>:<span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br></pre></td></tr></table></figure>
+<p>通过如上的描述，我们的<code>ConfessionController</code>列出函数可以这样写（列出表元素，当状态为：<code>ConfessionTable::STATUS_NORMAL</code> 的时候）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//  列出表元素，当状态为：ConfessionTable::STATUS_NORMAL 的时候</span></span><br><span class="line">    <span class="keyword">return</span> TablePager::listWhere(<span class="keyword">$this</span>-&gt;table, [<span class="string">'status'</span> =&gt; ConfessionTable::STATUS_NORMAL], [], $page, $row);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们的 <code>ConfessionController</code> 类长这样：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">table</span>\<span class="title">ConfessionTable</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">dxkite</span>\<span class="title">support</span>\<span class="title">view</span>\<span class="title">TablePager</span>; <span class="comment">// 引入分页函数类</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理表白</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfessionController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $table;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;table = <span class="keyword">new</span> ConfessionTable;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 添加表白帖</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $title</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $content</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> boolean $anonymous</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> integer</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">(string $title, string $content, bool $anonymous=true)</span>: <span class="title">int</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;table-&gt;insert([</span><br><span class="line">            <span class="string">'user'</span> =&gt; get_user_id(),</span><br><span class="line">            <span class="string">'title'</span> =&gt; $title ,</span><br><span class="line">            <span class="string">'content'</span> =&gt; $content,</span><br><span class="line">            <span class="string">'anonymous'</span> =&gt; $anonymous ? <span class="number">1</span> :<span class="number">0</span>,</span><br><span class="line">            <span class="string">'time'</span> =&gt; time(),</span><br><span class="line">            <span class="string">'ip'</span> =&gt; request()-&gt;ip(),</span><br><span class="line">            <span class="string">'status'</span> =&gt; ConfessionTable::STATUS_NORMAL,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//  列出表元素，当状态为：ConfessionTable::STATUS_NORMAL 的时候</span></span><br><span class="line">        <span class="keyword">return</span> TablePager::listWhere(<span class="keyword">$this</span>-&gt;table, [<span class="string">'status'</span> =&gt; ConfessionTable::STATUS_NORMAL], [], $page, $row);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>这可能是我最后一次列出全部代码了，毕竟会造成篇幅太长，我可能后期会弄一个工具用来查看文档</strong></p>
+<p>按照昨天的套路，我们如果要接用<code>support</code>模块公开api的话，还需要添加到provider类（可能有点繁琐，等会就会讲为什么）,添加到昨天的 <code>ConfessionProvider</code> 中去：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;controller-&gt;list($page, $row);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后利用Postman来调用这个方法；</p>
+<p><img src="1.png" alt=""></p>
+<p>可以看到我们的包：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"method"</span>:<span class="string">"list"</span>,</span><br><span class="line">	<span class="attr">"params"</span>: [],</span><br><span class="line">	<span class="attr">"id"</span>:<span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以及返回包：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"result"</span>: &#123;</span><br><span class="line">        <span class="attr">"rows"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"DXkite"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"DXkite Content"</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;DXkite Content&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535032422"</span>,</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"2"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"这是我的表白"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"匿名状态发布 "</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;匿名状态发布&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535032846"</span>,</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"3"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"标题"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"内容"</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;内容&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535037182"</span>,</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"row_size"</span>: <span class="number">3</span>,</span><br><span class="line">        <span class="attr">"row_total"</span>: <span class="number">3</span>,</span><br><span class="line">        <span class="attr">"page"</span>: &#123;</span><br><span class="line">            <span class="attr">"max"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"min"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"size"</span>: <span class="number">3</span>,</span><br><span class="line">            <span class="attr">"current"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"next"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"previous"</span>: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就目前来说，我们构建的包好像没有参数？为什么？因为这个list函数的值都是可省略的。（<code>page</code> 可为null，<code>row</code> 默认为10），在后续的教程中，我们优先开发功能，所以将会先把后端也就是api接口开发完毕后才会开始开发页面。</p>
+<p>从返回包来看，我们的页面信息都存储在里面了，但是也有一个问题，我们的ip啊，user啊都在里面！！如果一个稍微懂技术的人员通过这个接口就可以获取表白人的账号和发帖ip这将很危险，所以，在Controller层获取数据之后我们还要进行一次处理。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $pageData = <span class="keyword">$this</span>-&gt;controller-&gt;list($page, $row);</span><br><span class="line">    $pageRows = $pageData[<span class="string">'rows'</span>]; <span class="comment">// 获取到数据字段</span></span><br><span class="line">    <span class="keyword">foreach</span> ($pageRows <span class="keyword">as</span> $index =&gt; $pageRow ) &#123;</span><br><span class="line">        <span class="comment">// 表示匿名状态</span></span><br><span class="line">        <span class="keyword">if</span> ($pageRow[<span class="string">'anonymous'</span>] == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">// 清理user的信息</span></span><br><span class="line">            $pageRow[<span class="string">'user'</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 去除IP信息</span></span><br><span class="line">        <span class="keyword">unset</span>($pageRow[<span class="string">'ip'</span>]);</span><br><span class="line">        <span class="comment">// 替换原来的列</span></span><br><span class="line">        $pageRows[$index] = $pageRow;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 放回原来的字段</span></span><br><span class="line">    $pageData[<span class="string">'rows'</span>] = $pageRows;</span><br><span class="line">    <span class="keyword">return</span> $pageData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，我们在Provider层处理输出的数据，并去除了敏感信息；继续请求包，看看我们的返回：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"result"</span>: &#123;</span><br><span class="line">        <span class="attr">"rows"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"DXkite"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"DXkite Content"</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;DXkite Content&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535032422"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"2"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"这是我的表白"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"匿名状态发布 "</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;匿名状态发布&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535032846"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"3"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"标题"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"内容"</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;内容&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535037182"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"row_size"</span>: <span class="number">3</span>,</span><br><span class="line">        <span class="attr">"row_total"</span>: <span class="number">3</span>,</span><br><span class="line">        <span class="attr">"page"</span>: &#123;</span><br><span class="line">            <span class="attr">"max"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"min"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"size"</span>: <span class="number">3</span>,</span><br><span class="line">            <span class="attr">"current"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"next"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"previous"</span>: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们的匿名人发表的信息的ID都为0了，然后所以人的IP也都不见了。（PHP语法请熟练）</p>
+<h3 id="用户信息的具象化"><a href="#用户信息的具象化" class="headerlink" title="用户信息的具象化"></a>用户信息的具象化</h3><p>从刚刚我们的返回包可以看到，用户的数据还停留在id这样一个状态，我们现在需要具象化他，先下载好模块，我这个功能也是刚添加好的</p>
+<ul>
+<li><a href="dxkite-support.8.24.mod">support</a></li>
+<li><a href="dxkite-user.8.24.mod">user</a></li>
+</ul>
+<p>我们现在有两个解决方案：</p>
+<p><strong>方案1</strong></p>
+<p>在处理数据的时候直接查询用户信息，最新的<code>support</code>模块提供 <code>get_user_public_info</code> 用来获取用户的公开信息（头像，用户名啥的）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $pageData = <span class="keyword">$this</span>-&gt;controller-&gt;list($page, $row);</span><br><span class="line">    $pageRows = $pageData[<span class="string">'rows'</span>]; <span class="comment">// 获取到数据字段</span></span><br><span class="line">    <span class="keyword">foreach</span> ($pageRows <span class="keyword">as</span> $index =&gt; $pageRow ) &#123;</span><br><span class="line">        <span class="comment">// 表示匿名状态</span></span><br><span class="line">        <span class="keyword">if</span> ($pageRow[<span class="string">'anonymous'</span>] == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">// 清理user的信息</span></span><br><span class="line">            $pageRow[<span class="string">'user'</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 根据ID获取信息</span></span><br><span class="line">            $pageRow[<span class="string">'user'</span>] = get_user_public_info($pageRow[<span class="string">'user'</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 去除IP信息</span></span><br><span class="line">        <span class="keyword">unset</span>($pageRow[<span class="string">'ip'</span>]);</span><br><span class="line">        <span class="comment">// 替换原来的列</span></span><br><span class="line">        $pageRows[$index] = $pageRow;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 放回原来的字段</span></span><br><span class="line">    $pageData[<span class="string">'rows'</span>] = $pageRows;</span><br><span class="line">    <span class="keyword">return</span> $pageData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在查询出来的结果中我们可以看到</p>
+<p><img src="2.png" alt=""></p>
+<p>不是匿名的用户的用户信息也有了，但是这个意味着我们一个分页要进行10次作业的SQL查询，还有一个更加好的解决方案。</p>
+<p><strong>方案2</strong></p>
+<p>我们需要使用到 <code>get_user_public_info_array</code> 函数，这个函数相当于SQL中的IN语法进行查询的，所以只进行了一次查询，代价也不昂贵，就是处理数据的逻辑麻烦点：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $pageData = <span class="keyword">$this</span>-&gt;controller-&gt;list($page, $row);</span><br><span class="line">    $pageRows = $pageData[<span class="string">'rows'</span>]; <span class="comment">// 获取到数据字段</span></span><br><span class="line">    <span class="comment">// 检测到需要处理的用户ID</span></span><br><span class="line">    $userIdMap = [];</span><br><span class="line">    <span class="keyword">foreach</span> ($pageRows <span class="keyword">as</span> $index =&gt; $pageRow) &#123;</span><br><span class="line">        <span class="comment">// 表示匿名状态</span></span><br><span class="line">        <span class="keyword">if</span> ($pageRow[<span class="string">'anonymous'</span>] == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">// 清理user的信息</span></span><br><span class="line">            $pageRow[<span class="string">'user'</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 记录ID信息</span></span><br><span class="line">            <span class="comment">// ID =&gt; 索引</span></span><br><span class="line">            $userIdMap[$pageRow[<span class="string">'user'</span>]]=$index;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 去除IP信息</span></span><br><span class="line">        <span class="keyword">unset</span>($pageRow[<span class="string">'ip'</span>]);</span><br><span class="line">        <span class="comment">// 替换原来的列</span></span><br><span class="line">        $pageRows[$index] = $pageRow;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 获取所有用户信息</span></span><br><span class="line">    $userInfos = get_user_public_info_array(array_keys($userIdMap));</span><br><span class="line">    <span class="comment">// 返回到数据列</span></span><br><span class="line">    <span class="keyword">foreach</span> ($userInfos <span class="keyword">as</span> $id =&gt; $data) &#123;</span><br><span class="line">        <span class="comment">// $userIdMap[$id] == index</span></span><br><span class="line">        $pageRows[$userIdMap[$id]][<span class="string">'user'</span>]=$data;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 放回原来的字段</span></span><br><span class="line">    $pageData[<span class="string">'rows'</span>] = $pageRows;</span><br><span class="line">    <span class="keyword">return</span> $pageData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继续处理后，结果也如上面查询的结果一致，我们看看日志：</p>
+<p><strong>方案1</strong><br>如果ID数目过多，这里会出现多次的查询</p>
+<p><img src="3.png" alt=""></p>
+<p><strong>方案2</strong><br><img src="4.png" alt=""></p>
+<h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><p><strong>复现</strong></p>
+<hr>
+<p>参考源码：<a href="dxkite-confession-wall.8.24.mod">dxkite-confession-wall</a></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a> <a class="tag-link" href="/tags/表白墙/">表白墙</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/donate_wechat.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/donate_alipay.jpg">	
+	</div>
+
+	<span class="donate-word">Hello ! I'am DXkite</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+           
+        
+      
+        
+        <a href="/2018/08/23/suda-confession-wall-simple-action/" data-hover="Suda - 13 表白墙基本业务操作 - 发布表白"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>
