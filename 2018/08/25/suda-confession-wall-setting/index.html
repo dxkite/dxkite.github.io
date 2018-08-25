@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  Suda - 15 表白墙基本业务操作 - 表白管理 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		Suda - 15 表白墙基本业务操作 - 表白管理
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		8月 25, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			3329
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>我们基本的功能写的差不多了（什么！就差不多了？？？），现在我们需要添加一个管理功能。</p>
+<a id="more"></a>
+<h2 id="管理权限"><a href="#管理权限" class="headerlink" title="管理权限"></a>管理权限</h2><p><code>Support</code> 模块提供了细粒度的权限管理功能，我们来学习一下如何使用：</p>
+<h3 id="添加权限列"><a href="#添加权限列" class="headerlink" title="添加权限列"></a>添加权限列</h3><p>我们在 <code>config</code> 目录下添加一个 <code>permissions</code> 配置，如果你用json做配置文件可以这样写：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"confession-wall"</span>: &#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"表白墙权限管理"</span>,</span><br><span class="line">    <span class="attr">"childs"</span>: &#123;</span><br><span class="line">      <span class="attr">"view"</span>: <span class="string">"查看表白列表"</span>,</span><br><span class="line">      <span class="attr">"status"</span>: <span class="string">"编辑列表状态"</span>,</span><br><span class="line">      <span class="attr">"edit"</span>: <span class="string">"编辑表白"</span>,</span><br><span class="line">      <span class="attr">"delete"</span>: <span class="string">"删除表白"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不过我们现在采用 yaml 做配置文件。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">confession-wall:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">表白墙权限管理</span></span><br><span class="line"><span class="attr">  childs:</span></span><br><span class="line"><span class="attr">    view:</span> <span class="string">查看表白列表</span></span><br><span class="line"><span class="attr">    status:</span> <span class="string">编辑列表状态</span></span><br><span class="line"><span class="attr">    edit:</span> <span class="string">编辑表白</span></span><br><span class="line"><span class="attr">    delete:</span> <span class="string">删除表白</span></span><br></pre></td></tr></table></figure>
+<h3 id="添加权限角色"><a href="#添加权限角色" class="headerlink" title="添加权限角色"></a>添加权限角色</h3><p>进入后台设置列表：</p>
+<p><img src="1.png" alt=""></p>
+<p>这里我们权限添加一个角色：</p>
+<p><img src="2.png" alt=""></p>
+<p>然后给自己添加一下权限（设置-&gt;用户列表-&gt;权限）：</p>
+<p><img src="3.png" alt=""></p>
+<p>然后我们现在权限已经加好了。</p>
+<h2 id="添加管理功能"><a href="#添加管理功能" class="headerlink" title="添加管理功能"></a>添加管理功能</h2><p>管理功能我们单独使用一个 <code>Provider</code>：</p>
+<h3 id="查看表白列表"><a href="#查看表白列表" class="headerlink" title="查看表白列表"></a>查看表白列表</h3><p>查看列表，这里我们添加一个 Doc 注释，加一个 <code>@acl</code> 标注，值为 <code>confession-wall.view</code> （刚刚加入的权限配置的权限之一）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 列出表白墙列表</span><br><span class="line"> * </span><br><span class="line"> * @acl confession-wall.view</span><br><span class="line"> * @param integer|null $page</span><br><span class="line"> * @param integer $row</span><br><span class="line"> * @return array|null</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<p>这里是仿造Java的Annotation注解的功能</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">provider</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">controller</span>\<span class="title">ConfessionController</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 管理表白</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfessionSettingProvider</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $controller;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;controller = <span class="keyword">new</span> ConfessionController;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 列出表白墙列表</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@acl</span> confession-wall.view</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer|null $page</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $row</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array|null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $pageData = <span class="keyword">$this</span>-&gt;controller-&gt;list($page, $row);</span><br><span class="line">        $pageRows = $pageData[<span class="string">'rows'</span>]; <span class="comment">// 获取到数据字段</span></span><br><span class="line">        <span class="comment">// 检测到需要处理的用户ID</span></span><br><span class="line">        $userIdMap = [];</span><br><span class="line">        <span class="keyword">foreach</span> ($pageRows <span class="keyword">as</span> $index =&gt; $pageRow) &#123;</span><br><span class="line">            $userIdMap[$pageRow[<span class="string">'user'</span>]]=$index;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 获取所有用户信息</span></span><br><span class="line">        $userInfos = get_user_public_info_array(array_keys($userIdMap));</span><br><span class="line">        <span class="comment">// 返回到数据列</span></span><br><span class="line">        <span class="keyword">foreach</span> ($userInfos <span class="keyword">as</span> $id =&gt; $data) &#123;</span><br><span class="line">            <span class="comment">// $userIdMap[$id] == index</span></span><br><span class="line">            $pageRows[$userIdMap[$id]][<span class="string">'user'</span>]=$data;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 放回原来的字段</span></span><br><span class="line">        $pageData[<span class="string">'rows'</span>] = $pageRows;</span><br><span class="line">        <span class="keyword">return</span> $pageData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我来把 <code>ConfessionSettingProvider</code> 映射到API接口列表中：<br>打开 <code>api/mapper</code> 文件（这里是 <code>api/mapper.yml</code>）</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">v1.0:</span></span><br><span class="line"><span class="attr">  confession-wall:</span> <span class="string">dxkite.confession.wall.provider.ConfessionProvider</span></span><br><span class="line"><span class="attr">  confession-wall-setting:</span> <span class="string">dxkite.confession.wall.provider.ConfessionSettingProvider</span></span><br></pre></td></tr></table></figure>
+<p>然后访问：<code>dev.php/api/v1.0</code></p>
+<p><img src="4.png" alt=""></p>
+<p>可以看到 <code>confession-wall-setting</code> 也注册到API中</p>
+<p><img src="5.png" alt=""></p>
+<p>我们来使用一下这个功能</p>
+<p><img src="/images/placeholder.png" alt="" data-src="6.png" class="lazyload"></p>
+<p>哎？<code>PermissionDeny</code> 没有权限哦，为啥，，，没登陆啊。赶紧登陆一个</p>
+<p><img src="/images/placeholder.png" alt="" data-src="7.png" class="lazyload"></p>
+<p>登陆后，就可以查看到了我们的权限：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"result"</span>: &#123;</span><br><span class="line">        <span class="attr">"rows"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"DXkite"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"DXkite Content"</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;DXkite Content&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535032422"</span>,</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"2"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"这是我的表白"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"匿名状态发布 "</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;匿名状态发布&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535032846"</span>,</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"3"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"1"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"标题"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"内容"</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;内容&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535037182"</span>,</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"id"</span>: <span class="string">"4"</span>,</span><br><span class="line">                <span class="attr">"user"</span>: &#123;</span><br><span class="line">                    <span class="attr">"id"</span>: <span class="string">"1"</span>,</span><br><span class="line">                    <span class="attr">"name"</span>: <span class="string">"dxkite"</span>,</span><br><span class="line">                    <span class="attr">"avatar"</span>: <span class="string">"0"</span>,</span><br><span class="line">                    <span class="attr">"signupTime"</span>: <span class="string">"1535032260"</span>,</span><br><span class="line">                    <span class="attr">"avatarUrl"</span>: <span class="string">"http://confession-wall.dxkite.org/dev.php/user/avatar/1"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"anonymous"</span>: <span class="string">"0"</span>,</span><br><span class="line">                <span class="attr">"title"</span>: <span class="string">"不是匿名的表白帖"</span>,</span><br><span class="line">                <span class="attr">"content"</span>: &#123;</span><br><span class="line">                    <span class="attr">"type"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">                    <span class="attr">"raw"</span>: <span class="string">"表白内容"</span>,</span><br><span class="line">                    <span class="attr">"html"</span>: <span class="string">"&lt;p&gt;表白内容&lt;/p&gt;"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"time"</span>: <span class="string">"1535120351"</span>,</span><br><span class="line">                <span class="attr">"ip"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line">                <span class="attr">"status"</span>: <span class="string">"1"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"row_size"</span>: <span class="number">4</span>,</span><br><span class="line">        <span class="attr">"row_total"</span>: <span class="number">4</span>,</span><br><span class="line">        <span class="attr">"page"</span>: &#123;</span><br><span class="line">            <span class="attr">"max"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"min"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"size"</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">"current"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"next"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">"previous"</span>: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h2><p><strong>复现</strong></p>
+<blockquote>
+<p>还有删除啥的明天再说了</p>
+</blockquote>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a> <a class="tag-link" href="/tags/表白墙/">表白墙</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/donate_wechat.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/donate_alipay.jpg">	
+	</div>
+
+	<span class="donate-word">Hello ! I'am DXkite</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+           
+        
+      
+        
+        <a href="/2018/08/24/suda-confession-wall-view-list/" data-hover="Suda - 14 表白墙基本业务操作 - 列出表白"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

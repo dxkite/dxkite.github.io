@@ -84,7 +84,7 @@
 	
 		<i class="iconfont icon-words"></i>
 		<span>
-			6311
+			6312
 		</span>
 	
 </div>
@@ -134,7 +134,7 @@
 <p><img src="2.png" alt=""></p>
 <p>不是匿名的用户的用户信息也有了，但是这个意味着我们一个分页要进行10次作业的SQL查询，还有一个更加好的解决方案。</p>
 <p><strong>方案2</strong></p>
-<p>我们需要使用到 <code>get_user_public_info_array</code> 函数，这个函数相当于SQL中的IN语法进行查询的，所以只进行了一次查询，代价也不昂贵，就是处理数据的逻辑麻烦点：</p>
+<p>我们需要使用到 <code>get_user_public_info_array</code> 函数，这个函数相当于SQL中的IN语法进行查询的，所以只进行了一次查询，代价也不`昂贵，就是处理数据的逻辑麻烦点：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">list</span><span class="params">(?int $page, int $row = <span class="number">10</span>)</span>:?<span class="title">array</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $pageData = <span class="keyword">$this</span>-&gt;controller-&gt;list($page, $row);</span><br><span class="line">    $pageRows = $pageData[<span class="string">'rows'</span>]; <span class="comment">// 获取到数据字段</span></span><br><span class="line">    <span class="comment">// 检测到需要处理的用户ID</span></span><br><span class="line">    $userIdMap = [];</span><br><span class="line">    <span class="keyword">foreach</span> ($pageRows <span class="keyword">as</span> $index =&gt; $pageRow) &#123;</span><br><span class="line">        <span class="comment">// 表示匿名状态</span></span><br><span class="line">        <span class="keyword">if</span> ($pageRow[<span class="string">'anonymous'</span>] == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">// 清理user的信息</span></span><br><span class="line">            $pageRow[<span class="string">'user'</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 记录ID信息</span></span><br><span class="line">            <span class="comment">// ID =&gt; 索引</span></span><br><span class="line">            $userIdMap[$pageRow[<span class="string">'user'</span>]]=$index;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 去除IP信息</span></span><br><span class="line">        <span class="keyword">unset</span>($pageRow[<span class="string">'ip'</span>]);</span><br><span class="line">        <span class="comment">// 替换原来的列</span></span><br><span class="line">        $pageRows[$index] = $pageRow;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 获取所有用户信息</span></span><br><span class="line">    $userInfos = get_user_public_info_array(array_keys($userIdMap));</span><br><span class="line">    <span class="comment">// 返回到数据列</span></span><br><span class="line">    <span class="keyword">foreach</span> ($userInfos <span class="keyword">as</span> $id =&gt; $data) &#123;</span><br><span class="line">        <span class="comment">// $userIdMap[$id] == index</span></span><br><span class="line">        $pageRows[$userIdMap[$id]][<span class="string">'user'</span>]=$data;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 放回原来的字段</span></span><br><span class="line">    $pageData[<span class="string">'rows'</span>] = $pageRows;</span><br><span class="line">    <span class="keyword">return</span> $pageData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>继续处理后，结果也如上面查询的结果一致，我们看看日志：</p>
 <p><strong>方案1</strong><br>如果ID数目过多，这里会出现多次的查询</p>
@@ -232,7 +232,10 @@
 
       </div>  
     <nav class="pf-paginator">
-           
+      
+         
+          <a href="/2018/08/25/suda-confession-wall-setting/" data-hover="Suda - 15 表白墙基本业务操作 - 表白管理">上一篇</a>      
+            
         
       
         
