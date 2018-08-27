@@ -105,7 +105,7 @@ class ConfessionSettingProvider
 
     /**
      * 列出表白墙列表
-     * 
+     *
      * @acl confession-wall.view
      * @param integer|null $page
      * @param integer $row
@@ -118,14 +118,15 @@ class ConfessionSettingProvider
         // 检测到需要处理的用户ID
         $userIdMap = [];
         foreach ($pageRows as $index => $pageRow) {
-            $userIdMap[$pageRow['user']]=$index;
+            $userIdMap[$pageRow['user']][]=$index;
         }
         // 获取所有用户信息
         $userInfos = get_user_public_info_array(array_keys($userIdMap));
         // 返回到数据列
         foreach ($userInfos as $id => $data) {
-            // $userIdMap[$id] == index
-            $pageRows[$userIdMap[$id]]['user']=$data;
+            foreach ($userIdMap[$id] as $index) {
+                $pageRows[$index]['user']=$data;
+            }
         }
         // 放回原来的字段
         $pageData['rows'] = $pageRows;
@@ -167,7 +168,13 @@ v1.0:
         "rows": [
             {
                 "id": "1",
-                "user": "1",
+                "user": {
+                    "id": "1",
+                    "name": "dxkite",
+                    "avatar": "0",
+                    "signupTime": "1535032260",
+                    "avatarUrl": "http://confession-wall.dxkite.org/dev.php/user/avatar/1"
+                },
                 "anonymous": "1",
                 "title": "DXkite",
                 "content": {
@@ -181,7 +188,13 @@ v1.0:
             },
             {
                 "id": "2",
-                "user": "1",
+                "user": {
+                    "id": "1",
+                    "name": "dxkite",
+                    "avatar": "0",
+                    "signupTime": "1535032260",
+                    "avatarUrl": "http://confession-wall.dxkite.org/dev.php/user/avatar/1"
+                },
                 "anonymous": "1",
                 "title": "这是我的表白",
                 "content": {
@@ -195,7 +208,13 @@ v1.0:
             },
             {
                 "id": "3",
-                "user": "1",
+                "user": {
+                    "id": "1",
+                    "name": "dxkite",
+                    "avatar": "0",
+                    "signupTime": "1535032260",
+                    "avatarUrl": "http://confession-wall.dxkite.org/dev.php/user/avatar/1"
+                },
                 "anonymous": "1",
                 "title": "标题",
                 "content": {
