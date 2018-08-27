@@ -52,7 +52,7 @@ emmm，貌似多了一个，举报，毕竟没有审核的表白帖，还是加�
 
 表白墙的功能比较简单，就一个模块就好，本次我们专注表白墙功能的开发，引入一下我写的模块
 
-- support 模块 [下载](suda-confession-wall-design/dxkite-support.18.0813.mod)
+- support 模块 [下载](suda-confession-wall-design/dxkite-support.18.08.13.mod)
 
     提供了基础文件上传、数据维护、网站维护、权限系统等功能
 - user 模块 [下载](suda-confession-wall-design/dxkite-user.18.08.13.mod)
