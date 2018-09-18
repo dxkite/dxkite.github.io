@@ -20,57 +20,65 @@
       <header class="header">
 	
   <nav class="header-nav">        
-   
+
     <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-logo">
+      <a href="/">
+        <img class="header-logo-img" src="/">
+      </a>
+    </div>
 
     <div class="header-menu">          
               
-            
-
-              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
-
-            
-            
-            
-
-              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
-
-            
-            
-            
-
-              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
-
-            
-            
-            
-
-              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
-
-            
-            
-            
-
-              <a class="header-menu-link" id="header-menu-suda" href="/suda">Suda</a>     
-
-            
-            
-            
-
-              <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">Suda手册</a>     
-
-            
-            
-            
-
-              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
-
-            
-                
+          
+            <a class="header-menu-link" id="header-menu-home" href="/">
+              <i class="iconfont icon-home">  
+            </i></a>     
+          
+              
+          
+            <a class="header-menu-link" id="header-menu-archives" href="/archives">
+              <i class="iconfont icon-archives">  
+            </i></a>     
+          
+              
+          
+            <a class="header-menu-link" id="header-menu-tags" href="/tags">
+              <i class="iconfont icon-tags">  
+            </i></a>     
+          
+              
+          
+            <a class="header-menu-link" id="header-menu-about" href="/about">
+              <i class="iconfont icon-about">  
+            </i></a>     
+          
+              
+          
+            <a class="header-menu-link" id="header-menu-suda" href="/suda">
+              <i class="iconfont icon-suda">  
+            </i></a>     
+          
+              
+          
+            <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">
+              <i class="iconfont icon-suda-manual">  
+            </i></a>     
+          
+              
+          
+              <a class="header-menu-link" id="header-menu-search">
+                <i class="iconfont icon-search">  
+              </i></a>
+          
+                  
     </div>  
     
   </nav>
-</header>   
+</header>
+
+   
 
       <div class="container">       
           
@@ -85,16 +93,15 @@
 
 <div class="profile sildeUpMin">
 	
-		<a href="/">
-			<img class="avatar" src="/dxkite.png">
-		</a>
+		<img class="avatar" src="/dxkite.png">
+
 		<p class="author">DXkite</p>
 		
 		<div class="social">
-   		      		
+   		      	
 			<a target="_blank" class="social-links" href="https://github.com/DXkite">		
-				<i class="iconfont icon-Github"></i>
-			</a>	
+				<i class="iconfont icon-Github">
+			</i></a>	
 	    
     	</div>		
 </div>
@@ -113,7 +120,7 @@
 		 
 
 		<div class="article-meta">
-			6月 15, 2018
+			<time>6月 15, 2018</time>
 			
 		</div>
 	</div>
@@ -122,7 +129,7 @@
 	
 
     
-	<div class="article-excerpt">	
+	<div class="typo article-excerpt">	
 		
 			<p>StarUML 是一个方便的UML绘图工具，一直在使用这个，现在StarUML更新到了3.0，对弹窗做了很多的优化，现在支持了原始弹窗，和右键菜单，比以前的右键菜单好多了，但是未注册的导出的图片很尬尬，有水印，学生党什么的，肯定不能购买咯， :joy: ，话不多说，开始分析。</p>
 		  	  
@@ -147,7 +154,7 @@
 		 
 
 		<div class="article-meta">
-			6月 07, 2018
+			<time>6月 07, 2018</time>
 			
 				<span class="iconfont icon-star"></span>
 				            
@@ -163,7 +170,7 @@
 	
 
     
-	<div class="article-excerpt">	
+	<div class="typo article-excerpt">	
 		
 			<p>第一次在CTF比赛中尝试解PWN题，先把PWN题的环境放上来，本次虚拟机环境情况为 Ubuntu 18.04 LTS，使用docker配置环境，后续会把整个题解出来</p>
 		  	  
@@ -188,7 +195,7 @@
 		 
 
 		<div class="article-meta">
-			6月 06, 2018
+			<time>6月 06, 2018</time>
 			
 				<span class="iconfont icon-star"></span>
 				            
@@ -204,7 +211,7 @@
 	
 
     
-	<div class="article-excerpt">	
+	<div class="typo article-excerpt">	
 		
 			<h2 id="第一步：发现Cookie的漏洞：任意文件读取："><a href="#第一步：发现Cookie的漏洞：任意文件读取：" class="headerlink" title="第一步：发现Cookie的漏洞：任意文件读取："></a>第一步：发现Cookie的漏洞：任意文件读取：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CaptchaHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        file = open(self.application.jpgs_path + <span class="string">'/%s'</span> % base64.b64decode(self.get_cookie(<span class="string">'uuid'</span>)),<span class="string">'r'</span>)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'-'</span>*<span class="number">30</span></span><br><span class="line">        <span class="keyword">print</span> self.get_cookie(<span class="string">'uuid'</span>)</span><br><span class="line">        self.write(file.read())</span><br><span class="line">        file.close()</span><br><span class="line">        self.set_header(<span class="string">'Content-Type'</span>, <span class="string">'image/jpeg'</span>)</span><br></pre></td></tr></table></figure>
 <p>在这个文件中的cookie中获取UUID并读取文件，并没有对日志目录进行过滤，所以这个地方造成了任意文件读取</p>
@@ -230,7 +237,7 @@
 		 
 
 		<div class="article-meta">
-			7月 23, 2016
+			<time>7月 23, 2016</time>
 			
 				<span class="iconfont icon-star"></span>
 				            
@@ -250,7 +257,7 @@
 	
 
     
-	<div class="article-excerpt">	
+	<div class="typo article-excerpt">	
 		
 			<p>第一次实地操作web渗透？</p>
 		  	  
@@ -266,11 +273,11 @@
 
 
  
-   <nav class="paginator scrollIn">
+   <nav class="paginator">
     
         <a class="prev" href="/page/4/"> 
-        <i class="iconfont icon-left"></i>
-        上一页
+            <i class="iconfont icon-left"></i>
+            上一页
         </a>
     
 
@@ -292,8 +299,10 @@
     
     <div class="search-container sildeUpMin">
         <div class="search-header">
-            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
-            <span class="search-cancel iconfont icon-cancel"></span>
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">
+            <span class="search-cancel">
+                <i class="iconfont icon-cancel">
+            </i></span>
         </div>
         <div id="search-result" class="search-result"></div>
     </div>
