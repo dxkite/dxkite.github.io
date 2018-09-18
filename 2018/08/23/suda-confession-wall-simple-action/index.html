@@ -20,65 +20,57 @@
       <header class="header">
 	
   <nav class="header-nav">        
-
+   
     <span class="iconfont icon-menu mobile-toggle"></span>   	
-
-    <div class="header-logo">
-      <a href="/">
-        <img class="header-logo-img" src="/">
-      </a>
-    </div>
 
     <div class="header-menu">          
               
-          
-            <a class="header-menu-link" id="header-menu-home" href="/">
-              <i class="iconfont icon-home">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-archives" href="/archives">
-              <i class="iconfont icon-archives">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-tags" href="/tags">
-              <i class="iconfont icon-tags">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-about" href="/about">
-              <i class="iconfont icon-about">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-suda" href="/suda">
-              <i class="iconfont icon-suda">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">
-              <i class="iconfont icon-suda-manual">  
-            </i></a>     
-          
-              
-          
-              <a class="header-menu-link" id="header-menu-search">
-                <i class="iconfont icon-search">  
-              </i></a>
-          
-                  
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda" href="/suda">Suda</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">Suda手册</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
     </div>  
     
   </nav>
-</header>
-
-   
+</header>   
 
       <div class="container">       
           
@@ -112,7 +104,7 @@
 </div> 
 	 
 
-	  <div class="typo post-content slideDownMin">
+	  <div class="post-content slideDownMin">
 
 		
 
@@ -147,7 +139,7 @@
 <p>当我们点击发布以后，会写入到数据库中：</p>
 <p><img src="4.png" alt=""></p>
 <p>可以看到title字段位正常的，content字段的内容不是我们填的内容，为什么？这个我们之前就说了，看我们的Table类：</p>
-<p><img src="/images/placeholder.png" alt="" data-src="5.png" class="lazyload"></p>
+<p><img src="5.png" alt=""></p>
 <p>这里我们对输入的内容进行了一次处理，用打包模块打包了，然后我们发现时间也不对啊！！怎么是 <code>1535032846</code> ？这个是 <code>Unix</code>时间表示方式，叫时间戳，表示从 1970年1月1日到现在的时间的秒数了。</p>
 <h3 id="线路2实现"><a href="#线路2实现" class="headerlink" title="线路2实现"></a>线路2实现</h3><p>在线路2中，我们要使用support模块支持的RPC开放功能来实现。首先定义Provider类：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">provider</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">dxkite</span>\<span class="title">confession</span>\<span class="title">wall</span>\<span class="title">controller</span>\<span class="title">ConfessionController</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理表白</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConfessionProvider</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $controller;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;controller = <span class="keyword">new</span> ConfessionController;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">(string $title, string $content, bool $anonymous=true)</span>: <span class="title">int</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;controller-&gt;add($title,$content,$anonymous);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -184,10 +176,32 @@
 	  </div>     
 	  
 
-	<div class="post-footer">
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+     
+      	
 
-  <div class="post-footer-other">
-      <span class="post-footer-item">
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a> <a class="tag-link" href="/tags/表白墙/">表白墙</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
         
 
 
@@ -217,8 +231,6 @@
 </div>
 
  
-      </span>           
-      <span class="post-footer-item">
         
 	
 <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
@@ -229,81 +241,40 @@
 
 
 	<div class="-mob-share sildeUpMin">
-		<div class="-mob-inner">
 		   			             
-            <a class="iconfont icon-share-qq -mob-share-link"></a>		
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
      	   			             
-            <a class="iconfont icon-share-weixin -mob-share-link"></a>		
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
      	   			             
-            <a class="iconfont icon-share-weibo -mob-share-link"></a>		
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
      	   			             
-            <a class="iconfont icon-share-douban -mob-share-link"></a>		
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
      	   			             
-            <a class="iconfont icon-share-facebook -mob-share-link"></a>		
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
      	   			             
-            <a class="iconfont icon-share-twitter -mob-share-link"></a>		
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
      	   			             
-            <a class="iconfont icon-share-google -mob-share-link"></a>		
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
      	   
-		</div>
 	</div>	
 
-      </span>           
-  </div>  
-
-  <div class="post-footer-meta">
-        
-          <i class="iconfont icon-category"></i>       
-          <a class="category-link" href="/categories/基础教程/">基础教程</a> <a class="category-link" href="/categories/基础教程/Suda框架技能使用/">Suda框架技能使用</a> 	
+      </div>  
+    <nav class="pf-paginator">
       
-        	
-
+         
+          <a href="/2018/08/24/suda-confession-wall-view-list/" data-hover="Suda - 15 表白墙基本业务操作 - 列出表白">上一篇</a>      
+            
         
-          <i class="iconfont icon-tag"></i>     
-            <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Suda/">Suda</a> <a class="tag-link" href="/tags/表白墙/">表白墙</a>    
-        	
+      
+        
+        <a href="/2018/08/22/suda-autoload-psr4/" data-hover="Suda - 13 自动加载类规则"> 下一篇</a>
+            
+  </nav>   
   </div>
-
-</div>
-
-
-<nav class="post-footer-nav">
-  
-    <div class="post-footer-link">
-      <a href="/2018/08/24/suda-confession-wall-view-list/" id="post-nav-newer" class="post-nav-link-wrap">
-        <strong class="post-nav-caption">newer</strong>
-           
-          <a class="post-nav-title" href="/2018/08/24/suda-confession-wall-view-list/">
-          Suda - 15 表白墙基本业务操作 - 列出表白</a>
-      </a>
-    </div>
-  
-  
-    <div class="post-footer-link">
-      <a href="/2018/08/22/suda-autoload-psr4/" id="post-nav-older" class="post-nav-link-wrap">
-        <strong class="post-nav-caption">older</strong>
-        
-          <a class="post-nav-title" href="/2018/08/22/suda-autoload-psr4/">
-          Suda - 13 自动加载类规则</a>
-      </a>
-    </div>
-  
-</nav>
- 
+</div> 
 	
 	
 </article>
-
-	<div class="toc-container">
-			<div class="toc-sidebar">
-			<p class="toc-title">
-				CONTENT
-			</p>
-			<div class="toc-list">
-				<ol class="toc-inner"><li class="toc-inner-item toc-inner-level-2"><a class="toc-inner-link" href="#发帖功能实现"><span class="toc-inner-text">发帖功能实现</span></a><ol class="toc-inner-child"><li class="toc-inner-item toc-inner-level-3"><a class="toc-inner-link" href="#路线1实现："><span class="toc-inner-text">路线1实现：</span></a></li><li class="toc-inner-item toc-inner-level-3"><a class="toc-inner-link" href="#线路2实现"><span class="toc-inner-text">线路2实现</span></a><ol class="toc-inner-child"><li class="toc-inner-item toc-inner-level-4"><a class="toc-inner-link" href="#使用接口"><span class="toc-inner-text">使用接口</span></a></li></ol></li><li class="toc-inner-item toc-inner-level-3"><a class="toc-inner-link" href="#作业"><span class="toc-inner-text">作业</span></a></li></ol></li></ol>
-			</div>
-		</div>
-	</div>
 
           </section> 
       </div>            
@@ -318,10 +289,8 @@
     
     <div class="search-container sildeUpMin">
         <div class="search-header">
-            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">
-            <span class="search-cancel">
-                <i class="iconfont icon-cancel">
-            </i></span>
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
         </div>
         <div id="search-result" class="search-result"></div>
     </div>

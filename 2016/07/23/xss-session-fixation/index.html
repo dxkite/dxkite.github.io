@@ -20,65 +20,57 @@
       <header class="header">
 	
   <nav class="header-nav">        
-
+   
     <span class="iconfont icon-menu mobile-toggle"></span>   	
-
-    <div class="header-logo">
-      <a href="/">
-        <img class="header-logo-img" src="/">
-      </a>
-    </div>
 
     <div class="header-menu">          
               
-          
-            <a class="header-menu-link" id="header-menu-home" href="/">
-              <i class="iconfont icon-home">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-archives" href="/archives">
-              <i class="iconfont icon-archives">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-tags" href="/tags">
-              <i class="iconfont icon-tags">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-about" href="/about">
-              <i class="iconfont icon-about">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-suda" href="/suda">
-              <i class="iconfont icon-suda">  
-            </i></a>     
-          
-              
-          
-            <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">
-              <i class="iconfont icon-suda-manual">  
-            </i></a>     
-          
-              
-          
-              <a class="header-menu-link" id="header-menu-search">
-                <i class="iconfont icon-search">  
-              </i></a>
-          
-                  
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda" href="/suda">Suda</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">Suda手册</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
     </div>  
     
   </nav>
-</header>
-
-   
+</header>   
 
       <div class="container">       
           
@@ -112,7 +104,7 @@
 </div> 
 	 
 
-	  <div class="typo post-content slideDownMin">
+	  <div class="post-content slideDownMin">
 
 		
 
@@ -135,7 +127,7 @@
 <p>啥都木有，是不是插入失败了？不。脚本自我删除了，唯一的痕迹就在这里</p>
 <p><img src="1244653846.png" alt="唯一的痕迹"></p>
 <p>然后，，我们去服务器看看，，由于时原因，我就没等这个小伙子再次访问这个页面了，拿个其他小伙子的截图凑合一下，，额，四次捕获同一个小伙子</p>
-<p><img src="/images/placeholder.png" alt="倒霉的小伙子" data-src="3364299923.png" class="lazyload"></p>
+<p><img src="3364299923.png" alt="倒霉的小伙子"></p>
 <p>侬，这是XSS注入的后果，成功拿到了cookie，可是高兴的太早了，，如果这样就可以过了，那标题就不是混合了，，，<br>接下来是第二个成功原因<code>session fixation</code>漏洞</p>
 <h2 id="2-session-fixation-攻击"><a href="#2-session-fixation-攻击" class="headerlink" title="2. session fixation 攻击"></a>2. session fixation 攻击</h2><p>第一次XSS攻击成功获取到了cookie，，哎，还是说说这个玩意吧，，<br>毕竟网站的开发者考虑到了XSS注入，却没关注到这点，开发者做过XSS防范，如图</p>
 <p><img src="/images/placeholder.png" alt="XSS防范" data-src="528666995.png" class="lazyload"></p>
@@ -170,10 +162,32 @@
 	  </div>     
 	  
 
-	<div class="post-footer">
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+     
+      	
 
-  <div class="post-footer-other">
-      <span class="post-footer-item">
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Session-Fixation/">Session Fixation</a> <a class="tag-link" href="/tags/XSS/">XSS</a> <a class="tag-link" href="/tags/网络安全/">网络安全</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar lazyload" src="/images/placeholder.png" data-src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
         
 
 
@@ -203,8 +217,6 @@
 </div>
 
  
-      </span>           
-      <span class="post-footer-item">
         
 	
 <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
@@ -215,72 +227,37 @@
 
 
 	<div class="-mob-share sildeUpMin">
-		<div class="-mob-inner">
 		   			             
-            <a class="iconfont icon-share-qq -mob-share-link"></a>		
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
      	   			             
-            <a class="iconfont icon-share-weixin -mob-share-link"></a>		
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
      	   			             
-            <a class="iconfont icon-share-weibo -mob-share-link"></a>		
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
      	   			             
-            <a class="iconfont icon-share-douban -mob-share-link"></a>		
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
      	   			             
-            <a class="iconfont icon-share-facebook -mob-share-link"></a>		
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
      	   			             
-            <a class="iconfont icon-share-twitter -mob-share-link"></a>		
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
      	   			             
-            <a class="iconfont icon-share-google -mob-share-link"></a>		
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
      	   
-		</div>
 	</div>	
 
-      </span>           
-  </div>  
-
-  <div class="post-footer-meta">
-        
-          <i class="iconfont icon-category"></i>       
-          <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+      </div>  
+    <nav class="pf-paginator">
       
-        	
-
+         
+          <a href="/2018/06/06/ciscn-center-zone-q03/" data-hover="CISCN 2018 华中赛区 Q03 题解">上一篇</a>      
+            
         
-          <i class="iconfont icon-tag"></i>     
-            <a class="tag-link" href="/tags/PHP/">PHP</a> <a class="tag-link" href="/tags/Session-Fixation/">Session Fixation</a> <a class="tag-link" href="/tags/XSS/">XSS</a> <a class="tag-link" href="/tags/网络安全/">网络安全</a>    
-        	
+            
+  </nav>   
   </div>
-
-</div>
-
-
-<nav class="post-footer-nav">
-  
-    <div class="post-footer-link">
-      <a href="/2018/06/06/ciscn-center-zone-q03/" id="post-nav-newer" class="post-nav-link-wrap">
-        <strong class="post-nav-caption">newer</strong>
-           
-          <a class="post-nav-title" href="/2018/06/06/ciscn-center-zone-q03/">
-          CISCN 2018 华中赛区 Q03 题解</a>
-      </a>
-    </div>
-  
-  
-</nav>
- 
+</div> 
 	
 	
 </article>
-
-	<div class="toc-container">
-			<div class="toc-sidebar">
-			<p class="toc-title">
-				CONTENT
-			</p>
-			<div class="toc-list">
-				<ol class="toc-inner"><li class="toc-inner-item toc-inner-level-2"><a class="toc-inner-link" href="#1-XSS注入漏洞若干"><span class="toc-inner-text">1. XSS注入漏洞若干</span></a></li><li class="toc-inner-item toc-inner-level-2"><a class="toc-inner-link" href="#2-session-fixation-攻击"><span class="toc-inner-text">2. session fixation 攻击</span></a></li><li class="toc-inner-item toc-inner-level-2"><a class="toc-inner-link" href="#3-总结"><span class="toc-inner-text">3. 总结</span></a></li></ol>
-			</div>
-		</div>
-	</div>
 
           </section> 
       </div>            
@@ -295,10 +272,8 @@
     
     <div class="search-container sildeUpMin">
         <div class="search-header">
-            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">
-            <span class="search-cancel">
-                <i class="iconfont icon-cancel">
-            </i></span>
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
         </div>
         <div id="search-result" class="search-result"></div>
     </div>
