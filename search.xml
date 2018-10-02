@@ -3,6 +3,27 @@
   
     
     <entry>
+      <title>通过邮箱偷IP定位的正确姿势</title>
+      <link href="/2018/10/02/email-owned-your-ip/"/>
+      <url>/2018/10/02/email-owned-your-ip/</url>
+      <content type="html"><![CDATA[<blockquote><p><strong>本文针对用户群体为不使用代理查看邮件的用户</strong></p></blockquote><p>还记得那些年，邮箱钓鱼盛行，各种广告邮件钓鱼邮件层出不穷（现在还有某阿X的开发票推送），经过邮箱防水墙能拦截一部分以外，你是否注意到了正常邮箱可能被有心人利用的姿势？</p><a id="more"></a><h2 id="真·检测邮箱是否已读"><a href="#真·检测邮箱是否已读" class="headerlink" title="真·检测邮箱是否已读"></a>真·检测邮箱是否已读</h2><p>某天，工作的时候发送了一封邮件给一个比较重要的人，左等右等，心里在想，TA看了我的邮箱没有？现在通过一个姿势来获取一下自己邮箱的已读状态吧？</p><p><strong>原理</strong> 邮件被打开后很大几率会直接加载邮件中的图片</p><p>首先，准备一台服务器，服务器的权限最好是自己有，使用一下代码：</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">header(<span class="string">'Content-Type:image/png'</span>);</span><br><span class="line">$im = imagecreatetruecolor (<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">$background_color = imagecolorallocatealpha($im, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">127</span>);</span><br><span class="line">imagepng($im);</span><br><span class="line">imagedestroy($im);</span><br></pre></td></tr></table></figure><p>以上代码创建了一个1x1大小的全透明的图片（<strong>谁都看不到哦</strong>），我们把这个图片放到我们自己的服务器上，访问可以看到一张啥都没有的图片：</p><p><img src="1.png" alt=""></p><p>光是生成图片还不够，我们记录一下 <code>$_SERVER[&#39;HTTP_REFERER&#39;]</code> 和 <code>$_SERVER[&#39;HTTP_USER_AGENT&#39;]</code> 这俩个存储了用户从哪里来，使用了什么用户代理（浏览器设备）过来的，最后还有 <code>ip</code>，我们通过如下代码获取：</p><blockquote><p>参考：<a href="https://github.com/DXkite/suda/blob/master/system/src/suda/core/Request.php#L211" target="_blank" rel="noopener">https://github.com/DXkite/suda/blob/master/system/src/suda/core/Request.php#L211</a></p></blockquote><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_ip</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> $ipFrom = [<span class="string">'HTTP_CLIENT_IP'</span>,<span class="string">'HTTP_X_FORWARDED_FOR'</span>,<span class="string">'HTTP_X_FORWARDED'</span>, <span class="string">'HTTP_X_CLUSTER_CLIENT_IP'</span>,<span class="string">'HTTP_FORWARDED_FOR'</span>,<span class="string">'HTTP_FORWARDED'</span>,<span class="string">'REMOTE_ADDR'</span>];</span><br><span class="line">    <span class="keyword">foreach</span> ($ipFrom <span class="keyword">as</span> $key) &#123;</span><br><span class="line">        <span class="keyword">if</span> (array_key_exists($key, $_SERVER)) &#123;</span><br><span class="line">            <span class="keyword">foreach</span> (explode(<span class="string">','</span>, $_SERVER[$key]) <span class="keyword">as</span> $ip) &#123;</span><br><span class="line">                $ip = trim($ip);</span><br><span class="line">                <span class="keyword">if</span> ((bool) filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> $ip;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>  <span class="string">'127.0.0.1'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>获取完以上数据后，写入到数据库中：</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ip = get_ip();</span><br><span class="line">$from = $_SERVER[<span class="string">'HTTP_REFERER'</span>];</span><br><span class="line">$client = $_SERVER[<span class="string">'HTTP_USER_AGENT'</span>];</span><br><span class="line"><span class="comment">// SQL 插入到数据库中</span></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure><p>写完以后，我们在邮件中插入我们的图片（使用URL插入），对方收到后可能是这样的：</p><p><img src="2.png" alt=""></p><p>对方打开后，那么数据库中：</p><p><img src="3.png" alt=""></p><p>可以看到对方的信息：</p><table><thead><tr><th>字段</th><th>信息内容</th><th>解释</th></tr></thead><tbody><tr><td>HTTP_USER_AGENT</td><td>Mozilla/5.0 (Linux; Android 8.0.0; MIX 2S Build/OPR1.170623.032; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.84 Mobile Safari/537.36</td><td>从头部分析，可以看到用户通过小米Mix 2S打开的邮件</td></tr><tr><td>HTTP_REFERER</td><td><a href="http://netease-default-url-start/" target="_blank" rel="noopener">http://netease-default-url-start/</a></td><td>从来源可以看出，用户通过网易客户端打开邮件</td></tr><tr><td>IP</td><td>117.136.*.*</td><td>打开时，用户使用的出网IP</td></tr></tbody></table><h2 id="通过IP定位"><a href="#通过IP定位" class="headerlink" title="通过IP定位"></a>通过IP定位</h2><blockquote><p>这个自己找IP定位设备的网站吧</p></blockquote><p><img src="4.png" alt=""></p><h2 id="防范"><a href="#防范" class="headerlink" title="防范"></a>防范</h2><p>不是每个人上网都带跳板的，所以很容易定位到对应的地址，手机还好，如果是通过电信啥的上网，地理位置很容易就定位了。</p>]]></content>
+      
+      <categories>
+          
+          <category> 技术分享 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 网络安全 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Suda - 19 通用附件模块</title>
       <link href="/2018/08/28/suda-attachments/"/>
       <url>/2018/08/28/suda-attachments/</url>
@@ -233,9 +254,9 @@
       
         <tags>
             
-            <tag> PHP </tag>
-            
             <tag> VSCode </tag>
+            
+            <tag> PHP </tag>
             
         </tags>
       
@@ -625,13 +646,13 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> 网络安全 </tag>
             
             <tag> PHP </tag>
             
             <tag> Code Audit </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       
