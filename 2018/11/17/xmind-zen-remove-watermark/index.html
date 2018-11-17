@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  XMind Zend 去水印，注意！非破解 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda" href="/suda">Suda</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">Suda手册</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>   
+
+      <div class="container">       
+          
+          
+            <section class="main">  
+          
+
+          <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		XMind Zend 去水印，注意！非破解
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		11月 17, 2018
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			654
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>本文介绍如何将 <code>XMind Zend</code> 的水印去除，  <code>XMind Zend</code>  是一款免费的软件，采用 <code>Electron</code> 开发，有兴趣的可以了解下，由于是免费的，破解版和非破版没啥区别，除了导出图片的时候有个水印还有保存的时候订阅弹窗啥的，作为程序员的我很理解这种行为，毕竟自己的软件被大众使用还是可以的。本文简单讲解以下去水印。</p>
+<p><strong>去水印本文用的是最简单的方式，而不是破解！不是破解</strong>，请有能力的时候支持正版。</p>
+<a id="more"></a>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p><code>Eletron</code> 应用有个很明显的特征，不管你程序多大，，嗯，都自带了内置浏览器，毕竟跨平台嘛，资源什么的，对于 <code>Electron</code> 来说，可以压缩成 <code>app.asar</code> 也可以直接就是个资源包，打开 <code>XMind Zend</code> 的安装目录，可以看到如下结构：</p>
+<p><img src="1.png" alt=""></p>
+<p>从这个结构来看，应该是没打包的，打包了的话，可以参考我以前写的 <code>StarUML</code> 系列破解方式解包了再打包。从水印的情况上看，应该是使用图片或者代码生成的，全局搜索文字：<code>试用</code> 或者 <code>Trial</code> 可以看到：</p>
+<p><img src="2.png" alt=""></p>
+<p>有几个 <code>svg</code> , 那么这个应该就是水印的图片了，还以为是用代码生成的，打开看看：</p>
+<p><img src="3.png" alt=""></p>
+<p>可以看到，确实是水印图片，怎么处理？</p>
+<ul>
+<li>A. 删除</li>
+<li>B. 替换</li>
+</ul>
+<p>我们这里用修改，或者说替换，矢量图片都可以直接编辑：</p>
+<p><img src="4.png" alt=""></p>
+<p>将不透明度设置为0，即全透明，不影响导出就行了。</p>
+<p>矢量图文件位置：<code>resources\out\imgs\[类型]-watermark-[语言].svg</code><br>如：中文的PNG导出的水印：矢量图文件位置：<code>resources\out\imgs\png-watermark-zh-CN.svg</code></p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/技术分享/">技术分享</a> 	
+     
+      	
+
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/donate_wechat.png">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/donate_alipay.jpg">	
+	</div>
+
+	<span class="donate-word">Hello ! I'am DXkite</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+           
+        
+      
+        
+        <a href="/2018/11/15/simple-use-of-git/" data-hover="Git的简单使用"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+	
+</article>
+
+          </section> 
+      </div>            
+    
+    <a id="backTop">
+      <span>
+        <i class="iconfont icon-backtotop"></i>
+      </span>
+    </a> 
+
+  
+    
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/suda">Suda
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/suda-manual">Suda手册
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>        
+    
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+     
+    
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+		
+		2018		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>   
+
+  
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>

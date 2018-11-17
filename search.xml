@@ -3,6 +3,21 @@
   
     
     <entry>
+      <title>XMind Zend 去水印，注意！非破解</title>
+      <link href="/2018/11/17/xmind-zen-remove-watermark/"/>
+      <url>/2018/11/17/xmind-zen-remove-watermark/</url>
+      <content type="html"><![CDATA[<p>本文介绍如何将 <code>XMind Zend</code> 的水印去除，  <code>XMind Zend</code>  是一款免费的软件，采用 <code>Electron</code> 开发，有兴趣的可以了解下，由于是免费的，破解版和非破版没啥区别，除了导出图片的时候有个水印还有保存的时候订阅弹窗啥的，作为程序员的我很理解这种行为，毕竟自己的软件被大众使用还是可以的。本文简单讲解以下去水印。</p><p><strong>去水印本文用的是最简单的方式，而不是破解！不是破解</strong>，请有能力的时候支持正版。</p><a id="more"></a><h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p><code>Eletron</code> 应用有个很明显的特征，不管你程序多大，，嗯，都自带了内置浏览器，毕竟跨平台嘛，资源什么的，对于 <code>Electron</code> 来说，可以压缩成 <code>app.asar</code> 也可以直接就是个资源包，打开 <code>XMind Zend</code> 的安装目录，可以看到如下结构：</p><p><img src="1.png" alt=""></p><p>从这个结构来看，应该是没打包的，打包了的话，可以参考我以前写的 <code>StarUML</code> 系列破解方式解包了再打包。从水印的情况上看，应该是使用图片或者代码生成的，全局搜索文字：<code>试用</code> 或者 <code>Trial</code> 可以看到：</p><p><img src="2.png" alt=""></p><p>有几个 <code>svg</code> , 那么这个应该就是水印的图片了，还以为是用代码生成的，打开看看：</p><p><img src="3.png" alt=""></p><p>可以看到，确实是水印图片，怎么处理？</p><ul><li>A. 删除</li><li>B. 替换</li></ul><p>我们这里用修改，或者说替换，矢量图片都可以直接编辑：</p><p><img src="4.png" alt=""></p><p>将不透明度设置为0，即全透明，不影响导出就行了。</p><p>矢量图文件位置：<code>resources\out\imgs\[类型]-watermark-[语言].svg</code><br>如：中文的PNG导出的水印：矢量图文件位置：<code>resources\out\imgs\png-watermark-zh-CN.svg</code></p>]]></content>
+      
+      <categories>
+          
+          <category> 技术分享 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    <entry>
       <title>Git的简单使用</title>
       <link href="/2018/11/15/simple-use-of-git/"/>
       <url>/2018/11/15/simple-use-of-git/</url>
@@ -290,9 +305,9 @@
       
         <tags>
             
-            <tag> PHP </tag>
-            
             <tag> VSCode </tag>
+            
+            <tag> PHP </tag>
             
         </tags>
       
