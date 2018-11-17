@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   
   
-  <title>  XMind Zend 去水印，注意！非破解 |   Hello! I am DXkite </title>
+  <title>  XMind ZEN 去水印，注意！非破解 |   Hello! I am DXkite </title>
 
  
   
@@ -83,7 +83,7 @@
 	<div class="post-header">
 
 	<p class="post-title">	
-		XMind Zend 去水印，注意！非破解
+		XMind ZEN 去水印，注意！非破解
 	</p>
 			
 
@@ -96,7 +96,7 @@
 	
 		<i class="iconfont icon-words"></i>
 		<span>
-			654
+			651
 		</span>
 	
 </div>
@@ -109,10 +109,10 @@
 		
 
 			
-					<p>本文介绍如何将 <code>XMind Zend</code> 的水印去除，  <code>XMind Zend</code>  是一款免费的软件，采用 <code>Electron</code> 开发，有兴趣的可以了解下，由于是免费的，破解版和非破版没啥区别，除了导出图片的时候有个水印还有保存的时候订阅弹窗啥的，作为程序员的我很理解这种行为，毕竟自己的软件被大众使用还是可以的。本文简单讲解以下去水印。</p>
+					<p>本文介绍如何将 <code>XMind ZEN</code> 的水印去除，  <code>XMind ZEN</code>  是一款免费的软件，采用 <code>Electron</code> 开发，有兴趣的可以了解下，由于是免费的，破解版和非破版没啥区别，除了导出图片的时候有个水印还有保存的时候订阅弹窗啥的，作为程序员的我很理解这种行为，毕竟自己的软件被大众使用还是可以的。本文简单讲解以下去水印。</p>
 <p><strong>去水印本文用的是最简单的方式，而不是破解！不是破解</strong>，请有能力的时候支持正版。</p>
 <a id="more"></a>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p><code>Eletron</code> 应用有个很明显的特征，不管你程序多大，，嗯，都自带了内置浏览器，毕竟跨平台嘛，资源什么的，对于 <code>Electron</code> 来说，可以压缩成 <code>app.asar</code> 也可以直接就是个资源包，打开 <code>XMind Zend</code> 的安装目录，可以看到如下结构：</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p><code>Eletron</code> 应用有个很明显的特征，不管你程序多大，，嗯，都自带了内置浏览器，毕竟跨平台嘛，资源什么的，对于 <code>Electron</code> 来说，可以压缩成 <code>app.asar</code> 也可以直接就是个资源包，打开 <code>XMind ZEN</code> 的安装目录，可以看到如下结构：</p>
 <p><img src="1.png" alt=""></p>
 <p>从这个结构来看，应该是没打包的，打包了的话，可以参考我以前写的 <code>StarUML</code> 系列破解方式解包了再打包。从水印的情况上看，应该是使用图片或者代码生成的，全局搜索文字：<code>试用</code> 或者 <code>Trial</code> 可以看到：</p>
 <p><img src="2.png" alt=""></p>
