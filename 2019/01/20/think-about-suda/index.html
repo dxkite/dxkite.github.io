@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  关于框架的思考 |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>
+<style>
+  .alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+
+  .alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-sizing: border-box;
+  }
+</style>
+
+<body>
+
+  <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda" href="/suda">Suda</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">Suda手册</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>
+
+
+  
+  <div class="container">
+   
+    
+    <section class="main">
+      
+        
+          <a href="http://www.atd3.cn">
+            <div class="alert alert-success">点我访问博客临时新地址！文章基本发布在这里，年后备案之后换回来</div>
+          </a>
+        
+        <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		关于框架的思考
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		1月 20, 2019
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			1480
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>博客系统第一版本写完了， 大概写完了，这也可能是这几年最满意的一个版本，至少自己用起来很方便，现在不免有些感慨。</p>
+<a id="more"></a>
+<p>时间过得很快，从15年入学到现在19年，也差不多毕业了，整个大学期间使用PHP写了大大小小十多个网站，成功出生的也只有几个，投入使用的也寥寥无几，带来收入的也只有这一些年的PHP技术以及承接了学校的 <code>选宿舍系统</code>，讲道理，框架的技术含量并不高，起初是单纯的几个文件，实现功能，然后再对文件进行解析生成网站，框架推广的时候遇到了两个问题，一个是说框架配置太过繁琐，一个是框架运行太过麻烦。</p>
+<p>起初，框架的设计目的是有一个能够快速生成网页、创建项目、模块化、复用代码、避免低级别的问题以及能够很通用的软件项目，就目前而言，项目基本上做到了快速构建，前些天构建整个博客，大概花了4天，大部分代码都是用的以前的，很多代码的细节我都记不太清晰了，当时实际上整个代码也构建成功了，项目能完全的运行，Debug等等功能也完全没问题，但是实际上代码的冗余也很少，很多东西都使用起来挺方便，<strong>但是</strong>，对于 <code>suda</code> 这个项目我还是不太满意，所有的编码功能基本上内部纠结的一团糟，全局变量乱飞，全局函数乱开，代码基本上使用全局变量、类，类更多的是静态方法、单例化的类、基本上每个类都是全能类，很多设计上没有必要作为单例化的类也弄上去了、还有很多功能能搭上边的就全部放到一个类里面了。导致现在想要重构代码，关联太大，一重构，整个项目估计会崩溃。</p>
+<p>最近接触到了 <a href="https://scrutinizer-ci.com/g/dxkite/suda/inspections" target="_blank" rel="noopener">scrutinizer-ci.com</a> 这个网站，对代码进行静态分析，发现代码的评分基本上<code>F</code>，修了大概一个多星期才把评分从 <code>7.24</code> 升到了 <code>8.30</code> ，可能是强迫症，我想代码接近满分，至少要 <code>9</code> 分左右把，但是实际上 <code>8.3</code> 分已经是极限了，在这寒假。我也不打算做什么了，感觉整个大学四年什么都没有学到，有句话我现在觉得很有道理 <strong>报班的目的，是为了比自学要有规划，而不是乱学一通</strong> 自学的我，还是觉得自学好，但是自学也有自学的坏处，就是什么都涉及，在一个方面很难说专精，搞的现在感觉自己很尴尬，所以还是想要进行代码进修啥的。</p>
+<p>框架的重构思路有了，代码全部重构，兼容部分采用模块的形式载入到整个项目系统，项目运行时载入适配，整个框架核心部分按照：调试部分（错误监控、PSR3规范日志记录）、PSR4规范自动加载部分、路由处理部分、框架核心部分（应用模块处理、响应处理、请求处理）、数据库部分、模板部分、邮件发送部分，保证每个部分都能够拆到其他地方使用，尽量减少每个部分的功能关联性来重构代码，这样以后写代码也不用使用全部的东西，（以前给别人定制网站，别人的自定义框架，数据库部分手写就很尴尬）</p>
+<p>寒假感觉安排的满满的，Android教程：写个一音乐播放器、SDL2教程：写一个SDL2版本的贪吃蛇、毕业设计和论文，感觉毕设的框架版本太低了，升级以下估计就凉了，部分代码估计要重写，然后就是学习日语和锻炼。。。写这么多其实就是想吐槽，以及测试下代码的可行性。现在大过年的了，备案没法弄，先征用 <a href="http://atd3.cn，然后就是" target="_blank" rel="noopener">http://atd3.cn，然后就是</a> <a href="https://dxkite.cn">https://dxkite.cn</a> 的文章挂在github上面，加载好慢，都没我PHP动态的快一点（昨天测试，TTFB 160ms左右，真的尴尬），然后现在的博客样式采用Nayo的，估计还要定制下，很多问题，以后有时间了再折腾下。</p>
+<p>以上，美滋滋。博客域名怎么换都没事，图片资源啥的都能正确的生成链接，这就是我的博客系统的强大。<br>网页请求的时候加上 <code>Accept: application/json</code> 几乎所有页面都会以JSON形式呈现。</p>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      
+        <i class="iconfont icon-category"></i>       
+        <a class="category-link" href="/categories/日志杂文/">日志杂文</a> 	
+     
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/日常掉坑/">日常掉坑</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/donate_wechat.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img" src="/donate_alipay.jpg" alt="No Donate Image!">	
+	</div>
+
+	<span class="donate-word">Hello ! I'am DXkite</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+           
+        
+      
+        
+        <a href="/2019/01/19/php-post-size-limit/" data-hover="PHP 单个POST上传大文件"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+	
+</article>
+
+      </section>
+  </div>
+
+  <a id="backTop">
+    <span>
+      <i class="iconfont icon-backtotop"></i>
+    </span>
+  </a>
+
+
+  
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+   <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/suda">Suda
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/suda-manual">Suda手册
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>
+  
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+
+  
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+				
+		2018-
+		
+		2019		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>
+
+
+
+  <script src="/nayo.bundle.js"></script>
+</body>
+
+</html>

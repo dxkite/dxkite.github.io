@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html>
-  <head>
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   
@@ -14,10 +14,27 @@
 
 
   <link rel="stylesheet" href="/nayo.min.css"> 
-</head>  
-  <body>   
-    
-      <header class="header">
+</head>
+<style>
+  .alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+
+  .alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-sizing: border-box;
+  }
+</style>
+
+<body>
+
+  <header class="header">
 	
   <nav class="header-nav">        
    
@@ -70,15 +87,21 @@
     </div>  
     
   </nav>
-</header>   
+</header>
 
-      <div class="container">       
-          
-          
-            <section class="main">  
-          
 
-          <article class="post">
+  
+  <div class="container">
+   
+    
+    <section class="main">
+      
+        
+          <a href="http://www.atd3.cn">
+            <div class="alert alert-success">点我访问博客临时新地址！文章基本发布在这里，年后备案之后换回来</div>
+          </a>
+        
+        <article class="post">
   
 	<div class="post-header">
 
@@ -116,8 +139,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install docker docker-compose</span><br></pre></td></tr></table></figure>
 <p><img src="1.png" alt=""></p>
 <h3 id="步骤2：运行Docker服务"><a href="#步骤2：运行Docker服务" class="headerlink" title="步骤2：运行Docker服务"></a>步骤2：运行Docker服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service docker start</span><br></pre></td></tr></table></figure>
-<p><img src="ciscn-ce
-nter-zone-q12/2.png" alt=""></p>
+<p><img src="2.png" alt=""></p>
 <h2 id="步骤3：构建Docker环境"><a href="#步骤3：构建Docker环境" class="headerlink" title="步骤3：构建Docker环境"></a>步骤3：构建Docker环境</h2><p>我们下载好Docker的环境：<a href="ciscn-12-docker.zip">ciscn-q12</a> 然后解压到环境根目录，打开终端，运行命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker build -t pwn12 .</span><br></pre></td></tr></table></figure>
 <p><img src="3.png" alt=""></p>
@@ -237,17 +259,17 @@ nter-zone-q12/2.png" alt=""></p>
 	
 </article>
 
-          </section> 
-      </div>            
-    
-    <a id="backTop">
-      <span>
-        <i class="iconfont icon-backtotop"></i>
-      </span>
-    </a> 
+      </section>
+  </div>
+
+  <a id="backTop">
+    <span>
+      <i class="iconfont icon-backtotop"></i>
+    </span>
+  </a>
+
 
   
-    
     <div class="search-container sildeUpMin">
         <div class="search-header">
             <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
@@ -256,7 +278,7 @@ nter-zone-q12/2.png" alt=""></p>
         <div id="search-result" class="search-result"></div>
     </div>
  
-     <div class="mobile-menu">      
+   <div class="mobile-menu">      
 
       
       <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
@@ -305,8 +327,8 @@ nter-zone-q12/2.png" alt=""></p>
             
          
       
-</div>        
-    
+</div>
+  
 
 
 <script>
@@ -323,8 +345,8 @@ var _hmt = _hmt || [];
 
 
 
-     
-    
+
+  
 
 
 
@@ -346,10 +368,11 @@ var _hmt = _hmt || [];
 		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
 		</div>			
 	 
-</footer>   
+</footer>
 
-  
 
-    <script src="/nayo.bundle.js"></script>           
-  </body>        
+
+  <script src="/nayo.bundle.js"></script>
+</body>
+
 </html>

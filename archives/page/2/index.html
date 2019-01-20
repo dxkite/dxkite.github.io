@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html>
-  <head>
+<head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   
@@ -14,10 +14,27 @@
 
 
   <link rel="stylesheet" href="/nayo.min.css"> 
-</head>  
-  <body>   
-    
-      <header class="header">
+</head>
+<style>
+  .alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+
+  .alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-sizing: border-box;
+  }
+</style>
+
+<body>
+
+  <header class="header">
 	
   <nav class="header-nav">        
    
@@ -70,15 +87,21 @@
     </div>  
     
   </nav>
-</header>   
+</header>
 
-      <div class="container">       
-          
-          
-            <section class="main slideDownMin">
-          
 
-          <section class="archive slideDownMin">
+  
+  <div class="container">
+   
+    
+      <section class="main slideDownMin">
+        
+        
+          <a href="http://www.atd3.cn">
+            <div class="alert alert-success">点我访问博客临时新地址！文章基本发布在这里，年后备案之后换回来</div>
+          </a>
+        
+        <section class="archive slideDownMin">
 
     <span class="page-title">归档</span>  
     
@@ -98,6 +121,26 @@
           </div>
           	    
       
+        <div class="archive-item">
+          <h3 class="archive-time"> 8月 25日 </h3>
+          <h3 class="archive-title"> <a href="/2018/08/25/suda-confession-wall-setting/">Suda - 16 表白墙基本业务操作 - 表白管理</a></h3>
+        </div>
+
+    
+     
+      
+
+        
+        <div class="archive-item">
+          <h3 class="archive-time"> 8月 24日 </h3>
+          <h3 class="archive-title"> <a href="/2018/08/24/suda-confession-wall-view-list/">Suda - 15 表白墙基本业务操作 - 列出表白</a></h3>
+        </div>
+
+    
+     
+      
+
+        
         <div class="archive-item">
           <h3 class="archive-time"> 8月 23日 </h3>
           <h3 class="archive-title"> <a href="/2018/08/23/suda-confession-wall-simple-action/">Suda - 14 表白墙基本业务操作 - 发布表白</a></h3>
@@ -174,26 +217,6 @@
         </div>
 
     
-     
-      
-
-        
-        <div class="archive-item">
-          <h3 class="archive-time"> 8月 6日 </h3>
-          <h3 class="archive-title"> <a href="/2018/08/06/suda-results-statistical-router/">Suda - 08 成绩统计系统 - 路由参数</a></h3>
-        </div>
-
-    
-     
-      
-
-        
-        <div class="archive-item">
-          <h3 class="archive-time"> 8月 5日 </h3>
-          <h3 class="archive-title"> <a href="/2018/08/05/suda-results-statistical-design/">Suda - 07 成绩统计系统 - 项目设计</a></h3>
-        </div>
-
-    
 </section>
 
  
@@ -215,17 +238,17 @@
     
   </nav> 
 
-          </section> 
-      </div>            
-    
-    <a id="backTop">
-      <span>
-        <i class="iconfont icon-backtotop"></i>
-      </span>
-    </a> 
+      </section>
+  </div>
+
+  <a id="backTop">
+    <span>
+      <i class="iconfont icon-backtotop"></i>
+    </span>
+  </a>
+
 
   
-    
     <div class="search-container sildeUpMin">
         <div class="search-header">
             <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
@@ -234,7 +257,7 @@
         <div id="search-result" class="search-result"></div>
     </div>
  
-     <div class="mobile-menu">      
+   <div class="mobile-menu">      
 
       
       <img class="mobile-menu-icon" src="/favicon.png">   
@@ -283,8 +306,8 @@
             
          
       
-</div>        
-    
+</div>
+  
 
 
 <script>
@@ -301,8 +324,8 @@ var _hmt = _hmt || [];
 
 
 
-     
-    
+
+  
 
 
 
@@ -324,10 +347,11 @@ var _hmt = _hmt || [];
 		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
 		</div>			
 	 
-</footer>   
+</footer>
 
-  
 
-    <script src="/nayo.bundle.js"></script>           
-  </body>        
+
+  <script src="/nayo.bundle.js"></script>
+</body>
+
 </html>
