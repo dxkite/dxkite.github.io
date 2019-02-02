@@ -13,7 +13,8 @@ categories:
 
 第一次实地操作web渗透？
 
-<!--more-->
+<!-- more -->
+
 啊哈哈，结果还是喜人的，附上Cookie登陆后的图：
 
 ![Cookie 登陆](xss-session-fixation/4031893413.png)

@@ -14,7 +14,7 @@ categories:
 <!-- more -->
 程序代码给出下载：
 
-[天高云淡V2免授权版1.20.7z](simple-code-audit/天高云淡V2免授权版1.20.7z)
+[天高云淡V2免授权版1.20.7z](simple-code-audit/code.zip)
 
 ## PHP的外部变量
 

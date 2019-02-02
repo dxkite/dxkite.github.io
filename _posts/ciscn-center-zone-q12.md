@@ -30,8 +30,7 @@ sudo apt-get install docker docker-compose
 ```bash
 sudo service docker start
 ```
-![](ciscn-ce
-nter-zone-q12/2.png)
+![](ciscn-center-zone-q12/2.png)
 
 ## 步骤3：构建Docker环境
 
