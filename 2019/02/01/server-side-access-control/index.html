@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  服务器端访问控制（CORS） |   Hello! I am DXkite </title>
+
+ 
+  
+    <link rel="icon" href="/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>
+<style>
+  .alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+  }
+
+  .alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    box-sizing: border-box;
+  }
+</style>
+
+<body>
+
+  <header class="header">
+	
+  <nav class="header-nav">        
+   
+    <span class="iconfont icon-menu mobile-toggle"></span>   	
+
+    <div class="header-menu">          
+              
+            
+
+              <a class="header-menu-link" id="header-menu-home" href="/">首页</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-archives" href="/archives">归档</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-tags" href="/tags">标签</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-about" href="/about">关于</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda" href="/suda">Suda</a>     
+
+            
+            
+            
+
+              <a class="header-menu-link" id="header-menu-suda-manual" href="/suda-manual">Suda手册</a>     
+
+            
+            
+            
+
+              <a class="iconfont icon-menu-search header-menu-link" id="header-menu-search"></a>
+
+            
+                
+    </div>  
+    
+  </nav>
+</header>
+
+
+  
+  <div class="container">
+   
+    
+    <section class="main">
+      
+        
+          <a href="http://www.atd3.cn">
+            <div class="alert alert-success">点我访问博客临时新地址！文章基本发布在这里，年后备案之后换回来</div>
+          </a>
+        
+        <article class="post">
+  
+	<div class="post-header">
+
+	<p class="post-title">	
+		服务器端访问控制（CORS）
+	</p>
+			
+
+	<div class="meta-info">	
+	<span>
+		2月 01, 2019
+	</span>
+
+	
+	
+		<i class="iconfont icon-words"></i>
+		<span>
+			9248
+		</span>
+	
+</div>
+
+</div> 
+	 
+
+	  <div class="post-content slideDownMin">
+
+		
+
+			
+					<p>在做网站开发的时候，我们经常会用到异步请求来实现无刷新更新网页，通常我们使用的都是同源API来实现、以及使用 <code>WebSocket</code> 协议，这两个协议都离不开浏览器的一个安全判断：<strong>同源策略</strong>。文章中包含了跨站请求的实现与基本会话保持的方案。</p>
+<a id="more"></a>
+<p>当我们使用 <code>XMLHttpRequest</code> 或者 <code>Fetch</code> 方式来实现异步请求网站资源时，同源的网站很好处理，直接请求即可，不同源的网站浏览器会向服务器发送一个请求头来确认服务器是否接受该请求，下面的实现方案基于 <code>Chrome</code> 浏览器测试。</p>
+<h2 id="跨站请求允许"><a href="#跨站请求允许" class="headerlink" title="跨站请求允许"></a>跨站请求允许</h2><p>在我们向一个非同源网站发送内容请求之前，浏览器会向服务器发送一个 <code>OPTIONS</code> 请求头来确认服务器是否允许此次请求，测试代码：</p>
+<p><strong>测试：从127.0.0.1:8080请求127.0.0.1:8081的内容</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ajax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    <span class="keyword">var</span> url = <span class="string">'http://127.0.0.1:8081/api.php'</span>;</span><br><span class="line">    <span class="keyword">if</span> (ajax) &#123;</span><br><span class="line">        ajax.open(<span class="string">'POST'</span>, url, <span class="literal">true</span>);</span><br><span class="line">        ajax.setRequestHeader(<span class="string">'Content-Type'</span>,<span class="string">'application/json'</span>);</span><br><span class="line">        ajax.addEventListener(<span class="string">'readystatechange'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (ajax.readyState == <span class="number">4</span> &amp;&amp; ajax.status == <span class="number">200</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> json = <span class="built_in">JSON</span>.parse(ajax.responseText);</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">'recieve:'</span>, json);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        ajax.send(<span class="built_in">JSON</span>.stringify(&#123;<span class="attr">name</span>:<span class="string">'dxkite'</span>&#125;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们来查看收到的内容：</p>
+<p><img src="1.png" alt=""></p>
+<p>从浏览器请求期我们可以看到，浏览器向服务器发送了 <code>OPTIONS</code> 头，服务器什么都没返回，浏览器因此根据CORS协议将代码BAN了。</p>
+<h4 id="预请求-OPTIONS-（preflight-request）"><a href="#预请求-OPTIONS-（preflight-request）" class="headerlink" title="预请求 OPTIONS （preflight request）"></a>预请求 <code>OPTIONS</code> （preflight request）</h4><p>当我们请求服务器以非 <code>GET</code> 方式请求以及使用不是<code>Accept</code>、<code>Accept-Language</code>、、<code>Content-Language`</code>Content-Type<code>等安全请求头时，浏览器会发送</code>OPTIONS` 请求</p>
+<h3 id="服务器支持跨域"><a href="#服务器支持跨域" class="headerlink" title="服务器支持跨域"></a>服务器支持跨域</h3><p>服务器支持跨域，首先要支持 <code>OPTIONS</code> 请求，并且要放回特定的请求头。因此我们要处理这个请求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">OPTIONS http://127.0.0.1:8081/api.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Access-Control-Request-Method: POST</span><br><span class="line">Origin: http://127.0.0.1:8080</span><br><span class="line">Access-Control-Request-Headers: content-type</span><br></pre></td></tr></table></figure>
+<p>这里，我们需要将请求头 OPTIONS 处理并返回特定的请求头来回应这个请求。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$origin = <span class="string">'http://127.0.0.1:8080'</span>; <span class="comment">// 请求域名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理请求头</span></span><br><span class="line"><span class="keyword">if</span> ($_SERVER[<span class="string">'REQUEST_METHOD'</span>] == <span class="string">'OPTIONS'</span>) &#123;</span><br><span class="line">    <span class="comment">// 判断请求源并支持从 http://127.0.0.1:8080 请求。</span></span><br><span class="line">    <span class="keyword">if</span> ($_SERVER[<span class="string">'HTTP_ORIGIN'</span>] == $origin) &#123;</span><br><span class="line">        header(<span class="string">'Access-Control-Allow-Origin: '</span>.$origin); <span class="comment">// 允许请求的源</span></span><br><span class="line">        header(<span class="string">'Access-Control-Allow-Methods: POST, GET, OPTIONS'</span>); <span class="comment">// 允许请求的方法</span></span><br><span class="line">        header(<span class="string">'Access-Control-Allow-Headers: Content-Type'</span>); <span class="comment">// 允许请求的附加请求头</span></span><br><span class="line">        header(<span class="string">"Content-Length: 0"</span>);</span><br><span class="line">        header(<span class="string">"Content-Type: text/plain"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        header(<span class="string">"HTTP/1.1 403 Access Forbidden"</span>);</span><br><span class="line">        header(<span class="string">"Content-Type: text/plain"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">elseif</span> ($_SERVER[<span class="string">'REQUEST_METHOD'</span>] == <span class="string">'POST'</span>) &#123;</span><br><span class="line">    <span class="comment">// 输出头部</span></span><br><span class="line">    header(<span class="string">'Access-Control-Allow-Origin: '</span>.$origin);</span><br><span class="line">    header(<span class="string">'Content-Type: application/json'</span>);</span><br><span class="line">    <span class="comment">// 请求内容</span></span><br><span class="line">    $json = json_decode(file_get_contents(<span class="string">'php://input'</span>), <span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">echo</span> json_encode([ <span class="string">'name'</span> =&gt; $json[<span class="string">'name'</span>], <span class="string">'message'</span> =&gt; <span class="string">'hello, '</span>.$json[<span class="string">'name'</span>]]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再次请求服务器，从如下请求报文中中我们可以看到经过一次 <code>OPTIONS</code> 之后浏览器才进行正常的 <code>POST</code> 请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">OPTIONS http://127.0.0.1:8081/api.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Access-Control-Request-Method: POST</span><br><span class="line">Origin: http://127.0.0.1:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3608.4 Safari/537.36</span><br><span class="line">Access-Control-Request-Headers: content-type</span><br><span class="line">Accept: */*</span><br><span class="line">Referer: http://127.0.0.1:8080/</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Date: Fri, 01 Feb 2019 11:39:23 +0000</span><br><span class="line">Connection: close</span><br><span class="line">X-Powered-By: PHP/7.2.1</span><br><span class="line">Access-Control-Allow-Origin: http://127.0.0.1:8080</span><br><span class="line">Access-Control-Allow-Methods: POST, GET, OPTIONS</span><br><span class="line">Access-Control-Allow-Headers: Content-Type</span><br><span class="line">Content-Length: 0</span><br><span class="line">Content-type: text/plain;charset=UTF-8</span><br><span class="line"></span><br><span class="line">POST http://127.0.0.1:8081/api.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: 17</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Origin: http://127.0.0.1:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3608.4 Safari/537.36</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept: */*</span><br><span class="line">Referer: http://127.0.0.1:8080/</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Date: Fri, 01 Feb 2019 11:39:23 +0000</span><br><span class="line">Connection: close</span><br><span class="line">X-Powered-By: PHP/7.2.1</span><br><span class="line">Access-Control-Allow-Origin: http://127.0.0.1:8080</span><br><span class="line">Content-Type: application/json</span><br></pre></td></tr></table></figure>
+<p><img src="2.png" alt=""></p>
+<h2 id="请求头说明"><a href="#请求头说明" class="headerlink" title="请求头说明"></a>请求头说明</h2><h3 id="Access-Control-Allow-Origin"><a href="#Access-Control-Allow-Origin" class="headerlink" title="Access-Control-Allow-Origin"></a>Access-Control-Allow-Origin</h3><p>响应头指定了该响应的资源是否被允许与给定的origin共享。</p>
+<p><strong>语法参考</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *</span><br><span class="line">Access-Control-Allow-Origin: &lt;origin&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong></p>
+<ul>
+<li><code>&quot;*&quot;</code> 允许所有域都具有访问资源的权限。</li>
+<li><code>&lt;origin&gt;</code> 指定一个可以访问资源的URI。</li>
+</ul>
+<h3 id="Access-Control-Allow-Headers"><a href="#Access-Control-Allow-Headers" class="headerlink" title="Access-Control-Allow-Headers"></a>Access-Control-Allow-Headers</h3><p>响应头 <code>Access-Control-Allow-Headers</code> 用于预检请求中，列出了将会在正式请求的 <code>Access-Control-Expose-Headers</code> 字段中出现的头信息。</p>
+<p><strong>语法参考</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Headers: &lt;header-name&gt;, &lt;header-name&gt;, ...</span><br></pre></td></tr></table></figure>
+<h3 id="Access-Control-Allow-Methods"><a href="#Access-Control-Allow-Methods" class="headerlink" title="Access-Control-Allow-Methods"></a>Access-Control-Allow-Methods</h3><p>响应头 <code>Access-Control-Allow-Methods</code> 在对预检请求（preflight request）的应答中明确了客户端所要访问的资源允许使用的方法或方法列表。</p>
+<p><strong>语法参考</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Methods: &lt;method&gt;, &lt;method&gt;, ...</span><br></pre></td></tr></table></figure>
+<h3 id="Access-Control-Expose-Headers"><a href="#Access-Control-Expose-Headers" class="headerlink" title="Access-Control-Expose-Headers"></a>Access-Control-Expose-Headers</h3><p>响应首部 <code>Access-Control-Expose-Headers</code> 列出了哪些响应头可以作为响应的一部分被浏览器发现（即访问）</p>
+<p><strong>语法参考</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Expose-Headers: &lt;header-name&gt;, &lt;header-name&gt;, ...</span><br></pre></td></tr></table></figure>
+<p><em>注</em>：以下头部不用指定</p>
+<ul>
+<li>Cache-Control</li>
+<li>Content-Language</li>
+<li>Content-Type</li>
+<li>Expires</li>
+<li>Last-Modified</li>
+<li>Pragma</li>
+</ul>
+<h3 id="Access-Control-Max-Age"><a href="#Access-Control-Max-Age" class="headerlink" title="Access-Control-Max-Age"></a>Access-Control-Max-Age</h3><p>指定了预请求可以被缓存的时间</p>
+<p><strong>语法参考</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Max-Age: &lt;delta-seconds&gt;</span><br></pre></td></tr></table></figure>
+<p><code>delta-seconds</code> 参数表示预请求的结果在多少秒内有效。</p>
+<h3 id="Access-Control-Allow-Credentials"><a href="#Access-Control-Allow-Credentials" class="headerlink" title="Access-Control-Allow-Credentials"></a>Access-Control-Allow-Credentials</h3><p><code>Access-Control-Allow-Credentials</code> 头指定了当浏览器的<code>credentials</code>设置为true时是否允许浏览器读取response的内容。当用在对preflight预检测请求的响应中时，它指定了实际的请求是否可以使用<code>credentials</code>。请注意：简单 GET 请求不会被预检；如果对此类请求的响应中不包含该字段，这个响应将被忽略掉，并且浏览器也不会将相应内容返回给网页。</p>
+<p><strong>语法参考</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Credentials: true</span><br></pre></td></tr></table></figure>
+<h4 id="使用凭证（Cookie）的条件"><a href="#使用凭证（Cookie）的条件" class="headerlink" title="使用凭证（Cookie）的条件"></a>使用凭证（Cookie）的条件</h4><ul>
+<li>如果服务器端的响应中未携带 <code>Access-Control-Allow-Credentials: true</code> ，浏览器将不会把响应内容返回给请求的发送者。</li>
+<li>对于附带身份凭证的请求，服务器不得设置 <code>Access-Control-Allow-Origin</code> 的值为 <code>&quot;*&quot;</code> 。</li>
+<li>响应首部中也携带了 <code>Set-Cookie</code> 字段，尝试对 <code>Cookie</code> 进行修改。如果操作失败，将会抛出异常</li>
+</ul>
+<h3 id="带-Cookie-使用异步请求例子"><a href="#带-Cookie-使用异步请求例子" class="headerlink" title="带 Cookie 使用异步请求例子"></a>带 Cookie 使用异步请求例子</h3><p>客户端代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params">url, data, callback</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> ajax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">        ajax.withCredentials = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (ajax) &#123;</span><br><span class="line">            ajax.open(<span class="string">'POST'</span>, url, <span class="literal">true</span>);</span><br><span class="line">            ajax.setRequestHeader(<span class="string">'Content-Type'</span>, <span class="string">'application/json'</span>);</span><br><span class="line">            ajax.addEventListener(<span class="string">'readystatechange'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (ajax.readyState == <span class="number">4</span> &amp;&amp; ajax.status == <span class="number">200</span>) &#123;</span><br><span class="line">                    <span class="keyword">var</span> json = <span class="built_in">JSON</span>.parse(ajax.responseText);</span><br><span class="line">                    callback.call(ajax, json);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            ajax.send(<span class="built_in">JSON</span>.stringify(data));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    request(<span class="string">'http://127.0.0.1:8081/api.php'</span>,&#123;<span class="attr">name</span>:<span class="string">'dxkite'</span>&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">recieve</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'recieve:'</span>, recieve);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    request(<span class="string">'http://127.0.0.1:8081/api.php'</span>,&#123;&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">recieve</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'recieve cookie:'</span>, recieve);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>服务器端代码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">$origin = <span class="string">'http://127.0.0.1:8080'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理请求头</span></span><br><span class="line"><span class="keyword">if</span> ($_SERVER[<span class="string">'REQUEST_METHOD'</span>] == <span class="string">'OPTIONS'</span>) &#123;</span><br><span class="line">    <span class="comment">// 判断请求源并支持从 http://127.0.0.1:8080 请求。</span></span><br><span class="line">    <span class="keyword">if</span> ($_SERVER[<span class="string">'HTTP_ORIGIN'</span>] == $origin) &#123;</span><br><span class="line">        header(<span class="string">'Access-Control-Allow-Origin: '</span>.$origin); <span class="comment">// 允许请求的源</span></span><br><span class="line">        header(<span class="string">'Access-Control-Allow-Methods: POST, GET, OPTIONS'</span>); <span class="comment">// 允许请求的方法</span></span><br><span class="line">        header(<span class="string">'Access-Control-Allow-Headers: Content-Type'</span>); <span class="comment">// 允许请求的附加请求头</span></span><br><span class="line">        header(<span class="string">'Access-Control-Allow-Credentials: true'</span>); <span class="comment">// 允许携带Cookie</span></span><br><span class="line">        header(<span class="string">"Content-Length: 0"</span>);</span><br><span class="line">        header(<span class="string">"Content-Type: text/plain"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        header(<span class="string">"HTTP/1.1 403 Access Forbidden"</span>);</span><br><span class="line">        header(<span class="string">"Content-Type: text/plain"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">elseif</span> ($_SERVER[<span class="string">'REQUEST_METHOD'</span>] == <span class="string">'POST'</span>) &#123;</span><br><span class="line">    <span class="comment">// 输出头部</span></span><br><span class="line">    header(<span class="string">'Access-Control-Allow-Origin: '</span>.$origin); <span class="comment">// 允许请求的源</span></span><br><span class="line">    header(<span class="string">'Access-Control-Allow-Credentials: true'</span>); <span class="comment">// 允许携带Cookie</span></span><br><span class="line">    header(<span class="string">'Content-Type: application/json'</span>);</span><br><span class="line">    <span class="comment">// 请求内容</span></span><br><span class="line">    $json = json_decode(file_get_contents(<span class="string">'php://input'</span>), <span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">if</span> (array_key_exists(<span class="string">'name'</span>, $json)) &#123;</span><br><span class="line">        setcookie(<span class="string">'name'</span>, $json[<span class="string">'name'</span>]);</span><br><span class="line">        <span class="keyword">echo</span> json_encode([ <span class="string">'name'</span> =&gt; $json[<span class="string">'name'</span>], <span class="string">'message'</span> =&gt; <span class="string">'hello, '</span>.$json[<span class="string">'name'</span>]]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> json_encode($_COOKIE);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>请求链：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">OPTIONS http://127.0.0.1:8081/api.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Access-Control-Request-Method: POST</span><br><span class="line">Origin: http://127.0.0.1:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3608.4 Safari/537.36</span><br><span class="line">Access-Control-Request-Headers: content-type</span><br><span class="line">Accept: */*</span><br><span class="line">Referer: http://127.0.0.1:8080/</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Date: Fri, 01 Feb 2019 12:23:44 +0000</span><br><span class="line">Connection: close</span><br><span class="line">X-Powered-By: PHP/7.2.1</span><br><span class="line">Access-Control-Allow-Origin: http://127.0.0.1:8080</span><br><span class="line">Access-Control-Allow-Methods: POST, GET, OPTIONS</span><br><span class="line">Access-Control-Allow-Headers: Content-Type</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Content-Length: 0</span><br><span class="line">Content-type: text/plain;charset=UTF-8</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST http://127.0.0.1:8081/api.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: 17</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Origin: http://127.0.0.1:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3608.4 Safari/537.36</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept: */*</span><br><span class="line">Referer: http://127.0.0.1:8080/</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: _ga=GA1.1.938951084.1548392291; name=dxkite</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Date: Fri, 01 Feb 2019 12:23:45 +0000</span><br><span class="line">Connection: close</span><br><span class="line">X-Powered-By: PHP/7.2.1</span><br><span class="line">Access-Control-Allow-Origin: http://127.0.0.1:8080</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Set-Cookie: name=dxkite</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">POST http://127.0.0.1:8081/api.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Length: 2</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Origin: http://127.0.0.1:8080</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3608.4 Safari/537.36</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Accept: */*</span><br><span class="line">Referer: http://127.0.0.1:8080/</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: _ga=GA1.1.938951084.1548392291; name=dxkite</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Host: 127.0.0.1:8081</span><br><span class="line">Date: Fri, 01 Feb 2019 12:23:45 +0000</span><br><span class="line">Connection: close</span><br><span class="line">X-Powered-By: PHP/7.2.1</span><br><span class="line">Access-Control-Allow-Origin: http://127.0.0.1:8080</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Content-Type: application/json</span><br></pre></td></tr></table></figure>
+<p>成功截图：</p>
+<p><img src="3.png" alt=""></p>
+<hr>
+<p>参考文献</p>
+<ul>
+<li><a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header" target="_blank" rel="noopener">非安全请求头</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="noopener">HTTP访问控制（CORS）</a></li>
+</ul>
+  	
+					
+	  </div>     
+	  
+
+	
+<div class="post-meta">
+      	
+
+      
+        <i class="iconfont icon-tag"></i>     
+          <a class="tag-link" href="/tags/CORS/">CORS</a> <a class="tag-link" href="/tags/Fetch/">Fetch</a> <a class="tag-link" href="/tags/XMLHttpRequest/">XMLHttpRequest</a>    
+      	
+</div>
+
+
+
+
+
+<div class="post-footer">
+  <div class="pf-left">
+      <img class="pf-avatar" src="/dxkite.png">
+      <p class="pf-des">Hello! I am DXkite</p>
+  </div>
+
+  <div class="pf-right">           
+      <div class="pf-links">
+        
+
+
+
+
+<span class="donate-btn">
+	<span class="iconfont icon-donate"></span>
+</span>
+
+
+<div id="donate-box" class="sildeUpMin">
+
+	<span class="donate-cancel iconfont icon-cancel"></span>
+
+	<div class="donate-img-box">
+		<img id="donate-qr-wechat" class="noLazyLoad donate-img" src="/donate_wechat.png" alt="No Donate Image!">	
+		<img id="donate-qr-alipay" class="noLazyLoad donate-img lazyload" src="/images/placeholder.png" alt="No Donate Image!" data-src="/donate_alipay.jpg">	
+	</div>
+
+	<span class="donate-word">Hello ! I'am DXkite</span>
+
+	<div class="donate-list">
+		<span class="iconfont icon-donate-wechat"></span>
+		<span class="iconfont icon-donate-alipay"></span>
+	</div>
+
+</div>
+
+ 
+        
+	
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+	
+	<span class="share-btn">
+	<span class="iconfont icon-share"></span>
+	</span>
+
+
+	<div class="-mob-share sildeUpMin">
+		   			             
+            <a class="iconfont  icon-share-qq -mob-share-qq"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weixin -mob-share-weixin"></a>		
+     	   			             
+            <a class="iconfont  icon-share-weibo -mob-share-weibo"></a>		
+     	   			             
+            <a class="iconfont  icon-share-douban -mob-share-douban"></a>		
+     	   			             
+            <a class="iconfont  icon-share-facebook -mob-share-facebook"></a>		
+     	   			             
+            <a class="iconfont  icon-share-twitter -mob-share-twitter"></a>		
+     	   			             
+            <a class="iconfont  icon-share-google -mob-share-google"></a>		
+     	   
+	</div>	
+
+      </div>  
+    <nav class="pf-paginator">
+      
+         
+          <a href="/2019/03/10/video-play-with-range/" data-hover="视频播放、断点续传、多线程下载实现基础：Range">上一篇</a>      
+            
+        
+      
+        
+        <a href="/2019/01/20/think-about-suda/" data-hover="关于框架的思考"> 下一篇</a>
+            
+  </nav>   
+  </div>
+</div> 
+	
+	
+</article>
+
+      </section>
+  </div>
+
+  <a id="backTop">
+    <span>
+      <i class="iconfont icon-backtotop"></i>
+    </span>
+  </a>
+
+
+  
+    <div class="search-container sildeUpMin">
+        <div class="search-header">
+            <input type="text" placeholder="输入你想搜索的" id="search-input" class="search-input">  
+            <span class="search-cancel iconfont icon-cancel"></span>
+        </div>
+        <div id="search-result" class="search-result"></div>
+    </div>
+ 
+   <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/favicon.png">   
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首页
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">归档
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">标签
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">关于
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/suda">Suda
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/suda-manual">Suda手册
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
+</div>
+  
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d7aee75a7326ba3e59244e2db26823c8"; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+
+
+  
+
+
+
+
+<footer id="footer">	    
+
+		
+		<div class="footer-copyright">
+		&copy;
+				
+		2018-
+		
+		2019		
+	
+		DXkite
+		<br>
+
+		Theme By
+		<a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>	
+		</div>			
+	 
+</footer>
+
+
+
+  <script src="/nayo.bundle.js"></script>
+</body>
+
+</html>

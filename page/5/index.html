@@ -130,6 +130,88 @@
 	   
 	<div class="article-header">
 	    
+		<a class="article-title" href="/2018/07/09/snake-sound/">05 贪吃蛇 - 音频加载与播放：音频处理</a>  
+	       
+		 
+
+		<div class="article-meta">
+			7月 09, 2018
+			
+				<span class="iconfont icon-star"></span>
+				            
+						<a class="article-tag" href="/tags/Python/">Python</a>           
+				            
+						<a class="article-tag" href="/tags/pygame/">pygame</a>           
+				
+			
+		</div>
+	</div>
+
+
+	
+
+    
+	<div class="article-excerpt">	
+		
+			<p>看了下pygame的介绍，发现居然是！！SDL！！2014年一直玩的东西，打算水完Python系列以后，再水一下用SDL2来做一个贪吃蛇，很久没弄了。</p>
+		  	  
+	</div>
+
+	<div class="article-bottom">
+		<a class="article-readmore" href="/2018/07/09/snake-sound/">阅读更多</a> 	
+	</div>	
+    
+</article>
+
+
+
+
+
+<article class="article">		
+	   
+	<div class="article-header">
+	    
+		<a class="article-title" href="/2018/07/08/snake-show-and-control-fps/">04 贪吃蛇 - 帧率限制：限制显示速率</a>  
+	       
+		 
+
+		<div class="article-meta">
+			7月 08, 2018
+			
+				<span class="iconfont icon-star"></span>
+				            
+						<a class="article-tag" href="/tags/Python/">Python</a>           
+				            
+						<a class="article-tag" href="/tags/pygame/">pygame</a>           
+				
+			
+		</div>
+	</div>
+
+
+	
+
+    
+	<div class="article-excerpt">	
+		
+			<p>在一个游戏中，显示的控制也是一个比较重要的东西，在不同的机器上，界面刷新的频率不一样（也就是fps不一样），这样照成的结果就是<br>在不同情况下，基于帧的动画的效果会不同，本次将控制帧率</p>
+		  	  
+	</div>
+
+	<div class="article-bottom">
+		<a class="article-readmore" href="/2018/07/08/snake-show-and-control-fps/">阅读更多</a> 	
+	</div>	
+    
+</article>
+
+
+
+
+
+<article class="article">		
+	   
+	<div class="article-header">
+	    
 		<a class="article-title" href="/2018/07/07/snake-event/">03 贪吃蛇 - 事件获取与处理：处理事件</a>  
 	       
 		 
@@ -460,89 +542,6 @@
 
 	<div class="article-bottom">
 		<a class="article-readmore" href="/2018/06/15/bypass-staruml-3/">阅读更多</a> 	
-	</div>	
-    
-</article>
-
-
-
-
-
-<article class="article">		
-	   
-	<div class="article-header">
-	    
-		<a class="article-title" href="/2018/06/07/ciscn-center-zone-q12/">CISCN 2018 华中赛区 Q12</a>  
-	       
-		 
-
-		<div class="article-meta">
-			6月 07, 2018
-			
-				<span class="iconfont icon-star"></span>
-				            
-						<a class="article-tag" href="/tags/CTF/">CTF</a>           
-				            
-						<a class="article-tag" href="/tags/PWN/">PWN</a>           
-				
-			
-		</div>
-	</div>
-
-
-	
-
-    
-	<div class="article-excerpt">	
-		
-			<p>第一次在CTF比赛中尝试解PWN题，先把PWN题的环境放上来，本次虚拟机环境情况为 Ubuntu 18.04 LTS，使用docker配置环境，后续会把整个题解出来</p>
-		  	  
-	</div>
-
-	<div class="article-bottom">
-		<a class="article-readmore" href="/2018/06/07/ciscn-center-zone-q12/">阅读更多</a> 	
-	</div>	
-    
-</article>
-
-
-
-
-
-<article class="article">		
-	   
-	<div class="article-header">
-	    
-		<a class="article-title" href="/2018/06/06/ciscn-center-zone-q03/">CISCN 2018 华中赛区 Q03 题解</a>  
-	       
-		 
-
-		<div class="article-meta">
-			6月 06, 2018
-			
-				<span class="iconfont icon-star"></span>
-				            
-						<a class="article-tag" href="/tags/CTF/">CTF</a>           
-				            
-						<a class="article-tag" href="/tags/WEB/">WEB</a>           
-				
-			
-		</div>
-	</div>
-
-
-	
-
-    
-	<div class="article-excerpt">	
-		
-			<h2 id="第一步：发现Cookie的漏洞：任意文件读取："><a href="#第一步：发现Cookie的漏洞：任意文件读取：" class="headerlink" title="第一步：发现Cookie的漏洞：任意文件读取："></a>第一步：发现Cookie的漏洞：任意文件读取：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CaptchaHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        file = open(self.application.jpgs_path + <span class="string">'/%s'</span> % base64.b64decode(self.get_cookie(<span class="string">'uuid'</span>)),<span class="string">'r'</span>)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'-'</span>*<span class="number">30</span></span><br><span class="line">        <span class="keyword">print</span> self.get_cookie(<span class="string">'uuid'</span>)</span><br><span class="line">        self.write(file.read())</span><br><span class="line">        file.close()</span><br><span class="line">        self.set_header(<span class="string">'Content-Type'</span>, <span class="string">'image/jpeg'</span>)</span><br></pre></td></tr></table></figure>
-<p>在这个文件中的cookie中获取UUID并读取文件，并没有对日志目录进行过滤，所以这个地方造成了任意文件读取</p>
-		  	  
-	</div>
-
-	<div class="article-bottom">
-		<a class="article-readmore" href="/2018/06/06/ciscn-center-zone-q03/">阅读更多</a> 	
 	</div>	
     
 </article>

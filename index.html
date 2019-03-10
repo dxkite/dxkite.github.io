@@ -130,6 +130,90 @@
 	   
 	<div class="article-header">
 	    
+		<a class="article-title" href="/2019/03/10/video-play-with-range/">视频播放、断点续传、多线程下载实现基础：Range</a>  
+	       
+		 
+
+		<div class="article-meta">
+			3月 10, 2019
+			
+				<span class="iconfont icon-star"></span>
+				            
+						<a class="article-tag" href="/tags/PHP/">PHP</a>           
+				            
+						<a class="article-tag" href="/tags/Range/">Range</a>           
+				
+			
+		</div>
+	</div>
+
+
+	
+
+    
+	<div class="article-excerpt">	
+		
+			<p>实现一个视频播放的功能，以及对大文件的下载操作等等都避不开一个点：获取文件任意位置的数据，如果说我们单纯的通过 <code>echo file-content</code> 的方式只能用于文件下载，如果视频文件用于播放中，则难以处理，具体表现则为视频播放的时候无法调整进度条，而且如果是视频网站，对于视频只采用放在某个可以直接访问的目录上，那么这个视频也就相当于公开了，对于什么 <code>VIP</code> 什么的也就无从说起，本篇文章将 <code>Range</code>，来提供视频播放、断点续传、多线程下载的技术依赖实现 </p>
+		  	  
+	</div>
+
+	<div class="article-bottom">
+		<a class="article-readmore" href="/2019/03/10/video-play-with-range/">阅读更多</a> 	
+	</div>	
+    
+</article>
+
+
+
+
+
+<article class="article">		
+	   
+	<div class="article-header">
+	    
+		<a class="article-title" href="/2019/02/01/server-side-access-control/">服务器端访问控制（CORS）</a>  
+	       
+		 
+
+		<div class="article-meta">
+			2月 01, 2019
+			
+				<span class="iconfont icon-star"></span>
+				            
+						<a class="article-tag" href="/tags/CORS/">CORS</a>           
+				            
+						<a class="article-tag" href="/tags/XMLHttpRequest/">XMLHttpRequest</a>           
+				            
+						<a class="article-tag" href="/tags/Fetch/">Fetch</a>           
+				
+			
+		</div>
+	</div>
+
+
+	
+
+    
+	<div class="article-excerpt">	
+		
+			<p>在做网站开发的时候，我们经常会用到异步请求来实现无刷新更新网页，通常我们使用的都是同源API来实现、以及使用 <code>WebSocket</code> 协议，这两个协议都离不开浏览器的一个安全判断：<strong>同源策略</strong>。文章中包含了跨站请求的实现与基本会话保持的方案。</p>
+		  	  
+	</div>
+
+	<div class="article-bottom">
+		<a class="article-readmore" href="/2019/02/01/server-side-access-control/">阅读更多</a> 	
+	</div>	
+    
+</article>
+
+
+
+
+
+<article class="article">		
+	   
+	<div class="article-header">
+	    
 		<a class="article-title" href="/2019/01/20/think-about-suda/">关于框架的思考</a>  
 	       
 		 
@@ -437,96 +521,6 @@
 
 	<div class="article-bottom">
 		<a class="article-readmore" href="/2018/08/28/suda-attachments/">阅读更多</a> 	
-	</div>	
-    
-</article>
-
-
-
-
-
-<article class="article">		
-	   
-	<div class="article-header">
-	    
-		<a class="article-title" href="/2018/08/27/suda-comment/">Suda - 18 通用评论功能模块</a>  
-	       
-		 
-
-		<div class="article-meta">
-			8月 27, 2018
-			
-				<span class="iconfont icon-star"></span>
-				            
-						<a class="article-tag" href="/tags/PHP/">PHP</a>           
-				            
-						<a class="article-tag" href="/tags/Suda/">Suda</a>           
-				            
-						<a class="article-tag" href="/tags/通用评论/">通用评论</a>           
-				
-			
-		</div>
-	</div>
-
-
-	
-
-    
-	<div class="article-excerpt">	
-		
-			<p>这里我们写一个评论功能，对其的要求也不高，添加这个模块后，我们不管是表白墙还是文章模块都要可以用，使用也要很简单。为了实现这个功能，我从框架层面升级了一波，基础模块也变更了部分。</p>
-<ul>
-<li><a href="dxkite-support.8.27.mod">Support</a></li>
-<li>更新框架</li>
-</ul>
-		  	  
-	</div>
-
-	<div class="article-bottom">
-		<a class="article-readmore" href="/2018/08/27/suda-comment/">阅读更多</a> 	
-	</div>	
-    
-</article>
-
-
-
-
-
-<article class="article">		
-	   
-	<div class="article-header">
-	    
-		<a class="article-title" href="/2018/08/26/suda-confession-wall-setting-edit-delete/">Suda - 17 表白墙基本业务操作 - 表白管理：编辑删除</a>  
-	       
-		 
-
-		<div class="article-meta">
-			8月 26, 2018
-			
-				<span class="iconfont icon-star"></span>
-				            
-						<a class="article-tag" href="/tags/PHP/">PHP</a>           
-				            
-						<a class="article-tag" href="/tags/Suda/">Suda</a>           
-				            
-						<a class="article-tag" href="/tags/表白墙/">表白墙</a>           
-				
-			
-		</div>
-	</div>
-
-
-	
-
-    
-	<div class="article-excerpt">	
-		
-			<p>前面我们讲了列出表白的内容，这次我们讲如何编辑以及删除，在框架的模式下，对数据表的<code>CRUD</code>非常的简单，特别是你按照自己的套路来写的时候那就更加的简单了。</p>
-		  	  
-	</div>
-
-	<div class="article-bottom">
-		<a class="article-readmore" href="/2018/08/26/suda-confession-wall-setting-edit-delete/">阅读更多</a> 	
 	</div>	
     
 </article>
